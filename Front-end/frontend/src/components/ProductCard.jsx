@@ -1,23 +1,56 @@
-import { ShoppingCart, Eye, Star, Heart } from 'lucide-react';
+import { ShoppingCart, Eye, Star, Heart, CheckSquare2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from './Toast';
+import { useComparisonStore } from '../store';
 
 export default function ProductCard({ product, onAddToCart, onViewDetails }) {
+  const navigate = useNavigate();
   const toast = useToast();
+  const { addToComparison, removeFromComparison, isInComparison } = useComparisonStore();
+  const inComparison = isInComparison(product.id);
 
   const handleAddToCart = () => {
     onAddToCart(product);
     if (toast) toast(`${product.name} added to cart!`, { type: 'success', title: 'Added to Cart' });
   };
 
+  const handleViewDetails = () => {
+    navigate(`/product/${product.id}`);
+    if (onViewDetails) onViewDetails(product.id);
+  };
+
+  const handleToggleComparison = () => {
+    if (inComparison) {
+      removeFromComparison(product.id);
+      if (toast) toast(`Removed from comparison`, { type: 'info' });
+    } else {
+      addToComparison(product);
+      if (toast) toast(`Added to comparison!`, { type: 'success' });
+    }
+  };
+
   return (
     <div className="card-premium group relative flex flex-col h-full">
-      {/* Wishlist Button */}
-      <button className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-md shadow-sm opacity-0 group-hover:opacity-100 transition-all hover:bg-red-50 hover:text-red-500">
-        <Heart className="w-5 h-5" />
-      </button>
+      {/* Wishlist & Comparison Buttons */}
+      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
+        <button 
+          onClick={handleToggleComparison}
+          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${
+            inComparison
+              ? 'bg-primary text-white'
+              : 'bg-white/80 hover:bg-primary/10 hover:text-primary'
+          }`}
+          title={inComparison ? 'Remove from comparison' : 'Add to comparison'}
+        >
+          <CheckSquare2 className="w-5 h-5" />
+        </button>
+        <button className="p-2 rounded-full bg-white/80 backdrop-blur-md shadow-sm hover:bg-red-50 hover:text-red-500 transition-all">
+          <Heart className="w-5 h-5" />
+        </button>
+      </div>
 
       {/* Image Container */}
-      <div className="relative mb-6 bg-slate-100 rounded-xl overflow-hidden aspect-square">
+      <div className="relative mb-6 bg-slate-100 rounded-xl overflow-hidden aspect-square cursor-pointer" onClick={handleViewDetails}>
         <img
           src={product.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
           alt={product.name}
@@ -39,7 +72,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
         {/* Quick View Overlay */}
         <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
           <button
-            onClick={() => onViewDetails(product.id)}
+            onClick={handleViewDetails}
             className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300"
           >
             <Eye className="w-5 h-5" />
@@ -66,7 +99,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
           </div>
         </div>
 
-        <h3 className="font-bold text-slate-900 mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+        <h3 onClick={handleViewDetails} className="font-bold text-slate-900 mb-1 line-clamp-1 group-hover:text-primary transition-colors cursor-pointer">
           {product.name}
         </h3>
 

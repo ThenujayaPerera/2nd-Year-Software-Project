@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import Sidebar from '../components/Sidebar';
-import SupportBot from '../components/SupportBot';
 import { useCartStore, useFilterStore } from '../store';
 import { ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react';
 
@@ -34,6 +34,7 @@ const MOCK_PRODUCTS = Array.from({ length: 48 }, (_, i) => {
 });
 
 export default function Products() {
+  const navigate = useNavigate();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,7 +42,7 @@ export default function Products() {
   const addToCart = useCartStore((state) => state.addToCart);
   const filters = useFilterStore((state) => state.filters);
 
-  const itemsPerPage = 9;
+  const itemsPerPage = 18;
 
   useEffect(() => {
     setLoading(true);
@@ -89,7 +90,7 @@ export default function Products() {
   };
 
   const handleViewDetails = (productId) => {
-    console.log('View product:', productId);
+    navigate(`/product/${productId}`);
   };
 
   // Pagination
@@ -204,7 +205,6 @@ export default function Products() {
           </div>
         </div>
       </div>
-      <SupportBot isProducts={true} />
     </Layout>
   );
 }

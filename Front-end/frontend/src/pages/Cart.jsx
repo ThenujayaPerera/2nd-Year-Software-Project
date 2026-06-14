@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import CartItem from '../components/CartItem';
 import Alert from '../components/Alert';
-import { useCartStore } from '../store';
-import { ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
+import { useCartStore, useAuthStore, useComparisonStore } from '../store';
+import { ShoppingBag, ArrowRight, Trash2, Scale } from 'lucide-react';
 
 export default function Cart() {
   const cart = useCartStore((state) => state.cart);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
+  const { isAuthenticated } = useAuthStore();
+  const addToComparison = useComparisonStore((state) => state.addToComparison);
   const [alert, setAlert] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const tax = Math.round(subtotal * 0.08); // 8% VAT
@@ -34,8 +37,45 @@ export default function Cart() {
   const handleClearCart = () => {
     if (window.confirm('Are you sure you want to clear your cart?')) {
       clearCart();
+      setSelectedItems([]);
       setAlert({ type: 'success', message: 'Cart cleared' });
     }
+  };
+
+  const handleSelectItem = (productId) => {
+    setSelectedItems(prev => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.length === cart.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(cart.map(item => item.id));
+    }
+  };
+
+  const handleCompareSelected = () => {
+    if (selectedItems.length === 0) {
+      setAlert({ type: 'warning', message: 'Please select items to compare' });
+      return;
+    }
+    
+    const itemsToCompare = cart.filter(item => selectedItems.includes(item.id));
+    let addedCount = 0;
+    
+    itemsToCompare.forEach(item => {
+      if (addedCount < 4) {
+        addToComparison(item);
+        addedCount++;
+      }
+    });
+    
+    setAlert({ type: 'success', message: `Added ${addedCount} item(s) to comparison` });
+    setSelectedItems([]);
   };
 
   return (
@@ -72,6 +112,22 @@ export default function Cart() {
           <div className="grid lg:grid-cols-3 gap-10">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-6">
+              {/* Select All Section */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-100 flex items-center gap-4">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.length === cart.length && cart.length > 0}
+                  onChange={handleSelectAll}
+                  className="w-5 h-5 accent-primary rounded cursor-pointer"
+                  title="Select all items"
+                />
+                <span className="font-semibold text-slate-700">Select All</span>
+                {selectedItems.length > 0 && (
+                  <span className="ml-auto text-sm font-bold text-primary">{selectedItems.length} selected</span>
+                )}
+              </div>
+
+              {/* Cart Items */}
               <div className="space-y-4">
                 {cart.map((item) => (
                   <CartItem
@@ -79,16 +135,28 @@ export default function Cart() {
                     item={item}
                     onQuantityChange={handleQuantityChange}
                     onRemove={handleRemove}
+                    isSelected={selectedItems.includes(item.id)}
+                    onSelectChange={() => handleSelectItem(item.id)}
                   />
                 ))}
               </div>
 
-              <button
-                onClick={handleClearCart}
-                className="w-full py-4 border border-red-100 hover:border-red-200 text-red-500 hover:bg-red-50/50 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all"
-              >
-                <Trash2 className="w-4 h-4" /> Clear Cart
-              </button>
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCompareSelected}
+                  disabled={selectedItems.length === 0}
+                  className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all"
+                >
+                  <Scale className="w-4 h-4" /> Compare Selected
+                </button>
+                <button
+                  onClick={handleClearCart}
+                  className="flex-1 py-4 border border-red-100 hover:border-red-200 text-red-500 hover:bg-red-50/50 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all"
+                >
+                  <Trash2 className="w-4 h-4" /> Clear Cart
+                </button>
+              </div>
             </div>
 
             {/* Order Summary */}
@@ -125,9 +193,9 @@ export default function Cart() {
                 </div>
 
                 <div className="space-y-3">
-                  <button className="w-full py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                  <Link to={isAuthenticated ? "/checkout" : "/login"} className="w-full py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 transition-all">
                     Proceed to Checkout <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </Link>
 
                   <Link to="/products" className="w-full py-4 bg-slate-50 text-slate-700 hover:bg-slate-100 rounded-2xl font-bold text-center block transition-all">
                     Continue Shopping
@@ -140,4 +208,4 @@ export default function Cart() {
       </div>
     </Layout>
   );
-}
+}

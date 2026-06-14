@@ -1,5 +1,7 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SupportBot from './SupportBot';
+import ComparisonFloatingButton from './ComparisonFloatingButton';
 
 export default function Layout({ children }) {
   return (
@@ -9,6 +11,8 @@ export default function Layout({ children }) {
         {children}
       </main>
       <Footer />
+      <ComparisonFloatingButton />
+      <SupportBot />
     </div>
   );
 }

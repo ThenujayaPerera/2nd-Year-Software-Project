@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import Layout from '../components/Layout';
-import SupportBot from '../components/SupportBot';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -312,9 +311,6 @@ export default function Contact() {
             </button>
           </div>
         </div>
-
-        {/* Support Bot Widget */}
-        <SupportBot isProducts={false} />
       </div>
     </Layout>
   );

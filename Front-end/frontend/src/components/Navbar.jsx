@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-import { useAuthStore, useCartStore } from '../store';
-import { ShoppingCart, User, LogOut, Search, Menu, Smartphone, ShieldCheck, Heart, Truck } from 'lucide-react';
+import { useAuthStore, useCartStore, useComparisonStore } from '../store';
+import { ShoppingCart, User, LogOut, Search, Menu, Smartphone, ShieldCheck, Heart, Truck, Scale } from 'lucide-react';
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const cart = useCartStore((state) => state.cart);
+  const comparison = useComparisonStore((state) => state.comparison);
   const cartItemsCount = cart.length;
+  const comparisonCount = comparison.length;
 
   return (
     <div className="sticky top-0 z-50">
@@ -52,21 +54,33 @@ export default function Navbar() {
 
               <div className="h-8 w-px bg-slate-200 hidden md:block" />
 
+              {/* Cart & Wishlist - Always Visible */}
+              <Link to="/wishlist" className={`p-2.5 ${isAuthenticated ? 'text-slate-600 hover:text-accent hover:bg-accent/5' : 'text-slate-400 cursor-not-allowed'} rounded-full transition-all relative`} onClick={(e) => !isAuthenticated && e.preventDefault()}>
+                <Heart className="w-6 h-6" />
+              </Link>
+
+              <Link to={isAuthenticated ? "/comparison" : "/login"} className="p-2.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all relative" title="Compare Products">
+                <Scale className="w-6 h-6" />
+                {comparisonCount > 0 && isAuthenticated && (
+                  <span className="absolute top-1 right-1 bg-blue-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
+                    {comparisonCount}
+                  </span>
+                )}
+              </Link>
+
+              <Link to="/cart" className="p-2.5 text-slate-600 hover:text-primary hover:bg-primary/5 rounded-full transition-all relative">
+                <ShoppingCart className="w-6 h-6" />
+                {cartItemsCount > 0 && (
+                  <span className="absolute top-1 right-1 bg-primary text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
+                    {cartItemsCount}
+                  </span>
+                )}
+              </Link>
+
+              <div className="h-8 w-px bg-slate-200 hidden md:block" />
+
               {isAuthenticated ? (
                 <>
-                  <Link to="/wishlist" className="p-2.5 text-slate-600 hover:text-accent hover:bg-accent/5 rounded-full transition-all relative">
-                    <Heart className="w-6 h-6" />
-                  </Link>
-
-                  <Link to="/cart" className="p-2.5 text-slate-600 hover:text-primary hover:bg-primary/5 rounded-full transition-all relative">
-                    <ShoppingCart className="w-6 h-6" />
-                    {cartItemsCount > 0 && (
-                      <span className="absolute top-1 right-1 bg-primary text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
-                        {cartItemsCount}
-                      </span>
-                    )}
-                  </Link>
-
                   <div className="relative group ml-2">
                     <button className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-full border border-slate-200 hover:border-primary/30 hover:bg-primary/5 transition-all">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">

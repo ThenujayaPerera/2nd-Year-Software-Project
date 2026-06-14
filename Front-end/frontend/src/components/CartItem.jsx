@@ -1,13 +1,23 @@
 import { Trash2, Plus, Minus } from 'lucide-react';
 
-export default function CartItem({ item, onQuantityChange, onRemove }) {
+export default function CartItem({ item, onQuantityChange, onRemove, isSelected, onSelectChange }) {
   return (
     <div className="bg-white rounded-2xl p-5 border border-slate-100 flex gap-6 items-center hover:shadow-md transition-all duration-300">
+      {/* Checkbox */}
+      {onSelectChange && (
+        <input
+          type="checkbox"
+          checked={isSelected || false}
+          onChange={onSelectChange}
+          className="w-5 h-5 accent-primary rounded cursor-pointer flex-shrink-0"
+        />
+      )}
+
       {/* Product Image */}
       <img
         src={item.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
         alt={item.name}
-        className="w-20 h-20 object-cover rounded-xl bg-slate-50"
+        className="w-20 h-20 object-cover rounded-xl bg-slate-50 flex-shrink-0"
       />
 
       {/* Product Details */}

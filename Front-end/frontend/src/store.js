@@ -123,3 +123,37 @@ export const useFilterStore = create((set) => ({
     }
   })),
 }));
+
+// Comparison Store
+export const useComparisonStore = create((set) => ({
+  comparison: JSON.parse(localStorage.getItem('comparison')) || [],
+
+  addToComparison: (product) => set((state) => {
+    const alreadyAdded = state.comparison.find(item => item.id === product.id);
+    if (alreadyAdded) {
+      return { comparison: state.comparison };
+    }
+    if (state.comparison.length >= 4) {
+      return { comparison: state.comparison };
+    }
+    const updatedComparison = [...state.comparison, product];
+    localStorage.setItem('comparison', JSON.stringify(updatedComparison));
+    return { comparison: updatedComparison };
+  }),
+
+  removeFromComparison: (productId) => set((state) => {
+    const updatedComparison = state.comparison.filter(item => item.id !== productId);
+    localStorage.setItem('comparison', JSON.stringify(updatedComparison));
+    return { comparison: updatedComparison };
+  }),
+
+  clearComparison: () => set(() => {
+    localStorage.removeItem('comparison');
+    return { comparison: [] };
+  }),
+
+  isInComparison: (productId) => {
+    const state = useComparisonStore.getState();
+    return state.comparison.some(item => item.id === productId);
+  },
+}));
