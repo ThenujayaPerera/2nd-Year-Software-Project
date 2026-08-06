@@ -25,7 +25,7 @@ export default function Checkout() {
   });
 
   const [paymentData, setPaymentData] = useState({
-    method: 'card', // card, bank, koko
+    method: 'card', // card, bank, koko, payzy
     cardName: '',
     cardNumber: '',
     expiryDate: '',
@@ -307,6 +307,25 @@ export default function Checkout() {
                         </div>
                         <p className="text-sm font-bold text-center">Koko Pay</p>
                       </label>
+
+                      <label className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        paymentData.method === 'payzy'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-slate-200 hover:border-slate-300'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="method"
+                          value="payzy"
+                          checked={paymentData.method === 'payzy'}
+                          onChange={handlePaymentChange}
+                          className="hidden"
+                        />
+                        <div className="flex items-center justify-center mb-2">
+                          <Smartphone className="w-6 h-6" />
+                        </div>
+                        <p className="text-sm font-bold text-center">Payzy</p>
+                      </label>
                     </div>
                   </div>
 
@@ -380,6 +399,12 @@ export default function Checkout() {
                     </div>
                   )}
 
+                  {paymentData.method === 'payzy' && (
+                    <div className="p-4 bg-cyan-50 rounded-lg border border-cyan-200 mb-6">
+                      <p className="text-sm text-cyan-900">You will be redirected to Payzy to complete your payment in installments.</p>
+                    </div>
+                  )}
+
                   <div className="flex gap-4">
                     <button
                       onClick={() => setStep(1)}
@@ -419,6 +444,7 @@ export default function Checkout() {
                         {paymentData.method === 'card' && '💳 Credit/Debit Card'}
                         {paymentData.method === 'bank' && '🏦 Bank Transfer'}
                         {paymentData.method === 'koko' && '📱 Koko Pay (3 Installments)'}
+                        {paymentData.method === 'payzy' && '📱 Payzy Installments'}
                       </p>
                     </div>
 

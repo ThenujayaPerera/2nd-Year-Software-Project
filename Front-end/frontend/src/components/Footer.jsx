@@ -43,12 +43,11 @@ export default function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="bg-primary p-2 rounded-xl">
-                <Smartphone className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-black tracking-tighter text-white">
-                NV<span className="text-primary">SHOP</span>
-              </span>
+              <img 
+                src="/logo.png" 
+                alt="NVSHOP.LK" 
+                className="h-10 w-auto object-contain bg-white/90 p-1.5 rounded-lg" 
+              />
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
               Elevating your mobile experience with curated, high-performance accessories designed to protect and power your devices.

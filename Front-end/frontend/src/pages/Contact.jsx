@@ -264,15 +264,18 @@ export default function Contact() {
 
             {/* Support Bot - 1 column */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100 h-full">
+              <div 
+                onClick={() => window.dispatchEvent(new CustomEvent('open-support-bot'))}
+                className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100 h-full cursor-pointer hover:border-primary/30 transition-all group"
+              >
                 <h3 className="text-lg font-black text-slate-900 mb-4">Need Quick Help?</h3>
                 <p className="text-sm text-slate-600 mb-6">
                   Our AI-powered support bot is available 24/7 to answer your questions instantly.
                 </p>
-                <div className="flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl">
+                <div className="flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl group-hover:bg-primary/15 transition-all">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">🤖</div>
-                    <p className="text-sm text-slate-600">Click the chat button in the bottom right →</p>
+                    <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🤖</div>
+                    <p className="text-sm font-bold text-primary">Click to Open AI Live Chat 💬</p>
                   </div>
                 </div>
               </div>
@@ -306,9 +309,22 @@ export default function Contact() {
             <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
               Our expert support team is available 24/7. Don't hesitate to reach out—we're always happy to help!
             </p>
-            <button className="bg-gradient-to-r from-primary to-primary/80 hover:to-primary text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl inline-block">
-              Start a Live Chat
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('open-support-bot'))}
+                className="bg-gradient-to-r from-primary to-primary/80 hover:to-primary text-white font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+              >
+                💬 Start Live AI Chat
+              </button>
+              <a 
+                href="https://wa.me/94769890079?text=Hello%20NVSHOP.LK%20Support" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+              >
+                📱 WhatsApp Live Agent
+              </a>
+            </div>
           </div>
         </div>
       </div>

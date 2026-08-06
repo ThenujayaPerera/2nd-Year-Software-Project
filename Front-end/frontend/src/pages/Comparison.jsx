@@ -158,6 +158,31 @@ export default function Comparison() {
                     ))}
                   </tr>
 
+                    {/* Performance */}
+                    <tr className="border-b border-slate-200">
+                      <td className="px-6 py-4 font-bold text-slate-900">Performance</td>
+                      {comparison.map((product) => {
+                        const score = product.performance?.score ?? Math.round(product.rating * 20);
+                        const color = score >= 80 ? 'bg-green-400' : score >= 60 ? 'bg-yellow-400' : 'bg-red-400';
+                        return (
+                          <td key={product.id} className="px-6 py-4 text-center">
+                            <div className="max-w-xs mx-auto">
+                              <div className="flex items-center justify-center gap-3 mb-2">
+                                <span className="text-sm font-bold text-slate-900">{score}</span>
+                                <span className="text-xs text-slate-500">/100</span>
+                              </div>
+                              <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full ${color}`}
+                                  style={{ width: `${score}%` }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                        );
+                      })}
+                    </tr>
+
                   {/* Warranty */}
                   <tr className="border-b border-slate-200">
                     <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">

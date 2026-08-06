@@ -13,22 +13,28 @@ export default function Sidebar() {
   } = useFilterStore();
 
   const categories = [
-    'Cases',
-    'Chargers',
-    'Cables',
-    'Protection',
-    'Wireless',
+    'Apple iPhone',
+    'Earphones & Headsets',
+    'Power Banks',
+    'Speakers',
+    'Chargers & Cables & Adapters',
+    'Phone Cases & Back Covers',
+    'Screen Protectors',
+    'Smart Watches',
+    'Mouse & Keyboards',
+    'Pendrives & SD Cards',
+    'Others',
   ];
 
   const brands = [
     'Apple',
     'Samsung',
     'Anker',
+    'UGREEN',
+    'Baseus',
+    'Sony',
     'Spigen',
-    'NV-Premium',
-    'PowerFlow',
-    'ArmorShield',
-    'NV-Tech',
+    'Aspor',
   ];
 
   return (
@@ -51,20 +57,21 @@ export default function Sidebar() {
         <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
           <Layers className="w-3.5 h-3.5" /> Categories
         </h4>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-2 max-h-72 overflow-y-auto pr-1">
           {categories.map((cat) => {
             const isSelected = filters.category === cat;
             return (
               <button
                 key={cat}
                 onClick={() => setCategory(isSelected ? '' : cat)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                className={`px-4 py-2.5 rounded-xl text-xs font-semibold text-left border transition-all flex items-center justify-between group ${
                   isSelected
                     ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20'
-                    : 'bg-slate-50 border-slate-100 text-slate-600 hover:bg-slate-100 hover:border-slate-200'
+                    : 'bg-slate-50 border-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100'
                 }`}
               >
-                {cat}
+                <span>{cat}</span>
+                <span className={`text-[10px] ${isSelected ? 'text-white/80' : 'text-slate-400 group-hover:text-blue-500'}`}>›</span>
               </button>
             );
           })}
@@ -80,8 +87,8 @@ export default function Sidebar() {
           <input
             type="range"
             min="0"
-            max="25000"
-            step="500"
+            max="50000"
+            step="1000"
             value={filters.priceRange[1]}
             onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
             className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary"
@@ -176,4 +183,3 @@ export default function Sidebar() {
     </aside>
   );
 }
-

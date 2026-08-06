@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Alert from '../components/Alert';
 import { useAuthStore } from '../store';
-import { Mail, Lock, Eye, EyeOff, Smartphone, LogIn } from 'lucide-react';
+import { authAPI } from '../services/api';
+import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,35 +12,32 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setAlert(null);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await authAPI.login({ email, password });
+      const { token, user: userData } = response.data;
 
-      // Mock authentication
-      const userData = {
-        id: 1,
-        name: email.split('@')[0],
-        email,
-        role: 'user',
-      };
+      login(userData || { id: 1, name: email.split('@')[0], email, role: 'user' });
+      if (token) {
+        localStorage.setItem('token', token);
+      }
 
-      login(userData);
-      localStorage.setItem('token', 'mock-token-' + Date.now());
-
-      setAlert({ type: 'success', message: 'Welcome back! Redirecting...' });
+      setAlert({ type: 'success', message: 'Logged in successfully! Redirecting...' });
 
       setTimeout(() => {
         navigate('/');
-      }, 1200);
+      }, 800);
     } catch (error) {
-      setAlert({ type: 'error', message: 'Login failed. Please try again.' });
+      const errorMsg = error.response?.data?.message || 'Login failed. Invalid email or password.';
+      setAlert({ type: 'error', message: errorMsg });
     } finally {
       setLoading(false);
     }
@@ -54,19 +52,18 @@ export default function Login() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)]" />
             <div className="relative z-10">
               <Link to="/" className="flex items-center gap-3">
-                <div className="bg-white/10 backdrop-blur-md p-2.5 rounded-xl border border-white/20">
-                  <Smartphone className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-2xl font-black tracking-tighter">
-                  NV<span className="text-blue-200">SHOP</span>
-                </span>
+                <img 
+                  src="/logo.png" 
+                  alt="NVSHOP.LK" 
+                  className="h-12 w-auto object-contain bg-white/95 p-2 rounded-xl border border-white/20 shadow-sm" 
+                />
               </Link>
             </div>
             
             <div className="relative z-10 my-auto py-12">
-              <h2 className="text-4xl font-black mb-6 leading-tight">Access the Elite Tech Circle</h2>
+              <h2 className="text-4xl font-black mb-6 leading-tight">Welcome Back to NVSHOP.LK</h2>
               <p className="text-slate-200 leading-relaxed text-sm max-w-sm">
-                Unlock exclusive member benefits, view order history, and enjoy curated collections designed for tech perfection.
+                Sign in to manage your orders, track deliveries, and access exclusive member deals on authentic tech accessories.
               </p>
             </div>
 
@@ -78,8 +75,8 @@ export default function Login() {
           {/* Form Side */}
           <div className="p-8 md:p-16 flex flex-col justify-center">
             <div className="mb-8">
-              <h1 className="text-3xl font-black text-slate-900 mb-2">Welcome Back</h1>
-              <p className="text-sm text-slate-500 font-medium">Log in to manage your orders and profile.</p>
+              <h1 className="text-3xl font-black text-slate-900 mb-2">Account Login</h1>
+              <p className="text-sm text-slate-500 font-medium">Enter your email and password to log in.</p>
             </div>
 
             {alert && (
@@ -92,7 +89,7 @@ export default function Login() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleLogin} className="space-y-5">
               {/* Email */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
@@ -106,6 +103,7 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="input-premium pl-12"
                     placeholder="you@example.com"
+                    autoComplete="username"
                     required
                   />
                 </div>
@@ -124,6 +122,7 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="input-premium pl-12 pr-12"
                     placeholder="••••••••"
+                    autoComplete="current-password"
                     required
                   />
                   <button
@@ -136,24 +135,13 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Remember & Forgot */}
-              <div className="flex items-center justify-between text-xs font-semibold">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="w-4 h-4 rounded border-slate-350 text-blue-600 focus:ring-blue-500/20" />
-                  <span className="text-slate-650">Remember me</span>
-                </label>
-                <Link to="/forgot-password" className="text-blue-600 hover:text-blue-700 transition-colors">
-                  Forgot password?
-                </Link>
-              </div>
-
               {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-75 disabled:hover:shadow-none"
               >
-                <LogIn className="w-5 h-5" /> {loading ? 'Signing in...' : 'Sign In'}
+                <LogIn className="w-5 h-5" /> {loading ? 'Logging in...' : 'Log In'}
               </button>
             </form>
 
@@ -171,4 +159,4 @@ export default function Login() {
       </div>
     </Layout>
   );
-}
+}

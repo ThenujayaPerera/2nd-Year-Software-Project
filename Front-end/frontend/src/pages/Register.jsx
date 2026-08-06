@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Phone, MapPin, Eye, EyeOff, Check } from 'lucide-react';
 import { useAuthStore } from '../store';
+import { authAPI } from '../services/api';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -20,6 +21,10 @@ export default function Register() {
 
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [otpMessage, setOtpMessage] = useState('');
 
   const validateForm = () => {
     const newErrors = {};
@@ -54,20 +59,48 @@ export default function Register() {
       return;
     }
 
-    setSuccess(true);
-    
-    // Simulate registration and auto-login
-    setTimeout(() => {
-      login({
-        id: Date.now(),
+    try {
+      const response = await authAPI.register({
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        role: 'user',
+        password: formData.password,
       });
+
+      setOtpSent(true);
+      setOtpMessage(response.data?.message || 'OTP sent to your email.');
+      setSuccess(true);
+      setOtpError('');
+      setTimeout(() => setSuccess(false), 1500);
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || 'Registration failed. Please try again.';
+      setErrors({ server: errorMsg });
+    }
+  };
+
+  const handleOtpChange = (e) => {
+    setOtp(e.target.value);
+    if (otpError) {
+      setOtpError('');
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (!otp.match(/^\d{6}$/)) {
+      setOtpError('Enter a valid 6-digit OTP');
+      return;
+    }
+    try {
+      const response = await authAPI.verifyOtp({ email: formData.email, otp });
+      const { token, user: userData } = response.data;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      login(userData);
       navigate('/');
-    }, 1500);
+    } catch (error) {
+      setOtpError(error.response?.data?.message || 'OTP verification failed.');
+    }
   };
 
   return (
@@ -77,21 +110,33 @@ export default function Register() {
           <div className="grid md:grid-cols-2 gap-0">
             {/* Left Side - Form */}
             <div className="p-8 md:p-12">
-              <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">
-                  Create Account
-                </h1>
-                <p className="text-slate-600">Join NV-SHOP for exclusive deals and rewards</p>
+              <div className="mb-8 flex items-center justify-between gap-4">
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">
+                    Create Account
+                  </h1>
+                  <p className="text-slate-600">Join NVSHOP.LK for exclusive deals and rewards</p>
+                </div>
+                <Link to="/">
+                  <img src="/logo.png" alt="NVSHOP.LK" className="h-10 w-auto object-contain" />
+                </Link>
               </div>
 
               {success && (
                 <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
                   <Check className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-green-800">Registration successful! Redirecting...</span>
+                  <span className="text-sm text-green-800">{otpSent ? otpMessage : 'Registration successful! Redirecting...'}</span>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              {errors.server && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  {errors.server}
+                </div>
+              )}
+
+              {!otpSent && (
+                <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Name Fields */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -271,6 +316,40 @@ export default function Register() {
                   {success ? 'Creating Account...' : 'Create Account'}
                 </button>
               </form>
+              )}
+
+              {otpSent && (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Enter OTP</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={otp}
+                        onChange={handleOtpChange}
+                        placeholder="123456"
+                        maxLength={6}
+                        className={`w-full pr-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
+                          otpError
+                            ? 'border-red-300 bg-red-50 focus:border-red-500'
+                            : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
+                        }`}
+                      />
+                    </div>
+                    {otpError && <p className="text-xs text-red-600 mt-1">{otpError}</p>}
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full mt-6 bg-gradient-to-r from-primary to-primary/80 hover:to-primary text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    Verify OTP
+                  </button>
+                  <p className="text-sm text-slate-500 mt-2">
+                    An OTP has been sent to <strong>{formData.email}</strong>. Check your inbox and spam folder.
+                  </p>
+                </form>
+              )}
 
               <p className="text-center text-slate-600 text-sm mt-6">
                 Already have an account? <Link to="/login" className="text-primary font-bold hover:underline">Sign In</Link>

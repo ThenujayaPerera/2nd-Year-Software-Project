@@ -26,6 +26,15 @@ export default function SupportBot({ isProducts = false }) {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    const handleOpenBot = () => {
+      setIsOpen(true);
+      setIsMinimized(false);
+    };
+    window.addEventListener('open-support-bot', handleOpenBot);
+    return () => window.removeEventListener('open-support-bot', handleOpenBot);
+  }, []);
+
   const productResponses = {
     charger: {
       suggestions: [

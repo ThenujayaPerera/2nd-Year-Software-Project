@@ -124,10 +124,15 @@ export default function About() {
                   </p>
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl p-12 flex items-center justify-center min-h-96">
-                <div className="text-center">
-                  <Smartphone className="w-24 h-24 text-primary/30 mx-auto mb-6" />
-                  <p className="text-slate-500 font-semibold">Building trust through excellence</p>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-100 aspect-[4/3] group">
+                <img 
+                  src="/store/store-showroom.jpg" 
+                  alt="NVSHOP.LK Physical Showroom" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent p-6 flex flex-col justify-end">
+                  <span className="text-xs font-bold text-primary tracking-widest uppercase">Visit Us</span>
+                  <h4 className="text-xl font-bold text-white">NVSHOP.LK Store, Ambalangoda</h4>
                 </div>
               </div>
             </div>

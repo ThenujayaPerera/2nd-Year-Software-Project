@@ -1,12 +1,57 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Package, Clock, CheckCircle, AlertCircle, Calendar, Shield, Download, MessageSquare, ChevronDown } from 'lucide-react';
 import { useAuthStore } from '../store';
 import Layout from '../components/Layout';
+import CustomerCard from '../components/CustomerCard';
 
 export default function UserProfile() {
-  const { user } = useAuthStore();
+  const { user, isAuthenticated, setUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState('pending');
   const [expandedItem, setExpandedItem] = useState(null);
+
+  const handleDemoUser = () => {
+    const demoUser = {
+      id: 1,
+      name: 'Alice Doe',
+      email: 'alice@example.com',
+      phone: '+94 76 989 0079',
+      address: '185/1/2B New Road, Ambalangoda, Sri Lanka',
+      avatar: 'https://i.pravatar.cc/150?img=3',
+      role: 'user',
+    };
+    setUser(demoUser);
+  };
+
+  if (!isAuthenticated || !user) {
+    return (
+      <Layout>
+        <div className="min-h-[calc(100vh-8rem)] bg-gradient-to-br from-slate-50 to-slate-100 py-20 px-4">
+          <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-10 text-center">
+            <h1 className="text-3xl font-black text-slate-900 mb-4">Sign in to see your customer profile</h1>
+            <p className="text-slate-600 mb-8">
+              The customer dashboard is available after login. Use a demo profile if you want to preview it immediately.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3 text-white text-sm font-semibold hover:bg-primary/90 transition"
+              >
+                Go to Login
+              </Link>
+              <button
+                type="button"
+                onClick={handleDemoUser}
+                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+              >
+                Use Demo Customer
+              </button>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   // Mock data - replace with API calls
   const pendingItems = [
@@ -150,6 +195,8 @@ export default function UserProfile() {
               </div>
             </div>
           </div>
+          {/* Customer Card */}
+          <CustomerCard customer={user} pendingCount={pendingItems.length} boughtCount={boughtItems.length} />
 
           {/* Tabs */}
           <div className="flex gap-4 mb-8 border-b border-slate-200">

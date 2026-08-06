@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useCartStore } from '../store';
+import { productAPI } from '../services/api';
 import { Star, ShoppingCart, ArrowLeft, Truck, Shield, RotateCcw } from 'lucide-react';
 
-// Mock product database - same as Products.jsx
+// Mock product database fallback
 const MOCK_PRODUCTS = Array.from({ length: 48 }, (_, i) => {
   const category = ['Cases', 'Chargers', 'Cables', 'Protection', 'Wireless'][i % 5];
   const brand = ['Apple', 'Samsung', 'Anker', 'Spigen', 'NV-Premium', 'PowerFlow', 'ArmorShield', 'NV-Tech'][i % 8];
@@ -53,10 +54,59 @@ const MOCK_PRODUCTS = Array.from({ length: 48 }, (_, i) => {
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = MOCK_PRODUCTS.find(p => p.id === parseInt(id));
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const addToCart = useCartStore((state) => state.addToCart);
   const [quantity, setQuantity] = useState(1);
-  const [mainImage, setMainImage] = useState(product?.image || '');
+  const [mainImage, setMainImage] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+
+    productAPI.getById(id)
+      .then((res) => {
+        if (isMounted && res.data) {
+          const item = {
+            ...res.data,
+            features: res.data.features || ['Premium Materials', 'Easy Installation', 'Perfect Fit', 'Quality Assured'],
+            specifications: res.data.specifications || [
+              { label: 'Brand', value: res.data.brand || 'N/A' },
+              { label: 'Category', value: res.data.category || 'N/A' },
+              { label: 'Warranty', value: res.data.warranty || '1 Year' },
+              { label: 'Stock Status', value: res.data.stock > 0 ? 'In Stock' : 'Out of Stock' }
+            ]
+          };
+          setProduct(item);
+          setMainImage(item.image);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          const fallback = MOCK_PRODUCTS.find(p => p.id === parseInt(id));
+          if (fallback) {
+            setProduct(fallback);
+            setMainImage(fallback.image);
+          }
+        }
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => { isMounted = false; };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto px-6 py-20 text-center animate-pulse">
+          <div className="h-8 bg-slate-200 rounded w-1/3 mx-auto mb-4" />
+          <div className="h-4 bg-slate-200 rounded w-1/4 mx-auto" />
+        </div>
+      </Layout>
+    );
+  }
 
   if (!product) {
     return (

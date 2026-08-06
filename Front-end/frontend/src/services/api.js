@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -31,7 +31,9 @@ export const productAPI = {
 // Auth endpoints
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
+  verifyLoginOtp: (data) => api.post('/auth/login/verify', data),
   register: (data) => api.post('/auth/register', data),
+  verifyOtp: (data) => api.post('/auth/register/verify', data),
   logout: () => api.post('/auth/logout'),
   refreshToken: () => api.post('/auth/refresh'),
   verifyToken: () => api.get('/auth/verify'),

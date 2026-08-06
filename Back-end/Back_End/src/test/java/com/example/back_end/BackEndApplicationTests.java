@@ -8,6 +8,8 @@ class BackEndApplicationTests {
 
     @Test
     void contextLoads() {
+        // Context loading test
+        // This test verifies that the Spring context can be initialized
     }
 
 }
