@@ -40,6 +40,7 @@ function App() {
         <Route path="/UserProfile" element={<UserProfile />} />
         <Route path="/orders" element={<UserProfile />} />
         <Route path="/about" element={<About />} />
+        <Route path="/about-us" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/shipping-info" element={<ShippingInfo />} />

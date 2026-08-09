@@ -33,6 +33,20 @@ const socialLinks = [
   },
 ];
 
+const exploreLinks = [
+  { label: 'Products', to: '/products' },
+  { label: 'About Us', to: '/about' },
+  { label: 'Contact', to: '/contact' },
+  { label: 'FAQ', to: '/faq' },
+];
+
+const supportLinks = [
+  { label: 'Shipping Info', to: '/shipping-info' },
+  { label: 'Returns', to: '/returns' },
+  { label: 'Privacy Policy', to: '/privacy-policy' },
+  { label: 'Terms & Conditions', to: '/terms-conditions' },
+];
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -65,11 +79,11 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Explore</h4>
             <ul className="space-y-3">
-              {['Products', 'About Us', 'Contact', 'FAQ'].map((link) => (
-                <li key={link}>
-                  <Link to={`/${link.toLowerCase().replace(' ', '-')}`} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
+              {exploreLinks.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
                     <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
-                    {link}
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -80,11 +94,11 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Support</h4>
             <ul className="space-y-3">
-              {['Shipping Info', 'Returns', 'Privacy Policy', 'Terms & Conditions'].map((link) => (
-                <li key={link}>
-                  <Link to={`/${link.toLowerCase().replace(' & ', '-').replace(' ', '-')}`} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
+              {supportLinks.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
                     <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
-                    {link}
+                    {link.label}
                   </Link>
                 </li>
               ))}
@@ -129,4 +143,3 @@ export default function Footer() {
     </footer>
   );
 }
-

@@ -75,8 +75,12 @@ export default function About() {
         {/* Hero Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6">
-              <Smartphone className="w-8 h-8 text-primary" />
+            <div className="inline-flex items-center justify-center p-3 bg-white shadow-md border border-slate-100 rounded-2xl mb-6">
+              <img 
+                src="/logo.png" 
+                alt="NVSHOP.LK" 
+                className="h-12 w-auto object-contain" 
+              />
             </div>
             <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-6">
               Welcome to <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">NV-SHOP</span>
