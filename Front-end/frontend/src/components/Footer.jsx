@@ -122,10 +122,17 @@ export default function Footer() {
                 <span>+94 76 989 0079</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-slate-400">
-                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary mt-0.5">
+                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary mt-0.5 shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
-                <span>185/1/2B New Road, Ambalangoda, Sri Lanka</span>
+                <a
+                  href="https://maps.app.goo.gl/WfExCK9c9LUyhRd48"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  185/1/2B New Road, Ambalangoda, Sri Lanka
+                </a>
               </li>
             </ul>
           </div>
