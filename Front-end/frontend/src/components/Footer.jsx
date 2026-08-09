@@ -110,10 +110,15 @@ export default function Footer() {
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Get in Touch</h4>
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-sm text-slate-400">
-                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary">
+                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary shrink-0">
                   <Mail className="w-4 h-4" />
                 </div>
-                <span>nvshopamba@gmail.com</span>
+                <a
+                  href="mailto:nvshopamba@gmail.com"
+                  className="hover:text-white transition-colors"
+                >
+                  nvshopamba@gmail.com
+                </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-slate-400">
                 <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary">
