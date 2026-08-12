@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gpsd-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: gpsd_project
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - gpsd-network
+
+  app:
+    build: .
+    container_name: gpsd-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gpsd_project
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - gpsd-network
+
+volumes:
+  mysql_data:
+
+networks:
+  gpsd-network:
+    driver: bridge

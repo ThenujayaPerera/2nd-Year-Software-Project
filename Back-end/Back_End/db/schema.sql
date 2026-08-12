@@ -1,0 +1,30 @@
+-- Database Schema for GPSD Project
+-- Compatible with MySQL 8.0 / H2 / PostgreSQL
+
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DOUBLE NOT NULL,
+    original_price DOUBLE,
+    category VARCHAR(255) NOT NULL,
+    brand VARCHAR(255) NOT NULL,
+    rating DOUBLE DEFAULT 4.5,
+    reviews INT DEFAULT 15,
+    image VARCHAR(1000),
+    discount INT DEFAULT 0,
+    is_new BOOLEAN DEFAULT FALSE,
+    stock INT DEFAULT 10,
+    warranty VARCHAR(255) DEFAULT '1 Year',
+    return_period VARCHAR(255) DEFAULT '30 Days',
+    description VARCHAR(2000)
+);
