@@ -157,3 +157,30 @@ export const useComparisonStore = create((set) => ({
     return state.comparison.some(item => item.id === productId);
   },
 }));
+
+// Wishlist Store
+export const useWishlistStore = create((set, get) => ({
+  wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
+
+  toggleWishlist: (product) => set((state) => {
+    const exists = state.wishlist.some((item) => item.id === product.id);
+    let updated;
+    if (exists) {
+      updated = state.wishlist.filter((item) => item.id !== product.id);
+    } else {
+      updated = [...state.wishlist, product];
+    }
+    localStorage.setItem('wishlist', JSON.stringify(updated));
+    return { wishlist: updated };
+  }),
+
+  isInWishlist: (productId) => {
+    return get().wishlist.some((item) => item.id === productId);
+  },
+
+  clearWishlist: () => set(() => {
+    localStorage.removeItem('wishlist');
+    return { wishlist: [] };
+  }),
+}));
+

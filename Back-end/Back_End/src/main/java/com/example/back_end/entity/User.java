@@ -28,6 +28,15 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "is_email_verified")
+    private Boolean isEmailVerified = false;
+
+    @Column(name = "is_phone_verified")
+    private Boolean isPhoneVerified = false;
+
     @NotBlank(message = "Password cannot be blank")
     @Column(nullable = false)
     private String password;

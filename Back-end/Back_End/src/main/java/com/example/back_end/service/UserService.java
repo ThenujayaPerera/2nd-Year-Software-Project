@@ -41,8 +41,11 @@ public class UserService {
         User user = new User();
         user.setName(userCreateDTO.getName());
         user.setEmail(userCreateDTO.getEmail());
+        user.setPhone(userCreateDTO.getPhone());
         user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         user.setIsActive(false);
+        user.setIsEmailVerified(false);
+        user.setIsPhoneVerified(false);
 
         User savedUser = userRepository.save(user);
         log.info("User created successfully with ID: {}", savedUser.getId());
@@ -92,10 +95,10 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid email"));
 
-        if (!Boolean.TRUE.equals(user.getIsActive())) {
-            user.setIsActive(true);
-            userRepository.save(user);
-        }
+        user.setIsActive(true);
+        user.setIsEmailVerified(true);
+        user.setIsPhoneVerified(true);
+        userRepository.save(user);
 
         String token = "bearer-token-" + user.getId() + "-" + System.currentTimeMillis();
         return new AuthResponseDTO(token, convertToDTO(user));
@@ -202,6 +205,30 @@ public class UserService {
     }
 
     /**
+     * Get all users (Active and Inactive)
+     */
+    public List<UserDTO> getAllUsers() {
+        log.info("Fetching all users");
+        return userRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Toggle active/inactive user status
+     */
+    @Transactional
+    public UserDTO toggleUserStatus(Long id) {
+        log.info("Toggling status for user ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        user.setIsActive(!Boolean.TRUE.equals(user.getIsActive()));
+        User updated = userRepository.save(user);
+        return convertToDTO(updated);
+    }
+
+    /**
      * Convert User entity to UserDTO
      */
     private UserDTO convertToDTO(User user) {
@@ -209,6 +236,9 @@ public class UserService {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getPhone(),
+                user.getIsEmailVerified(),
+                user.getIsPhoneVerified(),
                 user.getIsActive(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()

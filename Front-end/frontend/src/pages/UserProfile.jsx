@@ -1,50 +1,77 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Package, Clock, CheckCircle, AlertCircle, Calendar, Shield, Download, MessageSquare, ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  Package, Clock, CheckCircle, AlertCircle, Calendar, Shield, 
+  Download, MessageSquare, ChevronDown, User, MapPin, Phone, Mail, 
+  ShoppingBag, LogOut, ArrowRight, ShieldCheck, Truck, Store, ExternalLink
+} from 'lucide-react';
 import { useAuthStore } from '../store';
 import Layout from '../components/Layout';
-import CustomerCard from '../components/CustomerCard';
 
 export default function UserProfile() {
-  const { user, isAuthenticated, setUser } = useAuthStore();
-  const [activeTab, setActiveTab] = useState('pending');
-  const [expandedItem, setExpandedItem] = useState(null);
+  const navigate = useNavigate();
+  const { user, isAuthenticated, setUser, logout } = useAuthStore();
+  const [activeTab, setActiveTab] = useState('orders');
+  const [liveOrders, setLiveOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  // Always declare hooks at the top level
+  useEffect(() => {
+    if (user?.email) {
+      setLoadingOrders(true);
+      fetch(`http://localhost:8080/api/orders/my-orders?email=${encodeURIComponent(user.email)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) setLiveOrders(data);
+        })
+        .catch((err) => console.warn('Could not fetch live orders:', err))
+        .finally(() => setLoadingOrders(false));
+    }
+  }, [user?.email]);
 
   const handleDemoUser = () => {
     const demoUser = {
       id: 1,
-      name: 'Alice Doe',
-      email: 'alice@example.com',
-      phone: '+94 76 989 0079',
+      name: 'Mayantha Nawarathna',
+      email: 'mayanthanawarathna37@gmail.com',
+      phone: '+94 72 583 5742',
       address: '185/1/2B New Road, Ambalangoda, Sri Lanka',
-      avatar: 'https://i.pravatar.cc/150?img=3',
-      role: 'user',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+      role: 'customer',
     };
     setUser(demoUser);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   if (!isAuthenticated || !user) {
     return (
       <Layout>
-        <div className="min-h-[calc(100vh-8rem)] bg-gradient-to-br from-slate-50 to-slate-100 py-20 px-4">
-          <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-10 text-center">
-            <h1 className="text-3xl font-black text-slate-900 mb-4">Sign in to see your customer profile</h1>
-            <p className="text-slate-600 mb-8">
-              The customer dashboard is available after login. Use a demo profile if you want to preview it immediately.
+        <div className="min-h-[calc(100vh-8rem)] bg-slate-50 py-16 px-4 flex items-center justify-center">
+          <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 sm:p-10 text-center border border-slate-100">
+            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+              <User className="w-8 h-8" />
+            </div>
+            <h1 className="text-2xl font-black text-slate-900 mb-2">Customer Profile</h1>
+            <p className="text-slate-500 text-xs leading-relaxed mb-6">
+              Sign in to view your orders, live delivery tracking, and authentic brand warranty certificates.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="space-y-3">
               <Link
                 to="/login"
-                className="inline-flex items-center justify-center rounded-2xl bg-primary px-6 py-3 text-white text-sm font-semibold hover:bg-primary/90 transition"
+                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all"
               >
-                Go to Login
+                Sign In to Your Account <ArrowRight className="w-4 h-4" />
               </Link>
               <button
                 type="button"
                 onClick={handleDemoUser}
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
+                className="w-full py-3 border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl transition-all"
               >
-                Use Demo Customer
+                Instant Preview with Demo Customer
               </button>
             </div>
           </div>
@@ -53,249 +80,200 @@ export default function UserProfile() {
     );
   }
 
-  // Mock data - replace with API calls
-  const pendingItems = [
+  // Warranty data mockup for customer gadgets
+  const warrantyItems = [
     {
-      id: 1,
-      name: 'Anker PowerCore 30000mAh',
-      orderId: 'ORD-001',
-      orderDate: '2024-01-15',
-      estimatedDelivery: '2024-01-20',
-      status: 'Processing',
-      price: 45.99,
-      warranty: '2 Years',
-      color: 'Black',
-      quantity: 1,
-      daysRemaining: 3,
+      id: 'W-901',
+      productName: 'Anker 737 Power Bank (PowerCore 24K 140W)',
+      brand: 'Anker',
+      serialNumber: 'ANK-24K-881920',
+      purchaseDate: '2026-07-15',
+      warrantyPeriod: '18 Months Official Warranty',
+      status: 'Active',
+      daysRemaining: 512,
     },
     {
-      id: 2,
-      name: 'UGREEN USB-C Hub 7-in-1',
-      orderId: 'ORD-002',
-      orderDate: '2024-01-18',
-      estimatedDelivery: '2024-01-25',
-      status: 'Shipped',
-      price: 59.99,
-      warranty: '1 Year',
-      color: 'Silver',
-      quantity: 1,
-      daysRemaining: 4,
+      id: 'W-902',
+      productName: 'UGREEN Nexode 100W 4-Port GaN Fast Charger',
+      brand: 'UGREEN',
+      serialNumber: 'UGR-100W-440219',
+      purchaseDate: '2026-08-01',
+      warrantyPeriod: '1 Year Warranty',
+      status: 'Active',
+      daysRemaining: 354,
     },
   ];
-
-  const boughtItems = [
-    {
-      id: 101,
-      name: 'Baseus 100W Fast Charger',
-      purchaseDate: '2023-12-01',
-      expiryDate: '2025-12-01',
-      warrantyDaysRemaining: 350,
-      status: 'Active',
-      price: 34.99,
-      warranty: '2 Years',
-      invoiceId: 'INV-2023-001',
-      color: 'White',
-      daysUsed: 15,
-    },
-    {
-      id: 102,
-      name: 'Anker 511 Charger Cable 2m',
-      purchaseDate: '2023-11-20',
-      expiryDate: '2024-11-20',
-      warrantyDaysRemaining: 322,
-      status: 'Active',
-      price: 12.99,
-      warranty: '1 Year',
-      invoiceId: 'INV-2023-002',
-      color: 'Black',
-      daysUsed: 52,
-    },
-    {
-      id: 103,
-      name: 'UGREEN Screen Protector 3-Pack',
-      purchaseDate: '2023-10-15',
-      expiryDate: '2024-10-15',
-      warrantyDaysRemaining: 267,
-      status: 'Active',
-      price: 19.99,
-      warranty: '1 Year',
-      invoiceId: 'INV-2023-003',
-      color: 'Clear',
-      daysUsed: 92,
-    },
-    {
-      id: 104,
-      name: 'Baseus Phone Stand',
-      purchaseDate: '2023-07-10',
-      expiryDate: '2024-07-10',
-      warrantyDaysRemaining: 27,
-      status: 'Expiring Soon',
-      price: 9.99,
-      warranty: '1 Year',
-      invoiceId: 'INV-2023-004',
-      color: 'Black',
-      daysUsed: 218,
-    },
-  ];
-
-  const getWarrantyColor = (daysRemaining) => {
-    if (daysRemaining > 180) return 'text-green-600';
-    if (daysRemaining > 90) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
-  const getStatusBadge = (status) => {
-    const baseClasses = 'inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold';
-    switch (status) {
-      case 'Processing':
-        return `${baseClasses} bg-blue-100 text-blue-700`;
-      case 'Shipped':
-        return `${baseClasses} bg-purple-100 text-purple-700`;
-      case 'Active':
-        return `${baseClasses} bg-green-100 text-green-700`;
-      case 'Expiring Soon':
-        return `${baseClasses} bg-red-100 text-red-700`;
-      default:
-        return `${baseClasses} bg-slate-100 text-slate-700`;
-    }
-  };
 
   return (
     <Layout>
-      <div className="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Profile Header */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto space-y-8">
+          
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+            <Link to="/" className="hover:text-blue-600">Home</Link>
+            <span>/</span>
+            <span className="text-slate-800 font-bold">Customer Account</span>
+          </div>
+
+          {/* User Profile Card Header */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4 sm:gap-5">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-black text-2xl flex items-center justify-center shadow-md">
+                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+              </div>
+
               <div>
-                <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">
-                  Welcome, {user?.name?.split(' ')[0]}!
-                </h1>
-                <div className="space-y-1 text-slate-600">
-                  <p className="flex items-center gap-2">
-                    <span className="text-sm">📧</span> {user?.email}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-sm">📱</span> {user?.phone}
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-sm">📍</span> {user?.address}
-                  </p>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
+                    {user?.name || 'Valued Customer'}
+                  </h1>
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md">
+                    Verified Customer
+                  </span>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-primary/10 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-black text-primary">{pendingItems.length}</p>
-                  <p className="text-xs text-slate-600 mt-1">Pending Items</p>
-                </div>
-                <div className="bg-green-100 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-black text-green-600">{boughtItems.length}</p>
-                  <p className="text-xs text-slate-600 mt-1">Items Bought</p>
+
+                <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 mt-2">
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <Mail className="w-3.5 h-3.5 text-blue-600" /> {user?.email}
+                  </span>
+                  {user?.phone && (
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <Phone className="w-3.5 h-3.5 text-emerald-600" /> {user?.phone}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1.5 font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-purple-600" /> {user?.address || 'Ambalangoda, Sri Lanka'}
+                  </span>
                 </div>
               </div>
             </div>
-          </div>
-          {/* Customer Card */}
-          <CustomerCard customer={user} pendingCount={pendingItems.length} boughtCount={boughtItems.length} />
 
-          {/* Tabs */}
-          <div className="flex gap-4 mb-8 border-b border-slate-200">
-            <button
-              onClick={() => setActiveTab('pending')}
-              className={`pb-4 px-4 font-semibold flex items-center gap-2 border-b-2 transition-all ${
-                activeTab === 'pending'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Clock className="w-5 h-5" />
-              Pending Items ({pendingItems.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('bought')}
-              className={`pb-4 px-4 font-semibold flex items-center gap-2 border-b-2 transition-all ${
-                activeTab === 'bought'
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <CheckCircle className="w-5 h-5" />
-              Items Bought ({boughtItems.length})
-            </button>
+            <div className="flex items-center gap-3 w-full md:w-auto">
+              <Link
+                to="/orders"
+                className="flex-1 md:flex-initial px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-blue-100"
+              >
+                <Package className="w-4 h-4" /> Live Tracking
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2.5 bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
+                title="Sign Out"
+              >
+                <LogOut className="w-4 h-4" /> Sign Out
+              </button>
+            </div>
           </div>
 
-          {/* Pending Items Section */}
-          {activeTab === 'pending' && (
+          {/* Navigation Tabs */}
+          <div className="flex gap-2 border-b border-slate-200/80 pb-1 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('orders')}
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${
+                activeTab === 'orders'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <ShoppingBag className="w-4 h-4" /> Orders & Invoices ({liveOrders.length})
+            </button>
+
+            <button
+              onClick={() => setActiveTab('warranties')}
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${
+                activeTab === 'warranties'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" /> Official Warranties ({warrantyItems.length})
+            </button>
+
+            <button
+              onClick={() => setActiveTab('showroom')}
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${
+                activeTab === 'showroom'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <Store className="w-4 h-4" /> Showroom Pickup & Support
+            </button>
+          </div>
+
+          {/* TAB 1: ORDERS & INVOICES */}
+          {activeTab === 'orders' && (
             <div className="space-y-4">
-              {pendingItems.length === 0 ? (
-                <div className="bg-white rounded-xl p-12 text-center">
-                  <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <p className="text-slate-600 text-lg">No pending items</p>
+              {loadingOrders ? (
+                <div className="bg-white rounded-3xl p-12 text-center text-slate-400 text-xs animate-pulse">
+                  Loading your orders...
+                </div>
+              ) : liveOrders.length === 0 ? (
+                <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm">
+                  <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                  <h3 className="font-bold text-slate-800 text-base mb-1">No Orders Placed Yet</h3>
+                  <p className="text-slate-500 text-xs mb-6 max-w-sm mx-auto">
+                    When you order original Anker, UGREEN or Baseus accessories, your receipt and live tracking will appear here.
+                  </p>
+                  <Link
+                    to="/products"
+                    className="px-6 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-xl inline-flex items-center gap-2 shadow-sm"
+                  >
+                    Start Shopping <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               ) : (
-                pendingItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all overflow-hidden">
-                    <div
-                      className="p-6 cursor-pointer hover:bg-slate-50 transition-colors"
-                      onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-2">
-                            <h3 className="text-lg font-bold text-slate-900">{item.name}</h3>
-                            <ChevronDown
-                              className={`w-5 h-5 text-slate-400 transition-transform ${
-                                expandedItem === item.id ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </div>
-                          <p className="text-sm text-slate-500 mb-3">Order #{item.orderId}</p>
-                          <div className="flex flex-wrap gap-4 text-sm">
-                            <span className={getStatusBadge(item.status)}>{item.status}</span>
-                            <div className="flex items-center gap-2 text-slate-600">
-                              <Calendar className="w-4 h-4" />
-                              Arrives in {item.daysRemaining} days
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-black text-primary">${item.price.toFixed(2)}</p>
-                          <p className="text-xs text-slate-500 mt-1">Qty: {item.quantity}</p>
-                        </div>
+                liveOrders.map((ord) => (
+                  <div
+                    key={ord.id}
+                    className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm hover:border-blue-300 transition-all space-y-4"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                      <div>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block font-mono">
+                          Order Reference
+                        </span>
+                        <h4 className="font-black text-slate-900 text-base">{ord.orderNumber || `#NV-${ord.id}`}</h4>
                       </div>
 
-                      {/* Expanded Details */}
-                      {expandedItem === item.id && (
-                        <div className="mt-6 pt-6 border-t border-slate-100 grid md:grid-cols-2 gap-6">
-                          <div className="space-y-3">
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-wide">Order Date</p>
-                              <p className="font-semibold text-slate-900">{new Date(item.orderDate).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-wide">Estimated Delivery</p>
-                              <p className="font-semibold text-slate-900">{new Date(item.estimatedDelivery).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-wide">Color</p>
-                              <p className="font-semibold text-slate-900">{item.color}</p>
-                            </div>
-                          </div>
-                          <div className="space-y-3">
-                            <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
-                              <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                              <div>
-                                <p className="text-xs text-blue-600 font-semibold">WARRANTY INCLUDED</p>
-                                <p className="text-sm font-bold text-blue-900">{item.warranty}</p>
-                              </div>
-                            </div>
-                            <button className="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 rounded-lg transition-colors">
-                              <MessageSquare className="w-4 h-4" />
-                              Track Order
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`text-xs font-bold px-3 py-1 rounded-full ${
+                            ord.status === 'DELIVERED'
+                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                              : ord.status === 'SHIPPED'
+                              ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                              : 'bg-blue-50 text-blue-700 border border-blue-200'
+                          }`}
+                        >
+                          {ord.status || 'PROCESSING'}
+                        </span>
+                        <Link
+                          to="/orders"
+                          className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                        >
+                          View Status <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Order Meta */}
+                    <div className="grid sm:grid-cols-3 gap-4 text-xs text-slate-600">
+                      <div>
+                        <span className="text-slate-400 block font-medium">Payment Method:</span>
+                        <span className="font-bold text-slate-800">{ord.paymentMethod || 'Cash on Delivery'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-medium">Delivery Address:</span>
+                        <span className="font-bold text-slate-800 truncate block">{ord.address || 'Ambalangoda Showroom'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-medium">Total Amount:</span>
+                        <span className="font-black text-slate-900 text-sm font-sans">
+                          Rs. {ord.totalAmount?.toLocaleString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -303,105 +281,74 @@ export default function UserProfile() {
             </div>
           )}
 
-          {/* Items Bought Section */}
-          {activeTab === 'bought' && (
+          {/* TAB 2: OFFICIAL WARRANTIES */}
+          {activeTab === 'warranties' && (
             <div className="space-y-4">
-              {boughtItems.length === 0 ? (
-                <div className="bg-white rounded-xl p-12 text-center">
-                  <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <p className="text-slate-600 text-lg">No purchased items yet</p>
-                </div>
-              ) : (
-                boughtItems.map((item) => (
-                  <div key={item.id} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all overflow-hidden">
-                    <div
-                      className="p-6 cursor-pointer hover:bg-slate-50 transition-colors"
-                      onClick={() => setExpandedItem(expandedItem === item.id ? null : item.id)}
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-2">
-                            <h3 className="text-lg font-bold text-slate-900">{item.name}</h3>
-                            <ChevronDown
-                              className={`w-5 h-5 text-slate-400 transition-transform ${
-                                expandedItem === item.id ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </div>
-                          <p className="text-sm text-slate-500 mb-3">Invoice #{item.invoiceId}</p>
-                          <div className="flex flex-wrap gap-4 text-sm">
-                            <span className={getStatusBadge(item.status)}>{item.status}</span>
-                            <div className="flex items-center gap-2">
-                              <Shield className={`w-4 h-4 ${getWarrantyColor(item.warrantyDaysRemaining)}`} />
-                              <span className={`font-semibold ${getWarrantyColor(item.warrantyDaysRemaining)}`}>
-                                {item.warrantyDaysRemaining} days left
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-black text-primary">${item.price.toFixed(2)}</p>
-                          <p className="text-xs text-slate-500 mt-1">Used: {item.daysUsed} days</p>
-                        </div>
-                      </div>
-
-                      {/* Expanded Details */}
-                      {expandedItem === item.id && (
-                        <div className="mt-6 pt-6 border-t border-slate-100 grid md:grid-cols-2 gap-6">
-                          <div className="space-y-3">
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-wide">Purchase Date</p>
-                              <p className="font-semibold text-slate-900">{new Date(item.purchaseDate).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-wide">Warranty Expiry</p>
-                              <p className="font-semibold text-slate-900">{new Date(item.expiryDate).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-slate-500 uppercase tracking-wide">Color</p>
-                              <p className="font-semibold text-slate-900">{item.color}</p>
-                            </div>
-                          </div>
-                          <div className="space-y-3">
-                            <div className={`p-3 rounded-lg ${
-                              item.warrantyDaysRemaining > 90 
-                                ? 'bg-green-50' 
-                                : item.warrantyDaysRemaining > 30 
-                                ? 'bg-yellow-50' 
-                                : 'bg-red-50'
-                            }`}>
-                              <p className={`text-xs font-semibold uppercase tracking-wide ${
-                                item.warrantyDaysRemaining > 90 
-                                  ? 'text-green-600' 
-                                  : item.warrantyDaysRemaining > 30 
-                                  ? 'text-yellow-600' 
-                                  : 'text-red-600'
-                              }`}>
-                                WARRANTY STATUS
-                              </p>
-                              <p className={`text-sm font-bold mt-1 ${
-                                item.warrantyDaysRemaining > 90 
-                                  ? 'text-green-900' 
-                                  : item.warrantyDaysRemaining > 30 
-                                  ? 'text-yellow-900' 
-                                  : 'text-red-900'
-                              }`}>
-                                {item.warranty} ({item.warrantyDaysRemaining} days remaining)
-                              </p>
-                            </div>
-                            <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-2 rounded-lg transition-colors">
-                              <Download className="w-4 h-4" />
-                              Download Invoice
-                            </button>
-                          </div>
-                        </div>
-                      )}
+              {warrantyItems.map((w) => (
+                <div key={w.id} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 font-mono bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                        {w.brand} Official
+                      </span>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                        {w.status}
+                      </span>
                     </div>
+                    <h4 className="font-bold text-slate-900 text-sm">{w.productName}</h4>
+                    <p className="text-xs text-slate-400 font-mono">Serial: {w.serialNumber} • Claimable at NVSHOP Ambalangoda</p>
                   </div>
-                ))
-              )}
+
+                  <div className="text-left sm:text-right shrink-0">
+                    <span className="text-xs font-bold text-slate-900 block">{w.warrantyPeriod}</span>
+                    <span className="text-[11px] text-emerald-600 font-bold">{w.daysRemaining} Days Remaining</span>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
+
+          {/* TAB 3: SHOWROOM & SUPPORT */}
+          {activeTab === 'showroom' && (
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 mb-1">Ambalangoda Showroom Direct Support</h3>
+                <p className="text-xs text-slate-500">
+                  Pick up your online orders in person or visit for device testing and warranty claims.
+                </p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4 text-xs">
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/60 space-y-2">
+                  <p className="font-bold text-slate-900 flex items-center gap-2">
+                    <Store className="w-4 h-4 text-blue-600" /> Showroom Address:
+                  </p>
+                  <p className="text-slate-600 leading-relaxed">
+                    185/1/2B New Road, Ambalangoda 80300, Sri Lanka
+                  </p>
+                  <p className="text-[11px] text-slate-400 font-medium">Open 7 days a week: 10:00 AM – 8:00 PM</p>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/60 space-y-2">
+                  <p className="font-bold text-slate-900 flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-emerald-600" /> Hotlines & WhatsApp:
+                  </p>
+                  <p className="text-slate-600 font-bold">+94 76 989 0079 / +94 77 747 0186</p>
+                  <p className="text-slate-600">Email: nvshopamba@gmail.com</p>
+                </div>
+              </div>
+
+              <a
+                href="https://wa.me/94769890079?text=Hello%20NVSHOP,%20I%20have%20an%20inquiry%20regarding%20my%20customer%20profile."
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all"
+              >
+                <MessageSquare className="w-4 h-4" /> Chat on WhatsApp Support
+              </a>
+            </div>
+          )}
+
         </div>
       </div>
     </Layout>

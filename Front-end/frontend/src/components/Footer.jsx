@@ -33,20 +33,6 @@ const socialLinks = [
   },
 ];
 
-const exploreLinks = [
-  { label: 'Products', to: '/products' },
-  { label: 'About Us', to: '/about' },
-  { label: 'Contact', to: '/contact' },
-  { label: 'FAQ', to: '/faq' },
-];
-
-const supportLinks = [
-  { label: 'Shipping Info', to: '/shipping-info' },
-  { label: 'Returns', to: '/returns' },
-  { label: 'Privacy Policy', to: '/privacy-policy' },
-  { label: 'Terms & Conditions', to: '/terms-conditions' },
-];
-
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -79,11 +65,16 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Explore</h4>
             <ul className="space-y-3">
-              {exploreLinks.map((link) => (
-                <li key={link.label}>
-                  <Link to={link.to} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
+              {[
+                { name: 'Products', path: '/products' },
+                { name: 'About Us', path: '/about' },
+                { name: 'Contact', path: '/contact' },
+                { name: 'FAQ', path: '/faq' },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
                     <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
-                    {link.label}
+                    {link.name}
                   </Link>
                 </li>
               ))}
@@ -94,11 +85,16 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Support</h4>
             <ul className="space-y-3">
-              {supportLinks.map((link) => (
-                <li key={link.label}>
-                  <Link to={link.to} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
+              {[
+                { name: 'Shipping Info', path: '/shipping-info' },
+                { name: 'Returns', path: '/returns' },
+                { name: 'Privacy Policy', path: '/privacy-policy' },
+                { name: 'Terms & Conditions', path: '/terms-conditions' },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-1 group">
                     <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
-                    {link.label}
+                    {link.name}
                   </Link>
                 </li>
               ))}
@@ -109,34 +105,43 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Get in Touch</h4>
             <ul className="space-y-4">
-              <li className="flex items-center gap-3 text-sm text-slate-400">
-                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary shrink-0">
-                  <Mail className="w-4 h-4" />
-                </div>
+              <li>
                 <a
                   href="mailto:nvshopamba@gmail.com"
-                  className="hover:text-white transition-colors"
+                  className="flex items-center gap-3 text-sm text-slate-400 hover:text-white group transition-colors"
                 >
-                  nvshopamba@gmail.com
+                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary group-hover:border-primary/40 group-hover:bg-primary/10 transition-all">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <span className="group-hover:underline">nvshopamba@gmail.com</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-sm text-slate-400">
-                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary">
-                  <Phone className="w-4 h-4" />
-                </div>
-                <span>+94 76 989 0079</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm text-slate-400">
-                <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary mt-0.5 shrink-0">
-                  <MapPin className="w-4 h-4" />
-                </div>
+
+              <li>
                 <a
-                  href="https://maps.app.goo.gl/WfExCK9c9LUyhRd48"
+                  href="tel:+94769890079"
+                  className="flex items-center gap-3 text-sm text-slate-400 hover:text-white group transition-colors"
+                >
+                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary group-hover:border-primary/40 group-hover:bg-primary/10 transition-all">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <span className="group-hover:underline">+94 76 989 0079</span>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="https://maps.google.com/?q=185/1/2B+New+Road,+Ambalangoda+80300,+Sri+Lanka"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="flex items-start gap-3 text-sm text-slate-400 hover:text-white group transition-colors"
                 >
-                  185/1/2B New Road, Ambalangoda, Sri Lanka
+                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary mt-0.5 group-hover:border-primary/40 group-hover:bg-primary/10 transition-all">
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <span className="group-hover:underline leading-relaxed">
+                    185/1/2B New Road, Ambalangoda, Sri Lanka
+                  </span>
                 </a>
               </li>
             </ul>
@@ -155,3 +160,4 @@ export default function Footer() {
     </footer>
   );
 }
+

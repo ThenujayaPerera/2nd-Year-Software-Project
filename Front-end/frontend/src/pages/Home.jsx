@@ -268,46 +268,7 @@ export default function Home() {
         )}
       </section>
 
-      {/* Categories Section */}
-      <section className="bg-slate-50 py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-primary font-bold text-xs tracking-widest uppercase mb-3 block">EXPLORE BY CATEGORY</span>
-            <h2 className="text-4xl font-black text-slate-900 mb-4">Official Categories</h2>
-            <p className="text-slate-500">Find original chargers, power banks, audio gear, and phone protection designed for performance.</p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[
-              { name: 'Apple iPhone', icon: Smartphone, count: '100% Original', color: 'text-slate-900', bg: 'bg-slate-100' },
-              { name: 'Earphones & Headsets', icon: Headphones, count: 'Anker, Soundcore, Sony', color: 'text-accent', bg: 'bg-accent/10' },
-              { name: 'Power Banks', icon: Zap, count: 'Anker, Baseus, UGREEN', color: 'text-amber-600', bg: 'bg-amber-50' },
-              { name: 'Speakers', icon: Headphones, count: 'Bluetooth Partyboxes', color: 'text-purple-600', bg: 'bg-purple-50' },
-              { name: 'Chargers & Cables & Adapters', icon: Zap, count: 'PD Fast Chargers', color: 'text-primary', bg: 'bg-primary/10' },
-              { name: 'Phone Cases & Back Covers', icon: Smartphone, count: 'Spigen, Premium', color: 'text-rose-600', bg: 'bg-rose-50' },
-              { name: 'Screen Protectors', icon: ShieldCheck, count: '9H Glass Guard', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-              { name: 'Smart Watches', icon: Star, count: 'Fitness & Smart Tech', color: 'text-blue-600', bg: 'bg-blue-50' },
-              { name: 'Mouse & Keyboards', icon: Star, count: 'Gaming & Work', color: 'text-indigo-600', bg: 'bg-indigo-50' },
-              { name: 'Pendrives & SD Cards', icon: Star, count: 'High-Speed Storage', color: 'text-amber-700', bg: 'bg-amber-100/50' },
-              { name: 'Others', icon: Star, count: 'Gadgets & Extras', color: 'text-slate-600', bg: 'bg-slate-200/60' },
-            ].map((cat) => (
-              <Link
-                key={cat.name}
-                to={`/products`}
-                className="bg-white p-6 rounded-3xl text-center border border-slate-100 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1.5 transition-all group flex flex-col justify-between"
-              >
-                <div>
-                  <div className={`w-14 h-14 ${cat.bg} ${cat.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                    <cat.icon className="w-7 h-7" />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-sm mb-1 line-clamp-1">{cat.name}</h3>
-                  <p className="text-[11px] text-slate-400 font-semibold tracking-wide">{cat.count}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* Showroom Gallery Section - Step Inside NVSHOP.LK */}
       <section className="py-24 bg-white border-y border-slate-100">
