@@ -42,6 +42,7 @@ public class UserService {
         user.setName(userCreateDTO.getName());
         user.setEmail(userCreateDTO.getEmail());
         user.setPhone(userCreateDTO.getPhone());
+        user.setAddress(userCreateDTO.getAddress());
         user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         user.setIsActive(false);
         user.setIsEmailVerified(false);
@@ -50,6 +51,23 @@ public class UserService {
         User savedUser = userRepository.save(user);
         log.info("User created successfully with ID: {}", savedUser.getId());
         return convertToDTO(savedUser);
+    }
+
+    /**
+     * Update user profile (Name, Phone, Address)
+     */
+    @Transactional
+    public UserDTO updateUserProfile(String email, String name, String phone, String address) {
+        log.info("Updating profile for user with email: {}", email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+
+        if (name != null && !name.isBlank()) user.setName(name);
+        if (phone != null && !phone.isBlank()) user.setPhone(phone);
+        if (address != null && !address.isBlank()) user.setAddress(address);
+
+        User saved = userRepository.save(user);
+        return convertToDTO(saved);
     }
 
     /**
@@ -237,6 +255,7 @@ public class UserService {
                 user.getName(),
                 user.getEmail(),
                 user.getPhone(),
+                user.getAddress(),
                 user.getIsEmailVerified(),
                 user.getIsPhoneVerified(),
                 user.getIsActive(),

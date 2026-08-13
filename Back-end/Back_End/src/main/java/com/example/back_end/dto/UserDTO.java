@@ -14,6 +14,7 @@ public class UserDTO {
     private String name;
     private String email;
     private String phone;
+    private String address;
     private Boolean isEmailVerified;
     private Boolean isPhoneVerified;
     private Boolean isActive;

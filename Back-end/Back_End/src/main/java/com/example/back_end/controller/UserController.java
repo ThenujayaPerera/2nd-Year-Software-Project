@@ -66,6 +66,22 @@ public class UserController {
     }
 
     /**
+     * Update user profile (Name, Phone, Address)
+     * PUT /api/users/profile
+     */
+    @PutMapping("/profile")
+    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserDTO profileDTO) {
+        log.info("PUT request to update user profile: {}", profileDTO.getEmail());
+        UserDTO updated = userService.updateUserProfile(
+                profileDTO.getEmail(),
+                profileDTO.getName(),
+                profileDTO.getPhone(),
+                profileDTO.getAddress()
+        );
+        return ResponseEntity.ok(updated);
+    }
+
+    /**
      * Update user
      * PUT /api/users/{id}
      */

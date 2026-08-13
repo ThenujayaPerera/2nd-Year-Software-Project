@@ -56,26 +56,29 @@ export default function Contact() {
     {
       icon: Mail,
       title: 'Email',
-      value: 'support@nvshop.com',
+      value: 'nvshopamba@gmail.com',
       description: 'Response within 2 hours',
+      link: 'mailto:nvshopamba@gmail.com',
     },
     {
       icon: Phone,
-      title: 'Phone',
-      value: '+94 71 123 4567',
-      description: '24/7 Support Available',
+      title: 'Phone & WhatsApp',
+      value: '+94 76 989 0079',
+      description: 'Hotline: +94 77 747 0186 (Open 7 Days)',
+      link: 'tel:+94769890079',
     },
     {
       icon: MapPin,
-      title: 'Address',
-      value: 'Colombo, Sri Lanka',
-      description: 'Visit our showroom',
+      title: 'Showroom Address',
+      value: '185/1/2B New Road, Ambalangoda, Sri Lanka',
+      description: 'Visit our showroom (10 AM - 8 PM)',
+      link: 'https://maps.google.com/?q=185/1/2B+New+Road,+Ambalangoda+80300,+Sri+Lanka',
     },
     {
       icon: Clock,
       title: 'Operating Hours',
-      value: 'Mon - Sat: 9 AM - 10 PM',
-      description: 'Sunday: 10 AM - 8 PM',
+      value: 'Monday – Sunday: 10 AM - 8 PM',
+      description: 'Open 7 days a week',
     },
   ];
 
@@ -244,18 +247,32 @@ export default function Contact() {
               <div className="grid md:grid-cols-2 gap-4 mt-8">
                 {contactMethods.map((method, idx) => {
                   const Icon = method.icon;
-                  return (
-                    <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-100 hover:shadow-lg transition-all">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <Icon className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-slate-900 mb-1">{method.title}</h4>
-                          <p className="font-semibold text-primary text-sm mb-1">{method.value}</p>
-                          <p className="text-xs text-slate-500">{method.description}</p>
-                        </div>
+                  const CardContent = (
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <Icon className="w-6 h-6 text-primary" />
                       </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 mb-1">{method.title}</h4>
+                        <p className="font-semibold text-primary text-sm mb-1">{method.value}</p>
+                        <p className="text-xs text-slate-500">{method.description}</p>
+                      </div>
+                    </div>
+                  );
+
+                  return method.link ? (
+                    <a
+                      key={idx}
+                      href={method.link}
+                      target={method.link.startsWith('http') ? '_blank' : '_self'}
+                      rel="noreferrer"
+                      className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-primary/40 hover:shadow-lg transition-all group block"
+                    >
+                      {CardContent}
+                    </a>
+                  ) : (
+                    <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-100 hover:shadow-lg transition-all group">
+                      {CardContent}
                     </div>
                   );
                 })}
