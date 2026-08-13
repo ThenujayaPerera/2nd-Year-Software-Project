@@ -3,41 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from './Toast';
 import { useComparisonStore } from '../store';
 
-export const getProductFallbackImage = (category = '', name = '') => {
-  const cat = ((category || '') + ' ' + (name || '')).toLowerCase();
-  if (cat.includes('watch') || cat.includes('shark') || cat.includes('ridge') || cat.includes('haylou') || cat.includes('gravix')) {
-    return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('power bank') || cat.includes('battery') || cat.includes('mah')) {
-    return 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('earphone') || cat.includes('headset') || cat.includes('earbud') || cat.includes('soundcore') || cat.includes('airpod') || cat.includes('liberty')) {
-    return 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('speaker') || cat.includes('partybox') || cat.includes('jbl') || cat.includes('sound')) {
-    return 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('charger') || cat.includes('adapter') || cat.includes('cable') || cat.includes('gan') || cat.includes('nexode')) {
-    return 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('case') || cat.includes('cover') || cat.includes('hybrid') || cat.includes('armor')) {
-    return 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('glass') || cat.includes('protector') || cat.includes('guard') || cat.includes('screen')) {
-    return 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('mouse') || cat.includes('keyboard') || cat.includes('logitech')) {
-    return 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('phone') || cat.includes('iphone') || cat.includes('apple') || cat.includes('16') || cat.includes('17')) {
-    return 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&auto=format&fit=crop&q=80';
-  }
-  if (cat.includes('stand') || cat.includes('desk') || cat.includes('holder')) {
-    return 'https://images.unsplash.com/photo-1586953101226-996522c06170?w=600&auto=format&fit=crop&q=80';
-  }
-  return 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&auto=format&fit=crop&q=80';
-};
-
 export default function ProductCard({ product, onAddToCart, onViewDetails }) {
   const navigate = useNavigate();
   const toast = useToast();
@@ -64,8 +29,6 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
     }
   };
 
-  const fallbackSrc = getProductFallbackImage(product.category, product.name);
-
   return (
     <div className="card-premium group relative flex flex-col h-full">
       {/* Wishlist & Comparison Buttons */}
@@ -89,16 +52,9 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
       {/* Image Container */}
       <div className="relative mb-6 bg-slate-100 rounded-xl overflow-hidden aspect-square cursor-pointer" onClick={handleViewDetails}>
         <img
-          src={product.image || fallbackSrc}
+          src={product.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
           alt={product.name}
-          onError={(e) => {
-            if (e.currentTarget.src !== fallbackSrc) {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = fallbackSrc;
-            }
-          }}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
         />
         
         {product.discount && (
