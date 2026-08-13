@@ -7,6 +7,7 @@ import {
   Star, ShoppingCart, Zap, Heart, ArrowLeft, Truck, ShieldCheck, 
   RotateCcw, Check, Share2, Store, HelpCircle, Phone, MessageSquare
 } from 'lucide-react';
+import { getProductFallbackImage } from '../components/ProductCard';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -26,26 +27,10 @@ export default function ProductDetails() {
 
     productAPI.getById(id)
       .then((res) => {
-        if (isMounted && res.data) {
-          const item = res.data;
-          setProduct(item);
-          setSelectedImgIndex(0);
-        }
+        if (isMounted) setProduct(res.data);
       })
-      .catch(() => {
-        // Fetch from all products if by ID direct endpoint failed
-        fetch('http://localhost:8080/api/products')
-          .then((r) => r.json())
-          .then((all) => {
-            if (isMounted && Array.isArray(all)) {
-              const found = all.find((p) => String(p.id) === String(id));
-              if (found) {
-                setProduct(found);
-                setSelectedImgIndex(0);
-              }
-            }
-          })
-          .catch((e) => console.warn(e));
+      .catch((err) => {
+        console.warn('Could not fetch product details:', err);
       })
       .finally(() => {
         if (isMounted) setLoading(false);
@@ -87,11 +72,14 @@ export default function ProductDetails() {
     );
   }
 
+  const fallbackSrc = getProductFallbackImage(product.category, product.name);
+  const mainImage = product.image || fallbackSrc;
+
   // Multi-angle Gallery Thumbnails generator
   const galleryImages = [
-    product.image,
-    product.image?.includes('?') ? `${product.image}&angle=2` : `${product.image}?angle=2`,
-    product.image?.includes('?') ? `${product.image}&angle=3` : `${product.image}?angle=3`,
+    mainImage,
+    mainImage.includes('?') ? `${mainImage}&angle=2` : `${mainImage}?angle=2`,
+    mainImage.includes('?') ? `${mainImage}&angle=3` : `${mainImage}?angle=3`,
   ];
 
   const handleAddToCart = () => {
@@ -140,8 +128,14 @@ export default function ProductDetails() {
                 </div>
 
                 <img
-                  src={galleryImages[selectedImgIndex] || product.image}
+                  src={galleryImages[selectedImgIndex] || fallbackSrc}
                   alt={product.name}
+                  onError={(e) => {
+                    if (e.currentTarget.src !== fallbackSrc) {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = fallbackSrc;
+                    }
+                  }}
                   className="max-h-[380px] w-full object-contain group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -158,7 +152,17 @@ export default function ProductDetails() {
                         : 'border-slate-200 hover:border-slate-300'
                     }`}
                   >
-                    <img src={img} alt={`thumb-${idx}`} className="w-full h-full object-contain" />
+                    <img 
+                      src={img} 
+                      alt={`thumb-${idx}`} 
+                      onError={(e) => {
+                        if (e.currentTarget.src !== fallbackSrc) {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = fallbackSrc;
+                        }
+                      }}
+                      className="w-full h-full object-contain" 
+                    />
                   </button>
                 ))}
               </div>
