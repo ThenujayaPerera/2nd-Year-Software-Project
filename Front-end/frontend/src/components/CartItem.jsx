@@ -1,7 +1,10 @@
 import { Trash2, Plus, Minus, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getProductFallbackImage } from './ProductCard';
 
 export default function CartItem({ item, onQuantityChange, onRemove, isSelected, onSelectChange }) {
+  const fallbackSrc = getProductFallbackImage(item.category, item.name);
+
   return (
     <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row gap-5 items-start sm:items-center hover:border-blue-400/40 hover:shadow-md transition-all">
       
@@ -18,8 +21,14 @@ export default function CartItem({ item, onQuantityChange, onRemove, isSelected,
       {/* Product Image Thumbnail */}
       <Link to={`/product/${item.id}`} className="w-20 h-20 sm:w-24 sm:h-24 bg-slate-50 rounded-2xl p-2 border border-slate-100 shrink-0 flex items-center justify-center overflow-hidden group">
         <img
-          src={item.image || 'https://api.nvshop.lk/api/public/file/6a113bc506fdb61b1b19f7d7/16-pro-6.jpg'}
+          src={item.image || fallbackSrc}
           alt={item.name}
+          onError={(e) => {
+            if (e.currentTarget.src !== fallbackSrc) {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = fallbackSrc;
+            }
+          }}
           className="w-full h-full object-contain group-hover:scale-105 transition-transform"
         />
       </Link>
