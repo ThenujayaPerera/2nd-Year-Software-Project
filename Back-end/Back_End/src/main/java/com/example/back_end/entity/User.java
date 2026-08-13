@@ -31,6 +31,9 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "is_email_verified")
+    private Boolean isEmailVerified = false;
+
     @Column(name = "is_phone_verified")
     private Boolean isPhoneVerified = false;
 

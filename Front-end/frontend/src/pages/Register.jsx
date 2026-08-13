@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Phone, MapPin, Eye, EyeOff, Check, ArrowRight, ShieldCheck, RefreshCw, Smartphone, Bell, MessageSquare } from 'lucide-react';
+import { 
+  Mail, Lock, User, Phone, MapPin, Eye, EyeOff, Check, ArrowRight, 
+  ShieldCheck, RefreshCw, Smartphone, Bell, MessageSquare, ExternalLink, Inbox
+} from 'lucide-react';
 import { useAuthStore } from '../store';
 import { authAPI } from '../services/api';
 
@@ -8,6 +11,8 @@ export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
+  const [verificationMethod, setVerificationMethod] = useState('both'); // 'email', 'phone', or 'both'
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -22,7 +27,6 @@ export default function Register() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [simulatedSms, setSimulatedSms] = useState(null);
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
   const [otpError, setOtpError] = useState('');
   const [resendTimer, setResendTimer] = useState(60);
@@ -46,11 +50,10 @@ export default function Register() {
     const newErrors = {};
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = 'Valid email is required';
-    if (!formData.phone || formData.phone.length < 9) newErrors.phone = 'Valid Sri Lankan phone number is required';
+    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = 'Valid email address is required';
     if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-    if (!formData.agreeTerms) newErrors.agreeTerms = 'You must agree to the Terms of Service';
+    if (!formData.agreeTerms) newErrors.agreeTerms = 'You must agree to the Terms & Conditions';
     return newErrors;
   };
 
@@ -78,7 +81,7 @@ export default function Register() {
     setErrors({});
 
     try {
-      const res = await authAPI.register({
+      await authAPI.register({
         name: `${formData.firstName} ${formData.lastName}`.trim(),
         email: formData.email,
         phone: formData.phone,
@@ -89,14 +92,6 @@ export default function Register() {
       setResendTimer(60);
       setCanResend(false);
       setOtpError('');
-
-      // Show SMS simulation preview notification
-      setSimulatedSms({
-        sender: 'NVSHOP.LK',
-        phone: formData.phone,
-        time: 'Just now',
-        text: 'Your NVSHOP.LK verification code is being dispatched to your phone number and email address.',
-      });
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Registration failed. Email might already exist.';
       setErrors({ server: errorMsg });
@@ -128,7 +123,7 @@ export default function Register() {
     e.preventDefault();
     const enteredOtp = otpDigits.join('');
     if (enteredOtp.length !== 6) {
-      setOtpError('Please enter all 6 digits of the OTP code');
+      setOtpError('Please enter all 6 digits of the verification code');
       return;
     }
 
@@ -139,10 +134,15 @@ export default function Register() {
       if (token) {
         localStorage.setItem('token', token);
       }
-      login(userData || { name: `${formData.firstName} ${formData.lastName}`, email: formData.email, phone: formData.phone });
+      login(userData || { 
+        name: `${formData.firstName} ${formData.lastName}`, 
+        email: formData.email, 
+        phone: formData.phone,
+        isEmailVerified: true 
+      });
       navigate('/');
     } catch (error) {
-      setOtpError(error.response?.data?.message || 'Invalid or expired OTP code. Please check your email or phone.');
+      setOtpError(error.response?.data?.message || 'Invalid or expired verification code. Please check your email inbox or phone.');
     } finally {
       setLoading(false);
     }
@@ -184,26 +184,26 @@ export default function Register() {
                 </Link>
 
                 <h2 className="text-3xl font-black leading-tight mb-4">
-                  {otpSent ? 'SMS & Email Verification' : 'Join NVSHOP.LK Customer Rewards'}
+                  {otpSent ? 'Email & Phone Verification' : 'Join NVSHOP.LK Customer Rewards'}
                 </h2>
                 <p className="text-blue-100 text-xs sm:text-sm leading-relaxed mb-6">
                   {otpSent
-                    ? 'Enter the 6-digit OTP code sent to your registered phone number & email address to activate your account.'
-                    : 'Create your account to unlock instant express checkout, live delivery tracking, and genuine brand warranty claims in Sri Lanka.'}
+                    ? 'Enter the 6-digit verification code sent to your email inbox and phone number to activate your account.'
+                    : 'Create your account to unlock instant express checkout, email invoices, live delivery tracking, and genuine brand warranties in Sri Lanka.'}
                 </p>
 
                 <div className="space-y-3 pt-2 text-xs">
                   <div className="flex items-center gap-2.5">
                     <div className="p-1 rounded-full bg-blue-500/30 text-white"><Check className="w-3.5 h-3.5 stroke-[3]" /></div>
-                    <span>Phone SMS & Email Verification System</span>
+                    <span>Instant Email OTP & SMS Verification</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <div className="p-1 rounded-full bg-blue-500/30 text-white"><Check className="w-3.5 h-3.5 stroke-[3]" /></div>
-                    <span>100% Genuine Anker, UGREEN, Baseus & Apple</span>
+                    <span>Automated HTML Invoices sent to your Email</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <div className="p-1 rounded-full bg-blue-500/30 text-white"><Check className="w-3.5 h-3.5 stroke-[3]" /></div>
-                    <span>Live Islandwide Cash on Delivery Tracking</span>
+                    <span>100% Genuine Anker, UGREEN & Baseus Products</span>
                   </div>
                 </div>
               </div>
@@ -213,33 +213,41 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Right Column: Dynamic Form (Registration ➔ 6-Digit SMS OTP Stage) */}
+            {/* Right Column: Dynamic Form (Registration ➔ 6-Digit Email & SMS OTP Stage) */}
             <div className="p-8 sm:p-12 flex flex-col justify-center">
               
-              {/* STAGE 2: 6-DIGIT SMS & EMAIL OTP VERIFICATION SCREEN */}
+              {/* STAGE 2: 6-DIGIT EMAIL & SMS OTP VERIFICATION SCREEN */}
               {otpSent ? (
                 <div className="space-y-6 animate-in fade-in zoom-in-95">
                   
-                  {/* Simulated Mobile SMS Push Notification Preview */}
-                  <div className="p-3.5 bg-slate-900 text-white rounded-2xl shadow-lg border border-slate-700 flex items-start gap-3">
-                    <div className="p-2 bg-blue-600 rounded-xl shrink-0 mt-0.5">
-                      <MessageSquare className="w-4 h-4 text-white" />
+                  {/* Email & SMS Dispatch Banner */}
+                  <div className="p-4 bg-blue-50/70 border border-blue-200/80 rounded-2xl space-y-2.5">
+                    <div className="flex items-center gap-2 text-xs font-bold text-blue-900">
+                      <Mail className="w-4 h-4 text-blue-600 shrink-0" />
+                      <span>Verification Code Sent via Email & SMS</span>
                     </div>
-                    <div className="flex-1 text-xs">
-                      <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold mb-0.5">
-                        <span>💬 SMS: NVSHOP.LK</span>
-                        <span>{formData.phone ? `+94 ${formData.phone}` : 'Mobile Phone'}</span>
-                      </div>
-                      <p className="text-slate-200 leading-snug">
-                        Check your Mobile SMS and your Email inbox (<strong className="text-blue-300">{formData.email}</strong>) for your 6-digit code.
-                      </p>
+                    
+                    <div className="text-[11px] text-slate-600 space-y-1 pl-6">
+                      <p>📧 Email: <strong className="text-slate-900 font-mono">{formData.email}</strong></p>
+                      {formData.phone && (
+                        <p>📱 Mobile: <strong className="text-slate-900 font-mono">+94 {formData.phone}</strong></p>
+                      )}
                     </div>
+
+                    <a
+                      href="https://mail.google.com"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-600 hover:text-blue-800 pl-6 hover:underline"
+                    >
+                      <Inbox className="w-3.5 h-3.5" /> Open Gmail Inbox <ExternalLink className="w-3 h-3" />
+                    </a>
                   </div>
 
                   <div className="text-center">
                     <h3 className="text-2xl font-black text-slate-900">Enter Verification Code</h3>
                     <p className="text-xs text-slate-500 mt-1">
-                      Enter the 6-digit code sent to verify your phone number
+                      Enter the 6-digit code received on your Email or Phone SMS
                     </p>
                   </div>
 
@@ -271,18 +279,18 @@ export default function Register() {
                       disabled={loading || otpDigits.join('').length !== 6}
                       className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
                     >
-                      {loading ? 'Verifying OTP Code...' : 'Verify Phone & Activate Account'}
+                      {loading ? 'Verifying Code...' : 'Verify Email & Activate Account'}
                     </button>
 
                     <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-                      <span>Didn't receive code?</span>
+                      <span>Didn't receive email code?</span>
                       {canResend ? (
                         <button
                           type="button"
                           onClick={handleResendOtp}
                           className="font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
                         >
-                          <RefreshCw className="w-3.5 h-3.5" /> Resend OTP
+                          <RefreshCw className="w-3.5 h-3.5" /> Resend Code
                         </button>
                       ) : (
                         <span className="font-bold text-slate-400">Resend in {resendTimer}s</span>
@@ -295,7 +303,9 @@ export default function Register() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <h3 className="text-2xl font-black text-slate-900">Create Account</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">Enter your details to receive phone SMS OTP</p>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Register to receive an Email & SMS verification code
+                    </p>
                   </div>
 
                   {errors.server && (
@@ -312,7 +322,7 @@ export default function Register() {
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
-                        placeholder="Saman"
+                        placeholder="Mayantha"
                         className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
                       />
                       {errors.firstName && <p className="text-[10px] text-red-600 mt-0.5">{errors.firstName}</p>}
@@ -325,30 +335,38 @@ export default function Register() {
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
-                        placeholder="Perera"
+                        placeholder="Nawarathna"
                         className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
                       />
                       {errors.lastName && <p className="text-[10px] text-red-600 mt-0.5">{errors.lastName}</p>}
                     </div>
                   </div>
 
+                  {/* Email Input (Primary Verification Method) */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="saman@example.com"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
-                    />
+                    <label className="block text-xs font-bold text-slate-600 mb-1 flex items-center justify-between">
+                      <span>Email Address (For Verification Code)</span>
+                      <span className="text-[10px] text-blue-600 font-semibold">Required for OTP</span>
+                    </label>
+                    <div className="relative flex items-center">
+                      <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none" />
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="yourname@gmail.com"
+                        className="w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
+                      />
+                    </div>
                     {errors.email && <p className="text-[10px] text-red-600 mt-0.5">{errors.email}</p>}
                   </div>
 
                   {/* Phone Number Field with Sri Lanka +94 Country Prefix */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1">
-                      Mobile Phone Number (For SMS OTP)
+                    <label className="block text-xs font-bold text-slate-600 mb-1 flex items-center justify-between">
+                      <span>Mobile Phone Number (Optional SMS OTP)</span>
+                      <span className="text-[10px] text-slate-400">Sri Lanka</span>
                     </label>
                     <div className="relative flex items-center">
                       <div className="absolute left-3 flex items-center gap-1 text-xs font-bold text-slate-600 pointer-events-none">
@@ -420,7 +438,7 @@ export default function Register() {
                     disabled={loading}
                     className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold text-sm rounded-xl transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 mt-2"
                   >
-                    {loading ? 'Sending SMS OTP...' : 'Send SMS OTP Verification Code'}
+                    {loading ? 'Sending Email Verification Code...' : 'Register & Send Verification Code'}
                     <ArrowRight className="w-4 h-4" />
                   </button>
 

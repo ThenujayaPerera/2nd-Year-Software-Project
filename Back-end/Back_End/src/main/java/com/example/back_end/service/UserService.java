@@ -44,6 +44,7 @@ public class UserService {
         user.setPhone(userCreateDTO.getPhone());
         user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
         user.setIsActive(false);
+        user.setIsEmailVerified(false);
         user.setIsPhoneVerified(false);
 
         User savedUser = userRepository.save(user);
@@ -94,10 +95,10 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid email"));
 
-        if (!Boolean.TRUE.equals(user.getIsActive())) {
-            user.setIsActive(true);
-            userRepository.save(user);
-        }
+        user.setIsActive(true);
+        user.setIsEmailVerified(true);
+        user.setIsPhoneVerified(true);
+        userRepository.save(user);
 
         String token = "bearer-token-" + user.getId() + "-" + System.currentTimeMillis();
         return new AuthResponseDTO(token, convertToDTO(user));
@@ -235,6 +236,9 @@ public class UserService {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getPhone(),
+                user.getIsEmailVerified(),
+                user.getIsPhoneVerified(),
                 user.getIsActive(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()

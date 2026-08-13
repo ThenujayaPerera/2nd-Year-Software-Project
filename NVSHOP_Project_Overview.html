@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NVSHOP.LK - Comprehensive Project Documentation</title>
+  <style>
+    @page {
+      margin: 15mm;
+      size: A4 portrait;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.5;
+      font-size: 13px;
+      margin: 0;
+      padding: 0;
+    }
+    .header-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .header-banner h1 {
+      margin: 0 0 6px 0;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+    }
+    .header-banner p {
+      margin: 0;
+      font-size: 13px;
+      color: #bfdbfe;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-primary { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    
+    h2 {
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    h3 {
+      color: #1e3a8a;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f8fafc;
+      color: #334155;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card-title {
+      font-weight: bold;
+      color: #1e3a8a;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .highlight-box {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header-banner">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>📱 NVSHOP.LK – Full-Stack Project Documentation</h1>
+        <p>Enterprise E-Commerce & Retail Management Platform for Genuine Branded Mobile Accessories</p>
+      </div>
+      <div>
+        <span class="badge badge-success" style="font-size: 13px; padding: 6px 14px;">97% COMPLETE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <strong>📍 Store Location:</strong> 185/1/2B New Road, Ambalangoda 80300, Sri Lanka &nbsp;|&nbsp; 
+    <strong>📞 Hotline:</strong> +94 76 989 0079 &nbsp;|&nbsp; 
+    <strong>✉️ Email:</strong> nvshopamba@gmail.com
+  </div>
+
+  <!-- SECTION 1: EXECUTIVE SUMMARY -->
+  <h2>1. Executive Summary & Status</h2>
+  <p>
+    <strong>NVSHOP.LK</strong> is a production-grade full-stack e-commerce web application engineered for the official retail showroom in Ambalangoda. The platform provides end-to-end shopping workflows, real-time inventory management, dual-channel OTP security (Email + Sri Lankan Mobile SMS), and order tracking with automated invoices.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Module / Functional Area</th>
+        <th>Status</th>
+        <th>Completion</th>
+        <th>Key Capabilities Delivered</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Catalog & Browsing</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>48 official products, 11 categories, real-time search, multi-filter by brand & price</td>
+      </tr>
+      <tr>
+        <td><strong>Product Details & Gallery</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Multi-angle image switcher, Rs. 1000 OFF badge, dual action (Add to Cart / Buy Now)</td>
+      </tr>
+      <tr>
+        <td><strong>Dual OTP Authentication</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Notify.lk Sri Lanka SMS Gateway integration + Gmail SMTP HTML email verification</td>
+      </tr>
+      <tr>
+        <td><strong>Shopping Cart & Promo Engine</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Free delivery progress bar (Rs. 10,000 threshold), coupon system (<code>NV10</code>), line totals</td>
+      </tr>
+      <tr>
+        <td><strong>Checkout & Order Placement</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Sri Lankan address verification, Cash on Delivery, instant order creation</td>
+      </tr>
+      <tr>
+        <td><strong>Order Tracking & Invoices</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Live status stepper (<code>PROCESSING</code> &rarr; <code>SHIPPED</code> &rarr; <code>DELIVERED</code>), printable receipts</td>
+      </tr>
+      <tr>
+        <td><strong>Customer Profile & Warranty</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Order history, digital brand warranty certificates with serial numbers & remaining days</td>
+      </tr>
+      <tr>
+        <td><strong>Product Comparison Matrix</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>Side-by-side spec comparison table for up to 4 devices simultaneously</td>
+      </tr>
+      <tr>
+        <td><strong>Admin Management Suite</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>95%</td>
+        <td>Product CRUD, stock updates, order status switcher, sales analytics cards</td>
+      </tr>
+      <tr>
+        <td><strong>External Integrations</strong></td>
+        <td><span class="badge badge-success">Completed</span></td>
+        <td>100%</td>
+        <td>MySQL Database, Notify.lk REST API, Gmail SMTP, Google Maps Geolocation</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 2: TECHNOLOGY STACK -->
+  <h2>2. Technology Stack & Architecture</h2>
+  
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">💻 Frontend Architecture</div>
+      <ul style="margin: 6px 0; padding-left: 18px;">
+        <li><strong>Core Framework:</strong> React 18 (Single Page Application)</li>
+        <li><strong>Build Tool:</strong> Vite v8.0 (Lightning-fast HMR)</li>
+        <li><strong>Routing:</strong> React Router DOM v6</li>
+        <li><strong>State Management:</strong> Zustand (Global Stores for Cart, Auth, Wishlist, Compare)</li>
+        <li><strong>Styling:</strong> Tailwind CSS & Modern Vanilla CSS</li>
+        <li><strong>Icons:</strong> Lucide React Icons</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Backend Architecture</div>
+      <ul style="margin: 6px 0; padding-left: 18px;">
+        <li><strong>Framework:</strong> Spring Boot v4.1.0 / Java 17 LTS</li>
+        <li><strong>Web Server:</strong> Embedded Apache Tomcat 11 (Port 8080)</li>
+        <li><strong>Security:</strong> Spring Security, BCrypt Hashing, CORS Filter</li>
+        <li><strong>ORM / Data Layer:</strong> Spring Data JPA & Hibernate 7</li>
+        <li><strong>Connection Pool:</strong> HikariCP (Auto-reconnect, 20s timeout)</li>
+        <li><strong>Validation:</strong> Jakarta Validation API</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗄️ Database Management</div>
+      <ul style="margin: 6px 0; padding-left: 18px;">
+        <li><strong>Engine:</strong> MySQL (via XAMPP / MariaDB on Port 3306)</li>
+        <li><strong>Database Name:</strong> <code>gpsd_project</code></li>
+        <li><strong>Tables:</strong> <code>users</code>, <code>products</code>, <code>orders</code>, <code>order_items</code></li>
+        <li><strong>Features:</strong> Foreign key constraints, indexed searches</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">☁️ Cloud & External Integrations</div>
+      <ul style="margin: 6px 0; padding-left: 18px;">
+        <li><strong>SMS Gateway:</strong> Notify.lk REST API (User ID: 32620)</li>
+        <li><strong>Email Dispatch:</strong> Google Gmail SMTP (Port 587 TLS)</li>
+        <li><strong>Maps Platform:</strong> Google Maps Showroom Navigation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 3: GROUP PROJECT 6-MEMBER VIVA ALLOCATION -->
+  <h2>3. Group Project 6-Member Viva Allocation</h2>
+  <p>
+    This project is structurally divided into 6 distinct technical domains for a 6-member team viva presentation:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">Member</th>
+        <th style="width: 32%;">Assigned Domain</th>
+        <th style="width: 54%;">Key Concepts & Code to Present</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Member 1</strong></td>
+        <td><strong>System Architecture & Dual OTP Security</strong></td>
+        <td>
+          • Spring Boot REST Controller architecture (<code>AuthController.java</code>)<br>
+          • BCrypt Password encryption & Security filter chain<br>
+          • <strong>Notify.lk SMS REST API</strong> live HTTP payload dispatch & SMS verification<br>
+          • <strong>Gmail SMTP</strong> TLS port 587 email verification dispatch
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Member 2</strong></td>
+        <td><strong>Product Catalog, Search & Comparison</strong></td>
+        <td>
+          • <code>ProductController.java</code> and <code>ProductService.java</code> data flow<br>
+          • Spring Data JPA Repository query methods with price & category criteria<br>
+          • Client-side dynamic search filtering and sorting algorithms in React<br>
+          • 4-device side-by-side spec comparison matrix (<code>Comparison.jsx</code>)
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Member 3</strong></td>
+        <td><strong>UI/UX Aesthetics & Warranty Engine</strong></td>
+        <td>
+          • Responsive layout system using Tailwind CSS and CSS Grid<br>
+          • Product Details showcase: Rs. 1000 OFF badge, interactive gallery thumbnails<br>
+          • Zustand Wishlist store integration with local persistence<br>
+          • Digital warranty certificate engine with serial numbers & remaining days calculation
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Member 4</strong></td>
+        <td><strong>Cart, Promo Engine & Checkout</strong></td>
+        <td>
+          • Zustand Cart State management (<code>useCartStore</code>) for quantity & line totals<br>
+          • Free Islandwide Delivery progress calculation (Rs. 10,000 threshold bar)<br>
+          • Dynamic coupon validation engine (<code>NV10</code> / <code>WELCOME1000</code>)<br>
+          • Sri Lankan checkout form validation with Cash on Delivery selection
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Member 5</strong></td>
+        <td><strong>Order Pipeline, Invoices & Live Stepper</strong></td>
+        <td>
+          • Order Entity One-to-Many mapping (<code>Order</code> &harr; <code>OrderItem</code>)<br>
+          • Automated transactional order processing (<code>OrderService.java</code>)<br>
+          • Real-time delivery status visual stepper (<code>PROCESSING</code> &rarr; <code>SHIPPED</code> &rarr; <code>DELIVERED</code>)<br>
+          • Automated MimeMessage HTML invoice generation sent to customer email
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Member 6</strong></td>
+        <td><strong>Admin Dashboard & Database Infrastructure</strong></td>
+        <td>
+          • MySQL schema design and HikariCP connection pooling configurations<br>
+          • Admin protected route authorization and credential validation<br>
+          • Full Product Inventory CRUD (Create, Read, Update, Delete)<br>
+          • Live Order status switcher and sales revenue summary metrics
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 4: TESTING & CREDENTIALS -->
+  <h2>4. Demo Credentials & Operational Commands</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Role / Service</th>
+        <th>URL / Endpoint</th>
+        <th>Credentials / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Customer Portal</strong></td>
+        <td><code>http://localhost:5173</code></td>
+        <td>Sign up with Sri Lankan phone (<code>+94</code>) or test via Demo Customer button</td>
+      </tr>
+      <tr>
+        <td><strong>Admin Portal</strong></td>
+        <td><code>http://localhost:5173/admin</code></td>
+        <td>Username: <code>admin@example.com</code> &nbsp;|&nbsp; Password: <code>admin123</code></td>
+      </tr>
+      <tr>
+        <td><strong>Backend API</strong></td>
+        <td><code>http://localhost:8080/api</code></td>
+        <td>Spring Boot 4.1 REST API documentation & endpoints</td>
+      </tr>
+      <tr>
+        <td><strong>MySQL Database</strong></td>
+        <td><code>localhost:3306</code></td>
+        <td>Database: <code>gpsd_project</code> &nbsp;|&nbsp; User: <code>root</code> &nbsp;|&nbsp; Pass: <em>(blank)</em></td>
+      </tr>
+      <tr>
+        <td><strong>SMS Gateway</strong></td>
+        <td>Notify.lk API</td>
+        <td>User ID: <code>32620</code> &nbsp;|&nbsp; Sender: <code>NotifyDEMO</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer-note">
+    <strong>NVSHOP.LK E-Commerce Platform</strong> • 2nd Year Software Project • Generated on August 13, 2026
+  </div>
+
+</body>
+</html>
