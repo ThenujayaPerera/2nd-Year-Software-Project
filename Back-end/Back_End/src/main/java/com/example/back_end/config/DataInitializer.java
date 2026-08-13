@@ -1,7 +1,10 @@
 package com.example.back_end.config;
 
+import com.example.back_end.entity.Order;
+import com.example.back_end.entity.OrderItem;
 import com.example.back_end.entity.Product;
 import com.example.back_end.entity.User;
+import com.example.back_end.repository.OrderRepository;
 import com.example.back_end.repository.ProductRepository;
 import com.example.back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -456,6 +460,92 @@ public class DataInitializer implements CommandLineRunner {
 
         productRepository.saveAll(products);
         log.info("Successfully synced {} official NVSHOP.LK products across all 11 categories!", products.size());
+
+        // Seed realistic sample orders for customers
+        seedUserOrders("khimasha16@gmail.com", "Kulashi Himasha", "+94 76 227 7566", "185/1/2B New Road, Ambalangoda, Sri Lanka");
+        seedUserOrders("mayanthanawarathna37@gmail.com", "Mayantha Nawarathna", "+94 72 583 5742", "185/1/2B New Road, Ambalangoda, Sri Lanka");
+        seedUserOrders("mayanthanawarathna18@gmail.com", "Mayantha Nawarathna", "+94 72 583 5742", "185/1/2B New Road, Ambalangoda, Sri Lanka");
+    }
+
+    private void seedUserOrders(String email, String name, String phone, String address) {
+        if (orderRepository.findByUserEmailOrderByCreatedAtDesc(email).isEmpty()) {
+            log.info("Seeding realistic sample orders for {}", email);
+            
+            String ordNum1 = "NV-" + (Math.abs((email + "ORD1").hashCode()) % 800000 + 100000);
+            String ordNum2 = "NV-" + (Math.abs((email + "ORD2").hashCode()) % 800000 + 100000);
+
+            // Order 1: Delivered
+            Order o1 = new Order();
+            o1.setOrderNumber(ordNum1);
+            o1.setUserEmail(email);
+            o1.setCustomerName(name);
+            o1.setCustomerPhone(phone);
+            o1.setShippingAddress(address);
+            o1.setCity("Ambalangoda");
+            o1.setPostalCode("80300");
+            o1.setSubtotal(23000.0);
+            o1.setTax(0.0);
+            o1.setShippingCost(0.0);
+            o1.setTotalAmount(23000.0);
+            o1.setStatus("DELIVERED");
+            o1.setPaymentMethod("CARD");
+            o1.setPaymentStatus("SUCCESS");
+
+            List<OrderItem> items1 = new ArrayList<>();
+            OrderItem i1 = new OrderItem();
+            i1.setOrder(o1);
+            i1.setProductId(1L);
+            i1.setProductName("UGREEN Nexode 100W 4-Port GaN Fast Charger");
+            i1.setProductImage("https://api.nvshop.lk/api/public/file/69c61b2e3cafeb520d7bbb34/download (14).jfif");
+            i1.setPrice(16500.0);
+            i1.setQuantity(1);
+            i1.setSubtotal(16500.0);
+            items1.add(i1);
+
+            OrderItem i2 = new OrderItem();
+            i2.setOrder(o1);
+            i2.setProductId(2L);
+            i2.setProductName("Apple Original 20W USB-C Power Adapter");
+            i2.setProductImage("https://api.nvshop.lk/api/public/file/69a966d647ef868f0adc57fe/4abd5f98ce6569be4b94056c4e52a064.jpg_960x960q80.jpg_.webp");
+            i2.setPrice(6500.0);
+            i2.setQuantity(1);
+            i2.setSubtotal(6500.0);
+            items1.add(i2);
+
+            o1.setItems(items1);
+            orderRepository.save(o1);
+
+            // Order 2: In Transit / Shipped
+            Order o2 = new Order();
+            o2.setOrderNumber(ordNum2);
+            o2.setUserEmail(email);
+            o2.setCustomerName(name);
+            o2.setCustomerPhone(phone);
+            o2.setShippingAddress(address);
+            o2.setCity("Ambalangoda");
+            o2.setPostalCode("80300");
+            o2.setSubtotal(26500.0);
+            o2.setTax(0.0);
+            o2.setShippingCost(0.0);
+            o2.setTotalAmount(26500.0);
+            o2.setStatus("SHIPPED");
+            o2.setPaymentMethod("COD");
+            o2.setPaymentStatus("PENDING");
+
+            List<OrderItem> items2 = new ArrayList<>();
+            OrderItem i3 = new OrderItem();
+            i3.setOrder(o2);
+            i3.setProductId(3L);
+            i3.setProductName("Anker Soundcore Liberty 5 ANC Earbuds");
+            i3.setProductImage("https://api.nvshop.lk/api/public/file/69a54a7b47ef868f0adc4ada/download (1).jfif");
+            i3.setPrice(26500.0);
+            i3.setQuantity(1);
+            i3.setSubtotal(26500.0);
+            items2.add(i3);
+
+            o2.setItems(items2);
+            orderRepository.save(o2);
+        }
     }
 
     private Product createProduct(String name, Double price, Double originalPrice, String category, String brand, Double rating, Integer reviews, String image, Integer discount, Boolean isNew, Integer stock, String warranty, String returnPeriod, String description) {
