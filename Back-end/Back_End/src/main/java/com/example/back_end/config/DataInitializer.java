@@ -28,14 +28,26 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        seedUserIfMissing("admin@example.com", "Admin User", "+94 76 989 0079", "admin123", "185/1/2B New Road, Ambalangoda, Sri Lanka");
-        seedUserIfMissing("john@example.com", "John Doe", "+94 71 123 4567", "user123", "Colombo, Sri Lanka");
-        seedUserIfMissing("hibosa972@gmail.com", "Hibosa Customer", "+94 76 989 0079", "12345678", "185/1/2B New Road, Ambalangoda, Sri Lanka");
-        seedUserIfMissing("khimasha16@gmail.com", "Kulashi Himasha", "+94 76 227 7566", "12345678", "185/1/2B New Road, Ambalangoda, Sri Lanka");
-        seedUserIfMissing("mayanthanawarathna37@gmail.com", "Mayantha Nawarathna", "+94 72 583 5742", "12345678", "185/1/2B New Road, Ambalangoda, Sri Lanka");
+        if (userRepository.count() == 0) {
+            log.info("Seeding initial users into database...");
+            User admin = new User();
+            admin.setName("Admin User");
+            admin.setEmail("admin@example.com");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setIsActive(true);
 
-        // Clean & Sync exact live products with 100% reliable high-res tech gadget images
-        log.info("Syncing high-definition product catalog into database...");
+            User user = new User();
+            user.setName("John Doe");
+            user.setEmail("john@example.com");
+            user.setPassword(passwordEncoder.encode("user123"));
+            user.setIsActive(true);
+
+            userRepository.saveAll(List.of(admin, user));
+            log.info("Users seeded successfully.");
+        }
+
+        // Clean & Sync exact live products and photo assets from official nvshop.lk
+        log.info("Syncing exact NVSHOP.LK catalog, official product images, and details...");
         productRepository.deleteAll();
 
         List<Product> products = new ArrayList<>();
@@ -45,7 +57,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Apple iPhone 17 Pro Max 256GB (X/A)",
                 445000.0, 465000.0,
                 "Apple iPhone", "Apple", 5.0, 42,
-                "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/6a113bc506fdb61b1b19f7d7/16-pro-6.jpg",
                 4, true, 5, "1 Year Apple Care", "7 Days",
                 "Buy genuine Apple iPhone 17 Pro Max 256GB (X/A) with Apple warranty at NVSHOP.LK Sri Lanka."
         ));
@@ -53,7 +65,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Apple Original 20W USB-C Power Adapter",
                 6500.0, 7500.0,
                 "Apple iPhone", "Apple", 4.9, 195,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69a966d647ef868f0adc57fe/4abd5f98ce6569be4b94056c4e52a064.jpg_960x960q80.jpg_.webp",
                 13, true, 20, "1 Year", "7 Days",
                 "Genuine Apple 20W fast charging wall adapter for iPhone 11, 12, 13, 14, 15, 16 series."
         ));
@@ -63,7 +75,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Green Lion Gravix Smart Watch",
                 14500.0, 16500.0,
                 "Smart Watches", "Green Lion", 4.8, 64,
-                "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61f343cafeb520d7bbc5d/Green-Lion-Gravix-Smart-Watch-by-appleme.lk-4.webp",
                 12, true, 15, "6 Months Warranty", "7 Days",
                 "Buy genuine Green Lion Gravix Smart Watch with AMOLED Display and Bluetooth calling at NVSHOP.LK Sri Lanka."
         ));
@@ -71,7 +83,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Green Lion Active SE Smart Watch",
                 12800.0, 14900.0,
                 "Smart Watches", "Green Lion", 4.7, 48,
-                "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61e1e3cafeb520d7bbc25/download (5).jfif",
                 14, true, 18, "6 Months Warranty", "7 Days",
                 "Buy genuine Green Lion Active SE Smart Watch with fitness tracking and heart rate monitor."
         ));
@@ -79,7 +91,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Black Shark S3 Smart Watch",
                 16900.0, 19500.0,
                 "Smart Watches", "Black Shark", 4.9, 72,
-                "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61d873cafeb520d7bbbee/download (10).jfif",
                 13, true, 12, "6 Months Warranty", "7 Days",
                 "Buy genuine Black Shark S3 Smart Watch with ultra-clear display and gaming styling."
         ));
@@ -87,7 +99,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Green Lion Hilux Smart Watch",
                 13900.0, 15900.0,
                 "Smart Watches", "Green Lion", 4.7, 39,
-                "https://images.unsplash.com/photo-1544117519-31a4b719223d?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61d253cafeb520d7bbbb8/download (13).jfif",
                 12, false, 14, "6 Months Warranty", "7 Days",
                 "Buy genuine Green Lion Hilux Smart Watch with long battery life and premium metallic body."
         ));
@@ -95,7 +107,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Black Shark A3 Smart Watch",
                 15500.0, 17900.0,
                 "Smart Watches", "Black Shark", 4.8, 51,
-                "https://images.unsplash.com/photo-1517502884422-41eaead166d4?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61cc83cafeb520d7bbb83/download (14).jfif",
                 13, true, 10, "6 Months Warranty", "7 Days",
                 "Buy genuine Black Shark A3 Smart Watch with sports modes and IP68 waterproof rating."
         ));
@@ -103,7 +115,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Green Lion Ridge Smart Watch",
                 14200.0, 16000.0,
                 "Smart Watches", "Green Lion", 4.8, 33,
-                "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61a8e3cafeb520d7bba49/Green-Lion-GL-SWA53-Ridge-Smart-Watch-Green-Brown-by-otc.lk-in-srilanka.webp",
                 11, false, 12, "6 Months Warranty", "7 Days",
                 "Buy genuine Green Lion Ridge Smart Watch with dual-color strap and rugged bezel."
         ));
@@ -111,7 +123,7 @@ public class DataInitializer implements CommandLineRunner {
                 "WiWU SW05 Smart Watch",
                 11500.0, 13500.0,
                 "Smart Watches", "WiWU", 4.6, 28,
-                "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c61a463cafeb520d7bba16/wiwu 3.jfif",
                 15, true, 16, "6 Months Warranty", "7 Days",
                 "Buy genuine WiWU SW05 Smart Watch with sleek lightweight design and HD touchscreen."
         ));
@@ -119,7 +131,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Haylou RS5 Smart Watch",
                 13500.0, 15500.0,
                 "Smart Watches", "Haylou", 4.7, 45,
-                "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c619693cafeb520d7bb9e4/download (2).jfif",
                 13, true, 15, "6 Months Warranty", "7 Days",
                 "Buy genuine Haylou RS5 Smart Watch with 2.01 inch AMOLED display and aerospace metallic frame."
         ));
@@ -127,7 +139,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Black Shark GT3 Neo Smart Watch",
                 12900.0, 14800.0,
                 "Smart Watches", "Black Shark", 4.7, 36,
-                "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c618ec3cafeb520d7bb998/download (1).jfif",
                 13, false, 20, "6 Months Warranty", "7 Days",
                 "Buy genuine Black Shark GT3 Neo with curved display and AI voice assistant."
         ));
@@ -135,7 +147,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Black Shark Watch S1",
                 17500.0, 19900.0,
                 "Smart Watches", "Black Shark", 4.9, 89,
-                "https://images.unsplash.com/photo-1510017803434-a899398421b3?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69c617ba3cafeb520d7bb94a/download.jfif",
                 12, true, 11, "6 Months Warranty", "7 Days",
                 "Buy genuine Black Shark Watch S1 with 1.43 AMOLED display, ENC Bluetooth calling."
         ));
@@ -145,7 +157,7 @@ public class DataInitializer implements CommandLineRunner {
                 "UGREEN 300W 48000mAh Smart Digital Display Power Bank",
                 58000.0, 65000.0,
                 "Power Banks", "UGREEN", 5.0, 94,
-                "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69b3a061671bdc237efeb925/H7b50569eb1f84a60bd970ef6924a7418Y.avif",
                 11, true, 8, "1 Year Warranty", "7 Days",
                 "Buy genuine UGREEN 300W 48000mAh Smart Digital Display Power Bank with 1 Year Warranty at NVSHOP.LK."
         ));
@@ -153,7 +165,7 @@ public class DataInitializer implements CommandLineRunner {
                 "UGREEN 20000mAh 30W Fast Charging Power Bank",
                 12800.0, 15500.0,
                 "Power Banks", "UGREEN", 4.9, 142,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69b3a010671bdc237efeb8f7/24727d81-b4bc-4bbd-bdbb-3949a1b4d899.jpg.webp",
                 17, true, 25, "1 Year Warranty", "7 Days",
                 "Buy genuine UGREEN 20000mAh 30W Fast Charging Power Bank with 1 Year Warranty at NVSHOP.LK."
         ));
@@ -161,7 +173,7 @@ public class DataInitializer implements CommandLineRunner {
                 "UGREEN 20000mAh 165W Fast Charging Power Bank",
                 28500.0, 33000.0,
                 "Power Banks", "UGREEN", 4.9, 87,
-                "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69b39f53671bdc237efeb8ca/UGREEN-55987b-Nexode-Power-Bank-20000mAh-165Wb-by-appleme.lk-1.webp",
                 14, true, 12, "1 Year Warranty", "7 Days",
                 "Buy genuine UGREEN 20000mAh 165W Fast Charging Power Bank with 1 Year Warranty at NVSHOP.LK."
         ));
@@ -169,7 +181,7 @@ public class DataInitializer implements CommandLineRunner {
                 "UGREEN 20000mAh 45W Fast Charging Power Bank with Built-in Cable",
                 16900.0, 19500.0,
                 "Power Banks", "UGREEN", 4.8, 110,
-                "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69b39efa671bdc237efeb89e/UGREEN-45W-Power-Bank-with-Built-in-Cable--PB536--55988B--1-Year-Warranty-ugreenlk-9.webp",
                 13, true, 18, "1 Year Warranty", "7 Days",
                 "Buy genuine UGREEN 20000mAh 45W Fast Charging Power Bank with built-in Type-C cable and 1 Year Warranty."
         ));
@@ -177,135 +189,223 @@ public class DataInitializer implements CommandLineRunner {
                 "UGREEN 20000mAh 67W Fast Charging Power Bank with Built-in Type-C Cable",
                 19800.0, 23000.0,
                 "Power Banks", "UGREEN", 4.9, 135,
-                "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69b39e8a671bdc237efeb852/UGREEN-20000mAh-67W-Power-Bank-with-Built-in-Type-C-Cable-PB550-â€“-55996B-â€“-1-Year-Warranty-1024x1024.webp",
                 14, true, 16, "1 Year Warranty", "7 Days",
-                "Buy genuine UGREEN 20000mAh 67W Fast Charging Power Bank with built-in Type-C cable and 1 Year Warranty."
+                "Buy genuine UGREEN 20000mAh 67W Fast Charging Power Bank with 1 Year Warranty at NVSHOP.LK."
         ));
         products.add(createProduct(
-                "Anker 737 Power Bank (PowerCore 24K 140W)",
-                39500.0, 45000.0,
-                "Power Banks", "Anker", 5.0, 210,
-                "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=600&auto=format&fit=crop&q=80",
-                12, true, 10, "18 Months Warranty", "7 Days",
-                "Ultra-powerful 140W two-way fast charging with smart digital display for laptops & phones."
+                "UGREEN 20000mAh 20W Fast Charging Power Bank",
+                10900.0, 13000.0,
+                "Power Banks", "UGREEN", 4.8, 160,
+                "https://api.nvshop.lk/api/public/file/69b39e28671bdc237efeb805/rn-image_picker_lib_temp_eabe4a72-d3be-4012-800f-b51ac3b2dbd0.webp",
+                16, false, 30, "1 Year Warranty", "7 Days",
+                "Buy genuine UGREEN 20000mAh 20W Fast Charging Power Bank with 1 Year Warranty."
+        ));
+        products.add(createProduct(
+                "UGREEN 25000mAh 145W Fast Charging Power Bank",
+                29900.0, 35000.0,
+                "Power Banks", "UGREEN", 4.9, 210,
+                "https://api.nvshop.lk/api/public/file/69b39d16671bdc237efeb703/WhatsApp-Image-2025-07-18-at-14.32.16.jpeg",
+                15, true, 14, "1 Year Warranty", "7 Days",
+                "Buy genuine UGREEN 25000mAh 145W Fast Charging Power Bank for MacBooks, laptops & phones."
+        ));
+        products.add(createProduct(
+                "Baseus Magnetic Mini Power Bank 10000mAh 30W",
+                11500.0, 13800.0,
+                "Power Banks", "Baseus", 4.8, 98,
+                "https://api.nvshop.lk/api/public/file/69b39998671bdc237efeb668/3144683_baseus-magnetic-mini-power-bank-10000mah-30w-kek.webp",
+                17, true, 22, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus Magnetic Mini Power Bank 10000mAh 30W MagSafe compatible with 1 Year Warranty."
+        ));
+        products.add(createProduct(
+                "Anker PowerCore III Elite 26K 60W Power Bank",
+                36500.0, 42000.0,
+                "Power Banks", "Anker", 4.9, 82,
+                "https://api.nvshop.lk/api/public/file/69b3940e671bdc237efeaff8/Anker-PowerCore-III-Elite-25600mAh-87W-USB-C-PD-Portable-Charger-6.webp",
+                13, false, 9, "6 Months Warranty", "7 Days",
+                "Buy genuine Anker PowerCore III Elite 25600mAh 60W Power Bank at NVSHOP.LK Sri Lanka."
+        ));
+        products.add(createProduct(
+                "Anker Power Bank 25K 165W with Built-In & Retractable Cables",
+                38900.0, 45000.0,
+                "Power Banks", "Anker", 5.0, 150,
+                "https://api.nvshop.lk/api/public/file/69b392bc671bdc237efeaf58/A1695H11_MRC_PRC_Rich_image_EN_V1_2.webp",
+                14, true, 15, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Anker Power Bank 25K 165W with Built-In & Retractable Cables with 18 Months Company Warranty."
+        ));
+        products.add(createProduct(
+                "Baseus Bipow 2 20W 10000mAh Digital Display Power Bank",
+                7900.0, 9500.0,
+                "Power Banks", "Baseus", 4.8, 180,
+                "https://api.nvshop.lk/api/public/file/69b1453ec8cd3fa49255398c/Baseus-Bipow-2-20W-10000mah-Digital-Display-Power-Bank-2.webp",
+                17, false, 35, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus Bipow 2 20W 10000mAh Digital Display Power Bank at NVSHOP.LK."
+        ));
+        products.add(createProduct(
+                "Baseus QPOW Digital Display Power Bank 10000mAh 15W",
+                8500.0, 10200.0,
+                "Power Banks", "Baseus", 4.7, 125,
+                "https://api.nvshop.lk/api/public/file/69b14443c8cd3fa49255390a/Baseus-QPOW-Digital-Display-Power-Bank-IP-Edition-2022-Edition-10000mAh-15w-img3.webp",
+                17, true, 20, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus QPOW Digital Display Power Bank 10000mAh 15W with built-in cable."
+        ));
+        products.add(createProduct(
+                "Baseus 10000mAh 22.5W Qpow Pro Digital Display Fast Charge",
+                9800.0, 11900.0,
+                "Power Banks", "Baseus", 4.8, 140,
+                "https://api.nvshop.lk/api/public/file/69b1419dc8cd3fa4925536ee/Baseus-PPQD020101-vc2.webp",
+                18, true, 25, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus 10000mAh 22.5W Qpow Pro Digital Display Fast Charge Power Bank."
+        ));
+        products.add(createProduct(
+                "Baseus EnerFill FM11 10000mAh 22.5W Magnetic Power Bank",
+                12500.0, 14800.0,
+                "Power Banks", "Baseus", 4.8, 77,
+                "https://api.nvshop.lk/api/public/file/69b1097647ef868f0adc97a5/baseus-enerfill-fm11-225w-10000mah-magnetic-wireless-power-bank-RlhsO_AHiI0z.webp",
+                16, true, 18, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus EnerFill FM11 10000mAh 22.5W Magnetic Wireless Power Bank."
+        ));
+        products.add(createProduct(
+                "Baseus Star-Lord 30000mAh 22.5W Fast Charging Power Bank",
+                15800.0, 18500.0,
+                "Power Banks", "Baseus", 4.9, 165,
+                "https://api.nvshop.lk/api/public/file/69b1084447ef868f0adc96df/Baseus_Star-Lord_Power_Bank_22.5W_30000mAh_PPXJ0801012_1200x.webp",
+                15, true, 20, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus Star-Lord 30000mAh 22.5W Fast Charging Power Bank with 1 Year Warranty."
+        ));
+        products.add(createProduct(
+                "Baseus Bipow 30000mAh 20W Digital Display Power Bank",
+                14500.0, 17200.0,
+                "Power Banks", "Baseus", 4.8, 190,
+                "https://api.nvshop.lk/api/public/file/69a96a8147ef868f0adc59b0/1-1.webp",
+                16, false, 24, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus Bipow 30000mAh 20W Digital Display Power Bank with 1 Year Warranty."
+        ));
+        products.add(createProduct(
+                "Baseus Bipow 20000mAh 25W Fast Charging Power Bank",
+                11900.0, 13900.0,
+                "Power Banks", "Baseus", 4.8, 145,
+                "https://api.nvshop.lk/api/public/file/69a969b947ef868f0adc5936/146055_6-1000x1000afac.jpg",
+                14, false, 28, "1 Year Warranty", "7 Days",
+                "Buy genuine Baseus Bipow 20000mAh 25W Fast Charging Power Bank with 1 Year Warranty."
+        ));
+        products.add(createProduct(
+                "Anker Zolo 20000mAh 22.5W Fast Charging Power Bank",
+                14800.0, 17500.0,
+                "Power Banks", "Anker", 4.9, 215,
+                "https://api.nvshop.lk/api/public/file/69a9687847ef868f0adc58c3/A110E_Webcover.webp",
+                15, true, 30, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Anker Zolo 20000mAh 22.5W Fast Charging Power Bank with 18 Months Company Warranty."
         ));
 
-        // --- 4. Chargers & Cables & Adapters ---
+        // --- 4. Speakers ---
         products.add(createProduct(
-                "UGREEN Nexode 100W 4-Port GaN Fast Charger",
-                16500.0, 19500.0,
-                "Chargers & Cables & Adapters", "UGREEN", 5.0, 180,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
-                15, true, 25, "1 Year Warranty", "7 Days",
-                "GaN fast wall charger with 3 USB-C and 1 USB-A ports for MacBook, iPhone and Android."
+                "JBL Charge 6 Portable Bluetooth Speaker",
+                48000.0, 54000.0,
+                "Speakers", "JBL", 4.9, 95,
+                "https://api.nvshop.lk/api/public/file/69b11096c8cd3fa49255327f/download (1).jfif",
+                11, true, 10, "6 Months Warranty", "7 Days",
+                "Buy genuine JBL Charge 6 Portable Bluetooth Speaker with waterproof design & powerbank feature."
         ));
         products.add(createProduct(
-                "UGREEN Nexode 65W 3-Port GaN Fast Charger",
-                12500.0, 14500.0,
-                "Chargers & Cables & Adapters", "UGREEN", 4.9, 145,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
-                14, true, 30, "1 Year Warranty", "7 Days",
-                "Compact foldable 65W fast charger capable of charging laptop and two phones simultaneously."
+                "JBL Flip 7 Portable Bluetooth Speaker",
+                36000.0, 41000.0,
+                "Speakers", "JBL", 4.9, 135,
+                "https://api.nvshop.lk/api/public/file/69b3a157671bdc237efeba4c/JBL_FLIP_7_speaker-simplytek-lk-sri-lanka_1.jpg",
+                12, true, 14, "6 Months Warranty", "7 Days",
+                "Buy genuine JBL Flip 7 Portable Bluetooth Speaker with crystal clear stereo audio & deep bass."
         ));
         products.add(createProduct(
-                "Anker 735 Charger (GaNPrime 65W)",
-                15500.0, 18000.0,
-                "Chargers & Cables & Adapters", "Anker", 4.9, 160,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
-                14, true, 20, "18 Months Warranty", "7 Days",
-                "High-speed multi-device charging with PowerIQ 4.0 and ActiveShield 2.0 safety monitoring."
+                "JBL Clip 5 Portable Bluetooth Speaker",
+                19500.0, 22500.0,
+                "Speakers", "JBL", 4.8, 88,
+                "https://api.nvshop.lk/api/public/file/69b10d3847ef868f0adc98f2/JBL-CLIP5-BLK-TTC-1--1765866515.jpg",
+                13, true, 18, "6 Months Warranty", "7 Days",
+                "Buy genuine JBL Clip 5 Portable Bluetooth Speaker with ultra-portable carabiner clip design."
         ));
         products.add(createProduct(
-                "Baseus Blade 100W Ultra-Slim Charger",
+                "JBL Go 3 Portable Bluetooth Speaker",
+                13800.0, 16000.0,
+                "Speakers", "JBL", 4.8, 170,
+                "https://api.nvshop.lk/api/public/file/69b10c5347ef868f0adc98ae/JBL-GO-3-7.jpg",
+                14, false, 25, "6 Months Warranty", "7 Days",
+                "Buy genuine JBL Go 3 Portable Bluetooth Speaker with IP67 water and dust resistance."
+        ));
+
+        // --- 5. Chargers & Cables & Adapters ---
+        products.add(createProduct(
+                "Anker 30W USB-C Fast Charger Adapter",
+                7500.0, 8900.0,
+                "Chargers & Cables & Adapters", "Anker", 4.9, 180,
+                "https://api.nvshop.lk/api/public/file/69a9675447ef868f0adc5835/715hWhF5crL._AC_SL1500_.webp",
+                16, true, 35, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Anker 30W USB-C Fast Charger Adapter with 18 Months Company Warranty at NVSHOP.LK."
+        ));
+        products.add(createProduct(
+                "Anker 20W USB-C Fast Charger Adapter",
+                5800.0, 6900.0,
+                "Chargers & Cables & Adapters", "Anker", 4.9, 240,
+                "https://api.nvshop.lk/api/public/file/69a966d647ef868f0adc57fe/4abd5f98ce6569be4b94056c4e52a064.jpg_960x960q80.jpg_.webp",
+                16, true, 40, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Anker 20W USB-C Fast Charger Adapter with 18 Months Company Warranty at NVSHOP.LK."
+        ));
+
+        // --- 6. Earphones & Headsets ---
+        products.add(createProduct(
+                "Soundcore Space One Wireless Noise Cancelling Headphones",
+                33500.0, 38000.0,
+                "Earphones & Headsets", "Soundcore", 4.9, 140,
+                "https://api.nvshop.lk/api/public/file/69a9660e47ef868f0adc57d5/A3035_2_670x670_9c6f9b44-5314-4ee9-b2a2-c2d8f4acaceb.webp",
+                12, true, 15, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Soundcore Space One Wireless Noise Cancelling Headphones with 2X stronger voice reduction."
+        ));
+        products.add(createProduct(
+                "Soundcore Q11i Wireless Over-Ear Headphones",
                 18900.0, 22500.0,
-                "Chargers & Cables & Adapters", "Baseus", 4.8, 95,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
-                16, true, 14, "1 Year Warranty", "7 Days",
-                "Ultra-slim high output power delivery wall charger with real-time LED power status display."
+                "Earphones & Headsets", "Soundcore", 4.8, 115,
+                "https://api.nvshop.lk/api/public/file/69a9656a47ef868f0adc57a3/Anker-Soundcore-Q11i-Simplytek-lk-sri-lanka_2.webp",
+                16, true, 20, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Soundcore Q11i Wireless Over-Ear Headphones with 60-hour long battery life."
         ));
         products.add(createProduct(
-                "UGREEN 100W 5A USB-C to USB-C Fast Charging Cable (2M)",
-                3200.0, 4200.0,
-                "Chargers & Cables & Adapters", "UGREEN", 4.9, 310,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
-                24, false, 50, "1 Year Warranty", "7 Days",
-                "Durable nylon braided 100W E-marker smart chip cable for rapid laptop and phone charging."
+                "Soundcore Liberty 4 NC True Wireless Noise Cancelling Earbuds",
+                24500.0, 28900.0,
+                "Earphones & Headsets", "Soundcore", 5.0, 260,
+                "https://api.nvshop.lk/api/public/file/69a9640447ef868f0adc575f/gq-mobiles-anker-liberty-4-nc-4nc-noise-cancellation-in-ear-wireless-earbuds-earpods-specifications-details-4.png",
+                15, true, 25, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Soundcore Liberty 4 NC with 98.5% noise reduction and Hi-Res wireless audio."
         ));
         products.add(createProduct(
-                "Anker 543 USB-C to USB-C Cable (Bio-Based 140W)",
-                4500.0, 5800.0,
-                "Chargers & Cables & Adapters", "Anker", 4.9, 220,
-                "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80",
-                22, true, 40, "18 Months Warranty", "7 Days",
-                "Eco-friendly plant-based material construction tested to withstand 20,000+ bends."
-        ));
-
-        // --- 5. Earphones & Headsets ---
-        products.add(createProduct(
-                "Anker Soundcore Liberty 4 NC Wireless Earbuds",
-                28500.0, 33500.0,
-                "Earphones & Headsets", "Soundcore", 5.0, 245,
-                "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80",
-                15, true, 18, "18 Months Company Warranty", "7 Days",
-                "98.5% noise reduction, Hi-Res wireless audio, LDAC technology and 50-hour battery life."
+                "Anker R50i NC True Wireless Earbuds",
+                8900.0, 10500.0,
+                "Earphones & Headsets", "Anker", 4.9, 320,
+                "https://api.nvshop.lk/api/public/file/69a962a247ef868f0adc56e1/Anker-soundcore-r50i-nc-simplytek-lk-sri-lanka.webp",
+                15, true, 40, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Anker R50i NC with 42dB active noise cancellation and 4-mic crystal clear calls."
         ));
         products.add(createProduct(
-                "Anker Soundcore Space Q45 Wireless Headphones",
-                38500.0, 44000.0,
-                "Earphones & Headsets", "Soundcore", 4.9, 130,
-                "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&auto=format&fit=crop&q=80",
-                12, true, 12, "18 Months Company Warranty", "7 Days",
-                "Adaptive active noise cancelling over-ear headphones with ultra-long 65H playtime."
+                "Anker Soundcore P20i True Wireless Earbuds",
+                6900.0, 8200.0,
+                "Earphones & Headsets", "Anker", 4.8, 280,
+                "https://api.nvshop.lk/api/public/file/69a9614c47ef868f0adc55dc/anker-soundcore-r50i-true-wireless-earbuds-original-17073513534473124.webp",
+                16, false, 50, "18 Months Company Warranty", "7 Days",
+                "Buy genuine Anker Soundcore P20i with 10mm drivers, punchy bass, and 30-hour playtime."
         ));
         products.add(createProduct(
-                "Anker Soundcore Life P3 Noise Cancelling Earbuds",
-                19500.0, 23000.0,
-                "Earphones & Headsets", "Soundcore", 4.8, 190,
-                "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80",
-                15, false, 22, "18 Months Company Warranty", "7 Days",
-                "Multi-mode ANC, thumping bass with BassUp technology and 6 microphones for clear calls."
+                "Anker Soundcore K20i TWS Semi-In-Ear Earbuds",
+                5500.0, 6800.0,
+                "Earphones & Headsets", "Anker", 4.7, 190,
+                "https://api.nvshop.lk/api/public/file/69a95fe747ef868f0adc5540/brd-00816_anker-soundcore-k20i-tws-semi-in-ear-bluetooth-gaming-mode-low-latency-earbuds-a3994_full07-29b407c2.jpg",
+                19, true, 30, "6 Months Warranty", "7 Days",
+                "Buy genuine Anker Soundcore K20i semi-in-ear earbuds with gaming low latency mode."
         ));
         products.add(createProduct(
                 "Anker Soundcore Liberty 5 ANC Earbuds",
                 26500.0, 31000.0,
                 "Earphones & Headsets", "Soundcore", 4.9, 175,
-                "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80",
+                "https://api.nvshop.lk/api/public/file/69a54a7b47ef868f0adc4ada/download (1).jfif",
                 15, true, 18, "18 Months Company Warranty", "7 Days",
                 "Buy genuine Anker Soundcore Liberty 5 ANC Earbuds with HearID personalized sound & spatial audio."
-        ));
-        products.add(createProduct(
-                "UGREEN HiTune Max5 Hybrid ANC Headphones",
-                21500.0, 25500.0,
-                "Earphones & Headsets", "UGREEN", 4.8, 98,
-                "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80",
-                16, true, 15, "1 Year Warranty", "7 Days",
-                "Hi-Res certified Bluetooth 5.0 wireless over-ear headset with dual-mic noise cancelling."
-        ));
-
-        // --- 6. Speakers ---
-        products.add(createProduct(
-                "JBL Flip 6 Portable Waterproof Bluetooth Speaker",
-                36500.0, 42000.0,
-                "Speakers", "JBL", 4.9, 180,
-                "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80",
-                13, true, 15, "1 Year Warranty", "7 Days",
-                "Bold JBL Original Pro Sound with 2-way speaker system, IP67 waterproof & dustproof."
-        ));
-        products.add(createProduct(
-                "JBL Charge 5 Wi-Fi & Bluetooth Speaker",
-                52000.0, 59000.0,
-                "Speakers", "JBL", 5.0, 140,
-                "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80",
-                12, true, 10, "1 Year Warranty", "7 Days",
-                "20 Hours playtime with built-in powerbank to charge other portable devices on the go."
-        ));
-        products.add(createProduct(
-                "Anker Soundcore Motion Boom Plus 80W",
-                44500.0, 51000.0,
-                "Speakers", "Soundcore", 4.9, 115,
-                "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80",
-                13, true, 12, "18 Months Warranty", "7 Days",
-                "80W booming outdoor sound with titanium drivers, BassUp technology, and IP67 rating."
         ));
 
         // --- 7. Phone Cases & Back Covers ---
@@ -313,7 +413,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Spigen Ultra Hybrid Case for iPhone 15 Pro",
                 6800.0, 8200.0,
                 "Phone Cases & Back Covers", "Spigen", 4.9, 185,
-                "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600",
                 17, true, 35, "12 Months", "7 Days",
                 "Clear shock-absorption bumper case with Air Cushion Technology for iPhone 15 Pro."
         ));
@@ -323,7 +423,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Spigen EZ Fit Tempered Glass Guard (2-Pack)",
                 4500.0, 5500.0,
                 "Screen Protectors", "Spigen", 4.9, 240,
-                "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586953101226-996522c06170?q=80&w=600",
                 18, true, 50, "12 Months", "7 Days",
                 "Auto-alignment tray kit for bubble-free 9H hardness tempered glass installation."
         ));
@@ -333,7 +433,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Logitech MX Master 3S Wireless Performance Mouse",
                 34500.0, 39900.0,
                 "Mouse & Keyboards", "Logitech", 4.9, 130,
-                "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500",
                 13, true, 14, "2 Years", "7 Days",
                 "Quiet clicks, 8K DPI sensor for glass tracking, and MagSpeed scroll wheel."
         ));
@@ -343,7 +443,7 @@ public class DataInitializer implements CommandLineRunner {
                 "SanDisk Extreme Pro 128GB MicroSDXC 200MB/s",
                 7800.0, 9500.0,
                 "Pendrives & SD Cards", "SanDisk", 4.9, 320,
-                "https://images.unsplash.com/photo-1586953101226-996522c06170?w=600&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586953101226-996522c06170?q=80&w=600",
                 17, false, 45, "Lifetime", "7 Days",
                 "High-speed A2 4K UHD MicroSD memory card for action cameras, drones & phones."
         ));
@@ -353,7 +453,7 @@ public class DataInitializer implements CommandLineRunner {
                 "UGREEN Aluminum Foldable Desk Phone Stand",
                 2900.0, 3800.0,
                 "Others", "UGREEN", 4.8, 110,
-                "https://images.unsplash.com/photo-1586953101226-996522c06170?w=600&auto=format&fit=crop&q=80",
+                "https://images.unsplash.com/photo-1586953101226-996522c06170?q=80&w=600",
                 23, true, 30, "12 Months", "7 Days",
                 "Adjustable multi-angle aluminum desktop stand for smartphones and tablets."
         ));
@@ -364,7 +464,7 @@ public class DataInitializer implements CommandLineRunner {
         // Seed realistic sample orders for customers
         seedUserOrders("khimasha16@gmail.com", "Kulashi Himasha", "+94 76 227 7566", "185/1/2B New Road, Ambalangoda, Sri Lanka");
         seedUserOrders("mayanthanawarathna37@gmail.com", "Mayantha Nawarathna", "+94 72 583 5742", "185/1/2B New Road, Ambalangoda, Sri Lanka");
-        seedUserOrders("hibosa972@gmail.com", "Hibosa Customer", "+94 76 989 0079", "185/1/2B New Road, Ambalangoda, Sri Lanka");
+        seedUserOrders("mayanthanawarathna18@gmail.com", "Mayantha Nawarathna", "+94 72 583 5742", "185/1/2B New Road, Ambalangoda, Sri Lanka");
     }
 
     private void seedUserOrders(String email, String name, String phone, String address) {
@@ -396,7 +496,7 @@ public class DataInitializer implements CommandLineRunner {
             i1.setOrder(o1);
             i1.setProductId(1L);
             i1.setProductName("UGREEN Nexode 100W 4-Port GaN Fast Charger");
-            i1.setProductImage("https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80");
+            i1.setProductImage("https://api.nvshop.lk/api/public/file/69c61b2e3cafeb520d7bbb34/download (14).jfif");
             i1.setPrice(16500.0);
             i1.setQuantity(1);
             i1.setSubtotal(16500.0);
@@ -406,7 +506,7 @@ public class DataInitializer implements CommandLineRunner {
             i2.setOrder(o1);
             i2.setProductId(2L);
             i2.setProductName("Apple Original 20W USB-C Power Adapter");
-            i2.setProductImage("https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop&q=80");
+            i2.setProductImage("https://api.nvshop.lk/api/public/file/69a966d647ef868f0adc57fe/4abd5f98ce6569be4b94056c4e52a064.jpg_960x960q80.jpg_.webp");
             i2.setPrice(6500.0);
             i2.setQuantity(1);
             i2.setSubtotal(6500.0);
@@ -437,7 +537,7 @@ public class DataInitializer implements CommandLineRunner {
             i3.setOrder(o2);
             i3.setProductId(3L);
             i3.setProductName("Anker Soundcore Liberty 5 ANC Earbuds");
-            i3.setProductImage("https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80");
+            i3.setProductImage("https://api.nvshop.lk/api/public/file/69a54a7b47ef868f0adc4ada/download (1).jfif");
             i3.setPrice(26500.0);
             i3.setQuantity(1);
             i3.setSubtotal(26500.0);
@@ -465,21 +565,5 @@ public class DataInitializer implements CommandLineRunner {
         p.setReturnPeriod(returnPeriod);
         p.setDescription(description);
         return p;
-    }
-
-    private void seedUserIfMissing(String email, String name, String phone, String rawPassword, String address) {
-        if (!userRepository.existsByEmail(email)) {
-            log.info("Seeding user account: {}", email);
-            User u = new User();
-            u.setName(name);
-            u.setEmail(email);
-            u.setPhone(phone);
-            u.setAddress(address);
-            u.setPassword(passwordEncoder.encode(rawPassword));
-            u.setIsActive(true);
-            u.setIsEmailVerified(true);
-            u.setIsPhoneVerified(true);
-            userRepository.save(u);
-        }
     }
 }
