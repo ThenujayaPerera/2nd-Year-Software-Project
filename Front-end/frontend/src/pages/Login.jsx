@@ -45,8 +45,8 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="min-h-[700px] flex items-center justify-center py-16 px-6 bg-slate-50">
-        <div className="w-full max-w-5xl bg-white rounded-[2rem] border border-slate-100 shadow-2xl overflow-hidden grid md:grid-cols-2">
+      <div className="min-h-[700px] flex items-center justify-center py-16 px-6 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        <div className="w-full max-w-5xl bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-2xl overflow-hidden grid md:grid-cols-2">
           {/* Visual Brand Side */}
           <div className="hidden md:flex flex-col justify-between p-16 bg-gradient-to-br from-blue-600 to-indigo-800 text-white relative">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)]" />

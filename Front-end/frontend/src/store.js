@@ -184,3 +184,60 @@ export const useWishlistStore = create((set, get) => ({
   }),
 }));
 
+// Theme Store
+const getInitialTheme = () => {
+  let theme = 'light';
+  if (typeof window !== 'undefined') {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+      theme = savedTheme;
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      theme = 'dark';
+    }
+    if (typeof document !== 'undefined') {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      }
+    }
+  }
+  return theme;
+};
+
+export const useThemeStore = create((set) => ({
+  theme: getInitialTheme(),
+
+  toggleTheme: () => set((state) => {
+    const nextTheme = state.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', nextTheme);
+    if (typeof document !== 'undefined') {
+      if (nextTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      }
+    }
+    return { theme: nextTheme };
+  }),
+
+  setTheme: (theme) => set(() => {
+    localStorage.setItem('theme', theme);
+    if (typeof document !== 'undefined') {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark');
+      }
+    }
+    return { theme };
+  }),
+}));
+
+

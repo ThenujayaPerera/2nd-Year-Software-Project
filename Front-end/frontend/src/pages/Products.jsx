@@ -141,8 +141,8 @@ export default function Products() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="mb-12">
           <span className="text-blue-600 font-bold text-xs tracking-widest uppercase mb-2 block">Catalog</span>
-          <h1 className="text-4xl font-black text-slate-900 mb-2">Our Premium Collection</h1>
-          <p className="text-slate-500">Upgrade your tech setup with meticulously designed accessories.</p>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">Our Premium Collection</h1>
+          <p className="text-slate-500 dark:text-slate-400">Upgrade your tech setup with meticulously designed accessories.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
@@ -167,17 +167,17 @@ export default function Products() {
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 bg-white p-4 rounded-2xl border border-slate-100">
-              <p className="text-sm font-semibold text-slate-500">
-                Showing <span className="text-slate-900">{filteredProducts.length > 0 ? startIdx + 1 : 0}</span> to <span className="text-slate-900">{Math.min(startIdx + itemsPerPage, filteredProducts.length)}</span> of <span className="text-slate-900">{filteredProducts.length}</span> products
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
+              <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                Showing <span className="text-slate-900 dark:text-white">{filteredProducts.length > 0 ? startIdx + 1 : 0}</span> to <span className="text-slate-900 dark:text-white">{Math.min(startIdx + itemsPerPage, filteredProducts.length)}</span> of <span className="text-slate-900 dark:text-white">{filteredProducts.length}</span> products
               </p>
 
               <div className="flex items-center gap-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Sort by</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Sort by</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-2 rounded-xl bg-slate-50 border-none font-semibold text-sm outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="px-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-semibold text-sm outline-none focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white"
                 >
                   <option value="trending">Trending</option>
                   <option value="price-low">Price: Low to High</option>
@@ -192,9 +192,9 @@ export default function Products() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="animate-pulse">
-                    <div className="bg-slate-100 rounded-2xl aspect-square mb-4" />
-                    <div className="h-4 bg-slate-100 rounded w-2/3 mb-2" />
-                    <div className="h-4 bg-slate-100 rounded w-1/2" />
+                    <div className="bg-slate-100 dark:bg-slate-800 rounded-2xl aspect-square mb-4" />
+                    <div className="h-4 bg-slate-100 dark:bg-slate-800 rounded w-2/3 mb-2" />
+                    <div className="h-4 bg-slate-100 dark:bg-slate-800 rounded w-1/2" />
                   </div>
                 ))}
               </div>
@@ -217,7 +217,7 @@ export default function Products() {
                     <button
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className="p-3 rounded-xl border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent"
+                      className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-transparent text-slate-700 dark:text-slate-300"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -229,7 +229,7 @@ export default function Products() {
                         className={`w-11 h-11 rounded-xl text-sm font-bold transition-all ${
                           currentPage === i + 1
                             ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                            : 'border border-slate-200 hover:bg-slate-50 text-slate-700'
+                            : 'border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
                         }`}
                       >
                         {i + 1}
@@ -239,7 +239,7 @@ export default function Products() {
                     <button
                       onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
-                      className="p-3 rounded-xl border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent"
+                      className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-transparent text-slate-700 dark:text-slate-300"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -247,10 +247,10 @@ export default function Products() {
                 )}
               </>
             ) : (
-              <div className="text-center py-20 bg-white rounded-3xl border border-slate-100">
-                <SlidersHorizontal className="w-12 h-12 text-slate-350 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-800 mb-1">No products found</h3>
-                <p className="text-sm text-slate-400">Try adjusting your filters to find what you're looking for.</p>
+              <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800">
+                <SlidersHorizontal className="w-12 h-12 text-slate-350 dark:text-slate-600 mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1">No products found</h3>
+                <p className="text-sm text-slate-400 dark:text-slate-500">Try adjusting your filters to find what you're looking for.</p>
               </div>
             )}
           </div>

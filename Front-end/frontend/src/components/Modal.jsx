@@ -2,26 +2,26 @@ export default function Modal({ isOpen, title, children, onClose, onConfirm, con
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+      <div className="bg-white dark:bg-slate-900 dark:text-white rounded-2xl shadow-2xl max-w-md w-full border border-slate-100 dark:border-slate-800 overflow-hidden">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-semibold">{title}</h2>
+        <div className="flex justify-between items-center p-6 border-b border-slate-100 dark:border-slate-800">
+          <h2 className="text-xl font-bold">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl transition-colors"
           >
             ✕
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 text-slate-700 dark:text-slate-300">
           {children}
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-6 border-t">
+        <div className="flex gap-3 p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40">
           <button onClick={onClose} className="flex-1 btn-secondary">
             {cancelText}
           </button>

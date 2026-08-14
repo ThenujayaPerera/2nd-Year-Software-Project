@@ -207,7 +207,7 @@ export default function Home() {
       <HeroSlider />
 
       {/* Benefits Section */}
-      <section className="py-12 bg-white border-b border-slate-100">
+      <section className="py-12 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -217,11 +217,11 @@ export default function Home() {
               { icon: Zap, title: 'Express Delivery', desc: 'Cash on Delivery island-wide' },
             ].map((benefit, i) => (
               <div key={i} className="flex flex-col items-center text-center group cursor-default">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-all">
                   <benefit.icon className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-sm">{benefit.title}</h3>
-                <p className="text-xs text-slate-500">{benefit.desc}</p>
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm">{benefit.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -236,9 +236,9 @@ export default function Home() {
               <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
               <span className="text-primary font-bold text-sm tracking-widest uppercase">Editor's Choice</span>
             </div>
-            <h2 className="text-4xl font-black text-slate-900">Weekly Highlights</h2>
+            <h2 className="text-4xl font-black text-slate-900 dark:text-white">Weekly Highlights</h2>
           </div>
-          <Link to="/products" className="group flex items-center gap-2 font-bold text-slate-900 hover:text-primary transition-colors">
+          <Link to="/products" className="group flex items-center gap-2 font-bold text-slate-900 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors">
             View All Collection
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
@@ -248,9 +248,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-slate-200 rounded-2xl aspect-square mb-4" />
-                <div className="h-4 bg-slate-200 rounded w-2/3 mb-2" />
-                <div className="h-4 bg-slate-200 rounded w-1/2" />
+                <div className="bg-slate-200 dark:bg-slate-800 rounded-2xl aspect-square mb-4" />
+                <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-2/3 mb-2" />
+                <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/2" />
               </div>
             ))}
           </div>
@@ -268,15 +268,13 @@ export default function Home() {
         )}
       </section>
 
-
-
       {/* Showroom Gallery Section - Step Inside NVSHOP.LK */}
-      <section className="py-24 bg-white border-y border-slate-100">
+      <section className="py-24 bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-primary font-bold text-xs tracking-widest uppercase mb-3 block">OUR AMBALANGODA SHOWROOM</span>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">Step Inside NVSHOP.LK</h2>
-            <p className="text-slate-600 text-base leading-relaxed">
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">Step Inside NVSHOP.LK</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed">
               A premium tech space for original chargers, power banks, gaming gear, and audio — with in-store demos and friendly advice on New Street, Ambalangoda.
             </p>
           </div>

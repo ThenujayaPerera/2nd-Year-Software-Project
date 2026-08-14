@@ -94,23 +94,23 @@ export default function Cart() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
+      <div className="bg-slate-50/60 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-8 px-4 sm:px-6 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
-            <Link to="/" className="hover:text-blue-600">Home</Link>
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-6 font-medium">
+            <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-slate-800 font-bold">Shopping Cart</span>
+            <span className="text-slate-800 dark:text-slate-200 font-bold">Shopping Cart</span>
           </div>
 
           {/* Cart Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900">
+              <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
                 Your Shopping Cart
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 {cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart • Original NVSHOP.LK Accessories
               </p>
             </div>

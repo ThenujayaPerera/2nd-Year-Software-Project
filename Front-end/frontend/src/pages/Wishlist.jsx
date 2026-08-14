@@ -52,11 +52,11 @@ export default function Wishlist() {
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 text-slate-900 dark:text-slate-100 transition-colors duration-300">
         <div className="mb-10">
           <span className="text-accent font-bold text-xs tracking-widest uppercase mb-2 block">Saved Items</span>
-          <h1 className="text-4xl font-black text-slate-900 mb-2">My Wishlist</h1>
-          <p className="text-slate-500">Items you've saved for later. Don't let them sell out!</p>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2">My Wishlist</h1>
+          <p className="text-slate-500 dark:text-slate-400">Items you've saved for later. Don't let them sell out!</p>
         </div>
 
         {wishlist.length === 0 ? (

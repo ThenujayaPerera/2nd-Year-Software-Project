@@ -91,7 +91,7 @@ const BRANDS = [
 export default function About() {
   return (
     <Layout>
-      <div className="bg-slate-50 min-h-screen">
+      <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
         {/* 1. Hero Section */}
         <section className="bg-gradient-to-b from-blue-950 via-slate-900 to-slate-900 text-white py-20 px-6 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
@@ -131,10 +131,10 @@ export default function About() {
         <section className="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {STATS.map((st, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 text-center space-y-1">
-                <p className="text-2xl sm:text-3xl font-black text-blue-600">{st.number}</p>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">{st.label}</h4>
-                <p className="text-[11px] text-slate-500">{st.sub}</p>
+              <div key={idx} className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xl border border-slate-100 dark:border-slate-800 text-center space-y-1 transition-colors duration-300">
+                <p className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">{st.number}</p>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">{st.label}</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">{st.sub}</p>
               </div>
             ))}
           </div>
@@ -145,31 +145,31 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div>
-                <span className="text-blue-600 font-bold text-xs tracking-widest uppercase mb-1 block">OUR HERITAGE & MISSION</span>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">
+                <span className="text-blue-600 dark:text-blue-400 font-bold text-xs tracking-widest uppercase mb-1 block">OUR HERITAGE & MISSION</span>
+                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white leading-tight">
                   Empowering Sri Lanka With Authentic Tech Since 2020
                 </h2>
               </div>
 
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
                 Founded in <strong>Ambalangoda</strong>, <strong>NVSHOP.LK</strong> began with a clear purpose: to bridge the gap in the Sri Lankan market by providing <strong>100% genuine, certified mobile accessories and consumer electronics</strong> at honest, transparent prices.
               </p>
 
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
                 In an industry plagued by substandard counterfeit chargers and battery hazards, we handpick authorized distributor shipments from global giants like <strong>Anker, UGREEN, Baseus, Apple, Spigen, and JBL</strong>. Every item sold in our store comes backed by authentic manufacturer warranties and customer-first aftersales service.
               </p>
 
               <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-100 text-slate-800">
-                  <h4 className="font-black text-base text-blue-950 mb-1">Our Mission</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                <div className="p-4 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 text-slate-800 dark:text-slate-200">
+                  <h4 className="font-black text-base text-blue-950 dark:text-blue-300 mb-1">Our Mission</h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                     To make certified fast charging, studio audio, and military-grade phone protection accessible across Sri Lanka with next-day dispatch and zero counterfeit compromise.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-100 text-slate-800">
-                  <h4 className="font-black text-base text-emerald-950 mb-1">Our Vision</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                <div className="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/60 text-slate-800 dark:text-slate-200">
+                  <h4 className="font-black text-base text-emerald-950 dark:text-emerald-300 mb-1">Our Vision</h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                     To remain Sri Lanka's most trustworthy tech hub, combining an immersive physical showroom experience with an effortless, secure digital storefront.
                   </p>
                 </div>
@@ -177,7 +177,7 @@ export default function About() {
             </div>
 
             {/* Store Image Card */}
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 aspect-[4/3] group">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 aspect-[4/3] group">
               <img
                 src="/store/nvshop-store.jpg"
                 alt="NVSHOP.LK Ambalangoda Showroom Counter"
@@ -193,30 +193,30 @@ export default function About() {
         </section>
 
         {/* 4. Why Choose NVSHOP.LK (4 Pillars) */}
-        <section className="bg-white py-20 border-y border-slate-100">
+        <section className="bg-white dark:bg-slate-900 py-20 border-y border-slate-100 dark:border-slate-800 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-2xl mx-auto mb-16 space-y-2">
-              <span className="text-blue-600 font-bold text-xs tracking-widest uppercase">THE NVSHOP ADVANTAGE</span>
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900">Why Customers Trust NVSHOP.LK</h2>
-              <p className="text-slate-500 text-sm">We provide an unmatched combination of authenticity, warranty support, and technical expertise.</p>
+              <span className="text-blue-600 dark:text-blue-400 font-bold text-xs tracking-widest uppercase">THE NVSHOP ADVANTAGE</span>
+              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">Why Customers Trust NVSHOP.LK</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">We provide an unmatched combination of authenticity, warranty support, and technical expertise.</p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {GUARANTEES.map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <div key={idx} className="bg-slate-50 rounded-3xl p-6 border border-slate-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                  <div key={idx} className="bg-slate-50 dark:bg-slate-800/60 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-slate-700 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
                     <div className="space-y-4">
                       <div className="flex justify-between items-center">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-600/10 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-600/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
                           <Icon className="w-6 h-6" />
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2 py-0.5 rounded-md border border-blue-100 dark:border-blue-900/60">
                           {item.badge}
                         </span>
                       </div>
-                      <h3 className="font-black text-base text-slate-900">{item.title}</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                      <h3 className="font-black text-base text-slate-900 dark:text-white">{item.title}</h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 );
@@ -228,17 +228,17 @@ export default function About() {
         {/* 5. Showroom Photo Gallery Mosaic (Step Inside NVSHOP.LK) */}
         <section className="py-20 max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-2">
-            <span className="text-blue-600 font-bold text-xs tracking-widest uppercase">VISIT OUR SHOWROOM</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900">Experience Our Retail Space</h2>
-            <p className="text-slate-500 text-sm">
+            <span className="text-blue-600 dark:text-blue-400 font-bold text-xs tracking-widest uppercase">VISIT OUR SHOWROOM</span>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">Experience Our Retail Space</h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">
               Located on New Road in Ambalangoda, our modern showroom invites you to test premium audio, explore live VR headsets, and consult with our friendly gadget experts.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SHOWROOM_PHOTOS.map((photo, idx) => (
-              <div key={idx} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 group flex flex-col justify-between hover:shadow-xl transition-all duration-300">
-                <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+              <div key={idx} className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 group flex flex-col justify-between hover:shadow-xl transition-all duration-300">
+                <div className="aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800">
                   <img
                     src={photo.image}
                     alt={photo.title}
@@ -246,8 +246,8 @@ export default function About() {
                   />
                 </div>
                 <div className="p-5 space-y-1.5">
-                  <h4 className="font-black text-sm text-slate-900 group-hover:text-blue-600 transition-colors">{photo.title}</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">{photo.desc}</p>
+                  <h4 className="font-black text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{photo.title}</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">{photo.desc}</p>
                 </div>
               </div>
             ))}
@@ -255,7 +255,7 @@ export default function About() {
         </section>
 
         {/* 6. Authorized Brand Portfolio */}
-        <section className="bg-slate-900 text-white py-16">
+        <section className="bg-slate-900 dark:bg-slate-950 text-white py-16 border-t border-slate-800">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-10 space-y-2">
               <span className="text-blue-400 font-bold text-xs tracking-widest uppercase">AUTHORIZED BRANDS</span>
@@ -276,57 +276,57 @@ export default function About() {
 
         {/* 7. Showroom Location, Contact & Opening Hours */}
         <section className="py-20 max-w-7xl mx-auto px-6">
-          <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-12 shadow-xl border border-slate-100 dark:border-slate-800 transition-colors duration-300">
             <div className="grid lg:grid-cols-2 gap-10 items-center">
               <div className="space-y-6">
                 <div>
-                  <span className="text-blue-600 font-bold text-xs tracking-widest uppercase">VISIT OR CONTACT US</span>
-                  <h2 className="text-3xl font-black text-slate-900 mt-1">Showroom Details & Hours</h2>
-                  <p className="text-slate-500 text-sm">We are open 7 days a week to assist your purchases, warranty claims, and device testing.</p>
+                  <span className="text-blue-600 dark:text-blue-400 font-bold text-xs tracking-widest uppercase">VISIT OR CONTACT US</span>
+                  <h2 className="text-3xl font-black text-slate-900 dark:text-white mt-1">Showroom Details & Hours</h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">We are open 7 days a week to assist your purchases, warranty claims, and device testing.</p>
                 </div>
 
                 <div className="space-y-4 text-sm">
                   <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 shrink-0 mt-0.5">
+                    <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
                       <MapPin className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900">Showroom Address</h4>
-                      <p className="text-slate-600 text-xs mt-0.5">185/1/2B New Road, Ambalangoda 80300, Southern Province, Sri Lanka</p>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Showroom Address</h4>
+                      <p className="text-slate-600 dark:text-slate-300 text-xs mt-0.5">185/1/2B New Road, Ambalangoda 80300, Southern Province, Sri Lanka</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 shrink-0 mt-0.5">
+                    <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
                       <Clock className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900">Opening Hours</h4>
-                      <p className="text-slate-600 text-xs mt-0.5">Monday – Sunday: <strong>10:00 AM – 8:00 PM</strong> (Open 7 Days)</p>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Opening Hours</h4>
+                      <p className="text-slate-600 dark:text-slate-300 text-xs mt-0.5">Monday – Sunday: <strong>10:00 AM – 8:00 PM</strong> (Open 7 Days)</p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 shrink-0 mt-0.5">
+                    <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5">
                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900">Telephone Hotlines</h4>
-                      <p className="text-slate-600 text-xs mt-0.5">
-                        <a href="tel:+94769890079" className="hover:text-blue-600 font-bold">+94 76 989 0079</a> &nbsp;|&nbsp; 
-                        <a href="tel:+94777470186" className="hover:text-blue-600 font-bold">+94 77 747 0186</a>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Telephone Hotlines</h4>
+                      <p className="text-slate-600 dark:text-slate-300 text-xs mt-0.5">
+                        <a href="tel:+94769890079" className="hover:text-blue-600 dark:hover:text-blue-400 font-bold">+94 76 989 0079</a> &nbsp;|&nbsp; 
+                        <a href="tel:+94777470186" className="hover:text-blue-600 dark:hover:text-blue-400 font-bold">+94 77 747 0186</a>
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-amber-50 text-amber-600 shrink-0 mt-0.5">
+                    <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">
                       <Mail className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate-900">Official Email</h4>
-                      <p className="text-slate-600 text-xs mt-0.5">
-                        <a href="mailto:nvshopamba@gmail.com" className="hover:text-blue-600 font-semibold">nvshopamba@gmail.com</a>
+                      <h4 className="font-bold text-slate-900 dark:text-white">Official Email</h4>
+                      <p className="text-slate-600 dark:text-slate-300 text-xs mt-0.5">
+                        <a href="mailto:nvshopamba@gmail.com" className="hover:text-blue-600 dark:hover:text-blue-400 font-semibold">nvshopamba@gmail.com</a>
                       </p>
                     </div>
                   </div>
@@ -343,7 +343,7 @@ export default function About() {
                   </a>
                   <Link
                     to="/contact"
-                    className="px-6 py-3 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-50 transition-all"
+                    className="px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
                   >
                     Contact Us Page
                   </Link>
@@ -351,7 +351,7 @@ export default function About() {
               </div>
 
               {/* Showroom Map Card Preview */}
-              <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-inner bg-slate-100 aspect-[4/3] relative">
+              <div className="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-inner bg-slate-100 dark:bg-slate-800 aspect-[4/3] relative">
                 <iframe
                   title="NVSHOP.LK Location Map"
                   src="https://maps.google.com/maps?q=Ambalangoda,%20Sri%20Lanka&t=&z=14&ie=UTF8&iwloc=&output=embed"

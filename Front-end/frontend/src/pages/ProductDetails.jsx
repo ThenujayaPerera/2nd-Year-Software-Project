@@ -113,17 +113,15 @@ export default function ProductDetails() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
+      <div className="bg-slate-50/60 dark:bg-slate-950 min-h-screen py-8 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
-            <Link to="/" className="hover:text-blue-600">Home</Link>
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 mb-6">
+            <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
             <span>/</span>
-            <Link to="/products" className="hover:text-blue-600">Products</Link>
+            <Link to="/products" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Products</Link>
             <span>/</span>
-            <Link to={`/products?q=${encodeURIComponent(product.category || '')}`} className="hover:text-blue-600">{product.category || 'Accessories'}</Link>
-            <span>/</span>
-            <span className="text-slate-800 font-bold truncate max-w-xs">{product.name}</span>
+            <span className="text-slate-800 dark:text-slate-200 font-bold truncate max-w-xs">{product.name}</span>
           </div>
 
           {/* Main 2-Column Product Stage */}
@@ -132,7 +130,7 @@ export default function ProductDetails() {
             {/* Left Column: Image Gallery with Discount Badge (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               {/* Main Showcase Image Frame */}
-              <div className="relative bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm flex items-center justify-center aspect-square overflow-hidden group">
+              <div className="relative bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center justify-center aspect-square overflow-hidden group transition-colors duration-300">
                 
                 {/* Rs. 1000 OFF Badge (Exact NVSHOP Style) */}
                 <div className="absolute top-4 left-4 bg-red-600 text-white font-black text-xs px-3.5 py-1.5 rounded-full shadow-md z-10 tracking-wide">
@@ -152,10 +150,10 @@ export default function ProductDetails() {
                   <button
                     key={idx}
                     onClick={() => setSelectedImgIndex(idx)}
-                    className={`w-20 h-20 rounded-2xl bg-white p-1.5 border-2 transition-all overflow-hidden shrink-0 ${
+                    className={`w-20 h-20 rounded-2xl bg-white dark:bg-slate-900 p-1.5 border-2 transition-all overflow-hidden shrink-0 ${
                       selectedImgIndex === idx
                         ? 'border-blue-600 shadow-md shadow-blue-500/10'
-                        : 'border-slate-200 hover:border-slate-300'
+                        : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                     }`}
                   >
                     <img src={img} alt={`thumb-${idx}`} className="w-full h-full object-contain" />
@@ -169,24 +167,24 @@ export default function ProductDetails() {
               
               {/* Product Header */}
               <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-blue-600 font-mono">
+                <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 font-mono">
                   {product.brand} • {product.category}
                 </span>
-                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 leading-snug">
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1 leading-snug">
                   {product.name}
                 </h1>
                 
                 {/* Price Display */}
                 <div className="flex items-baseline gap-3 mt-3">
-                  <span className="text-3xl font-black text-slate-900 font-sans">
+                  <span className="text-3xl font-black text-slate-900 dark:text-white font-sans">
                     Rs. {product.price?.toLocaleString()}
                   </span>
                   {product.originalPrice && (
-                    <span className="text-lg font-bold text-slate-400 line-through">
+                    <span className="text-lg font-bold text-slate-400 dark:text-slate-500 line-through">
                       Rs. {product.originalPrice?.toLocaleString()}
                     </span>
                   )}
-                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
                     In Stock
                   </span>
                 </div>
@@ -194,21 +192,21 @@ export default function ProductDetails() {
 
               {/* Quantity Selector */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 mb-2">Quantity:</label>
-                <div className="inline-flex items-center border border-slate-300 rounded-xl bg-white overflow-hidden shadow-sm">
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-2">Quantity:</label>
+                <div className="inline-flex items-center border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 overflow-hidden shadow-sm">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
-                    className="px-4 py-2 text-slate-600 hover:bg-slate-100 font-bold transition-colors disabled:opacity-40"
+                    className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition-colors disabled:opacity-40"
                   >
                     −
                   </button>
-                  <span className="px-5 py-2 font-bold text-slate-900 text-sm border-x border-slate-200">
+                  <span className="px-5 py-2 font-bold text-slate-900 dark:text-white text-sm border-x border-slate-200 dark:border-slate-800">
                     {quantity}
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-2 text-slate-600 hover:bg-slate-100 font-bold transition-colors"
+                    className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition-colors"
                   >
                     +
                   </button>
@@ -226,7 +224,7 @@ export default function ProductDetails() {
 
                 <button
                   onClick={handleBuyNow}
-                  className="flex-1 min-w-[150px] py-3.5 px-6 bg-[#111827] hover:bg-black text-white font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-md"
+                  className="flex-1 min-w-[150px] py-3.5 px-6 bg-[#111827] dark:bg-slate-800 hover:bg-black dark:hover:bg-slate-700 text-white font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-md"
                 >
                   <Zap className="w-4 h-4 text-amber-400 fill-amber-400" /> Buy Now
                 </button>
@@ -235,8 +233,8 @@ export default function ProductDetails() {
                   onClick={() => toggleWishlist(product)}
                   className={`p-3.5 rounded-xl border transition-all ${
                     isInWishlist(product.id)
-                      ? 'border-red-400 bg-red-50 text-red-500'
-                      : 'border-slate-300 bg-white text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                      ? 'border-red-400 bg-red-50 dark:bg-red-950/40 text-red-500'
+                      : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                   title="Save to Wishlist"
                 >
@@ -246,39 +244,39 @@ export default function ProductDetails() {
 
               {/* Toast Message when added */}
               {addedToCartToast && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2 animate-in fade-in">
-                  <Check className="w-4 h-4 text-emerald-600" /> Added to your shopping cart!
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+                  <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Added to your shopping cart!
                 </div>
               )}
 
               {/* Structured "About this [Brand] product" Specification Card (Exact NVSHOP Layout) */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-5 text-sm text-slate-700">
+              <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-5 text-sm text-slate-700 dark:text-slate-300 transition-colors duration-300">
                 
-                <h3 className="text-lg font-black text-slate-900">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white">
                   About this {brandName} product
                 </h3>
 
                 {/* Main Product Tagline */}
-                <p className="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                <p className="font-bold text-slate-900 dark:text-white flex items-center gap-2 text-sm">
                   <span>🔋</span> {product.name}
                 </p>
 
                 {/* Overview Paragraphs */}
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   ⚡ Stay powered throughout your day with the {product.name}. Designed with advanced technology and premium materials, it provides reliable, efficient, and long-lasting performance for your smartphones, tablets, earbuds, and other USB-powered devices.
                 </p>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   🚀 Equipped with Power Delivery (PD) and Quick Charge (QC) support, this {brandName} gadget delivers fast and stable charging while protecting your devices with advanced safety features. Its compact and portable design makes it perfect for travel, office use, and everyday charging needs.
                 </p>
 
                 {/* Key Features Bullet List with Emojis */}
                 <div className="pt-2">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-500">
+                  <h4 className="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
                     <span>✨</span> Key Features:
                   </h4>
 
-                  <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                  <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">🔋</span>
                       <span><strong>High Capacity & Output</strong> – Delivers maximum efficient power output for all connected gadgets</span>
@@ -315,11 +313,11 @@ export default function ProductDetails() {
                 </div>
 
                 {/* Showroom & Islandwide Delivery Note */}
-                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs text-blue-900 flex items-start gap-3 mt-4">
-                  <Store className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/60 text-xs text-blue-900 dark:text-blue-200 flex items-start gap-3 mt-4">
+                  <Store className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold">Available in Showroom & Online Delivery</p>
-                    <p className="text-blue-700 mt-0.5">
+                    <p className="text-blue-700 dark:text-blue-300 mt-0.5">
                       Visit our showroom at 185/1/2B New Road, Ambalangoda or order online with Cash on Delivery (1-3 days islandwide).
                     </p>
                   </div>

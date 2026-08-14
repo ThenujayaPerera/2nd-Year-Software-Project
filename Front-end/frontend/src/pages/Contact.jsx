@@ -112,13 +112,13 @@ export default function Contact() {
   return (
     <Layout>
       <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen py-12 px-4 relative">
-        <div className="max-w-7xl mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">
               Get in Touch
             </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </p>
           </div>
@@ -126,8 +126,8 @@ export default function Contact() {
           <div className="grid lg:grid-cols-3 gap-8 mb-16">
             {/* Contact Form - 2 columns */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                <h2 className="text-2xl font-black text-slate-900 mb-6">Send us a Message</h2>
+              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-8 border border-slate-100 dark:border-slate-800 transition-colors duration-300">
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-6">Send us a Message</h2>
 
                 {submitted && (
                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3 animate-in fade-in">

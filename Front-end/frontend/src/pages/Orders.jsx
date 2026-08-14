@@ -44,14 +44,14 @@ export default function Orders() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-slate-50 py-12 px-6">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-12 px-6 transition-colors duration-300">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
             <div>
-              <span className="text-blue-600 font-bold text-xs tracking-widest uppercase">NVSHOP.LK ORDERS</span>
-              <h1 className="text-3xl md:text-4xl font-black text-slate-900 mt-1">My Orders & Tracking</h1>
-              <p className="text-slate-500 text-sm">Real-time status updates and order history (FR1.8)</p>
+              <span className="text-blue-600 dark:text-blue-400 font-bold text-xs tracking-widest uppercase">NVSHOP.LK ORDERS</span>
+              <h1 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mt-1">My Orders & Tracking</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">Real-time status updates and order history (FR1.8)</p>
             </div>
             <Link
               to="/products"

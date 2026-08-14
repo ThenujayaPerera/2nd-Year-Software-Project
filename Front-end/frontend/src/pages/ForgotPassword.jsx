@@ -16,17 +16,17 @@ export default function ForgotPassword() {
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center py-16 px-4 bg-slate-50">
-        <div className="w-full max-w-xl bg-white rounded-[2rem] border border-slate-200 shadow-lg p-10">
+      <div className="min-h-screen flex items-center justify-center py-16 px-4 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        <div className="w-full max-w-xl bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-lg p-10">
           <div className="mb-8">
-            <div className="flex items-center gap-3 text-slate-700 font-semibold">
+            <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-semibold">
               <ArrowLeft className="w-5 h-5" />
-              <Link to="/login" className="text-blue-600 hover:text-blue-700">
+              <Link to="/login" className="text-blue-600 dark:text-blue-400 hover:text-blue-700">
                 Back to Sign In
               </Link>
             </div>
-            <h1 className="mt-6 text-3xl font-black text-slate-900">Forgot Password</h1>
-            <p className="mt-3 text-slate-600">Enter your email and we will send you instructions to reset your password.</p>
+            <h1 className="mt-6 text-3xl font-black text-slate-900 dark:text-white">Forgot Password</h1>
+            <p className="mt-3 text-slate-600 dark:text-slate-400">Enter your email and we will send you instructions to reset your password.</p>
           </div>
 
           {status && (

@@ -251,18 +251,18 @@ export default function UserProfile() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
+      <div className="bg-slate-50/60 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-8 px-4 sm:px-6 transition-colors duration-300">
         <div className="max-w-6xl mx-auto space-y-8">
           
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <Link to="/" className="hover:text-blue-600">Home</Link>
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
+            <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-slate-800 font-bold">Customer Account</span>
+            <span className="text-slate-800 dark:text-slate-200 font-bold">Customer Account</span>
           </div>
 
           {/* User Profile Card Header */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-colors duration-300">
             <div className="flex items-center gap-4 sm:gap-5">
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-black text-2xl flex items-center justify-center shadow-md shrink-0">
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -270,7 +270,7 @@ export default function UserProfile() {
 
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 capitalize">
+                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white capitalize">
                     {user?.name || 'Valued Customer'}
                   </h1>
                   <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md">
