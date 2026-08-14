@@ -1,18 +1,14 @@
 # Frontend - Node.js
-Front-end/node_modules/
-Front-end/frontend/node_modules/
-Front-end/frontend/dist/
-Front-end/frontend/.env.local
-Front-end/frontend/.env.*.local
+frontend/node_modules/
+frontend/dist/
 
 # Frontend - Build/Cache
-Front-end/frontend/.vite
-Front-end/frontend/*.local
+frontend/.vite/
+frontend/*.local
 
 # Backend - Gradle
-Back-end/Back_End/.gradle/
-Back-end/Back_End/build/
-Back-end/Back_End/.gradle
+backend/.gradle/
+backend/build/
 
 # IDE
 .vscode/
@@ -36,5 +32,5 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
-# Resources
+# Generated/local resources
 Resources & Details/
