@@ -1,45 +1,67 @@
 import { create } from 'zustand';
+import { cartAPI } from './services/api';
+
+// Helper to get email
+const getAuthEmail = () => useAuthStore.getState().user?.email;
 
 // Cart Store
-export const useCartStore = create((set) => ({
-  cart: JSON.parse(localStorage.getItem('cart')) || [],
+export const useCartStore = create((set, get) => ({
+  cart: [],
   
-  addToCart: (product) => set((state) => {
-    const existingItem = state.cart.find(item => item.id === product.id);
-    let updatedCart;
-    
-    if (existingItem) {
-      updatedCart = state.cart.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    } else {
-      updatedCart = [...state.cart, { ...product, quantity: 1 }];
+  fetchCart: async () => {
+    const email = getAuthEmail();
+    if (!email) return;
+    try {
+      console.log("Fetching cart from backend...");
+      const response = await cartAPI.fetchCart(email);
+      const mappedCart = response.data.items.map(item => ({ ...item.product, quantity: item.quantity }));
+      set({ cart: mappedCart });
+    } catch (error) {
+      console.error("Failed to fetch cart", error);
     }
-    
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    return { cart: updatedCart };
-  }),
+  },
 
-  removeFromCart: (productId) => set((state) => {
-    const updatedCart = state.cart.filter(item => item.id !== productId);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    return { cart: updatedCart };
-  }),
+  addToCart: async (product) => {
+    const email = getAuthEmail();
+    if (!email) {
+      console.error("Must be logged in to add to cart");
+      return;
+    }
+    try {
+      const response = await cartAPI.addToCartAPI(email, product.id, 1);
+      const mappedCart = response.data.items.map(item => ({ ...item.product, quantity: item.quantity }));
+      set({ cart: mappedCart });
+    } catch (error) {
+      console.error("Failed to add to cart", error);
+    }
+  },
 
-  updateQuantity: (productId, quantity) => set((state) => {
-    const updatedCart = state.cart.map(item =>
-      item.id === productId ? { ...item, quantity } : item
-    ).filter(item => item.quantity > 0);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    return { cart: updatedCart };
-  }),
+  removeFromCart: async (productId) => {
+    const email = getAuthEmail();
+    if (!email) return;
+    try {
+      const response = await cartAPI.removeFromCartAPI(email, productId);
+      const mappedCart = response.data.items.map(item => ({ ...item.product, quantity: item.quantity }));
+      set({ cart: mappedCart });
+    } catch (error) {
+      console.error("Failed to remove from cart", error);
+    }
+  },
 
-  clearCart: () => set(() => {
-    localStorage.removeItem('cart');
-    return { cart: [] };
-  }),
+  updateQuantity: (productId, quantity) => {
+     // Optional: If you need it later
+  },
+
+  clearCart: async () => {
+    const email = getAuthEmail();
+    if (!email) return;
+    try {
+      await cartAPI.clearCartAPI(email);
+      set({ cart: [] });
+    } catch (error) {
+      console.error("Failed to clear cart", error);
+    }
+  },
 
   getCartTotal: () => {
     const state = useCartStore.getState();
