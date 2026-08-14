@@ -247,6 +247,50 @@ public class UserService {
     }
 
     /**
+     * Create an Administrator account directly (Active & Verified)
+     */
+    @Transactional
+    public UserDTO createAdminUser(UserCreateDTO userCreateDTO) {
+        log.info("Admin creating new administrator account with email: {}", userCreateDTO.getEmail());
+
+        if (userRepository.existsByEmail(userCreateDTO.getEmail())) {
+            log.warn("User already exists with email: {}", userCreateDTO.getEmail());
+            throw new DuplicateResourceException("User with email " + userCreateDTO.getEmail() + " already exists");
+        }
+
+        User admin = new User();
+        admin.setName(userCreateDTO.getName());
+        admin.setEmail(userCreateDTO.getEmail());
+        admin.setPhone(userCreateDTO.getPhone());
+        admin.setAddress(userCreateDTO.getAddress() != null ? userCreateDTO.getAddress() : "185/1/2B New Road, Ambalangoda, Sri Lanka");
+        admin.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
+        admin.setRole("admin");
+        admin.setIsActive(true);
+        admin.setIsEmailVerified(true);
+        admin.setIsPhoneVerified(true);
+
+        User saved = userRepository.save(admin);
+        log.info("New admin created successfully with ID: {}", saved.getId());
+        return convertToDTO(saved);
+    }
+
+    /**
+     * Toggle user role between 'admin' and 'user'
+     */
+    @Transactional
+    public UserDTO toggleUserRole(Long id) {
+        log.info("Toggling role for user ID: {}", id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        
+        String newRole = "admin".equalsIgnoreCase(user.getRole()) ? "user" : "admin";
+        user.setRole(newRole);
+        User updated = userRepository.save(user);
+        log.info("User ID {} role updated to: {}", id, newRole);
+        return convertToDTO(updated);
+    }
+
+    /**
      * Convert User entity to UserDTO
      */
     private UserDTO convertToDTO(User user) {
@@ -259,6 +303,7 @@ public class UserService {
                 user.getIsEmailVerified(),
                 user.getIsPhoneVerified(),
                 user.getIsActive(),
+                user.getRole() != null ? user.getRole() : "user",
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );

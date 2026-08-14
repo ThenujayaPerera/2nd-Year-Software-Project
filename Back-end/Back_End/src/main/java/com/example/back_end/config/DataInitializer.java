@@ -33,14 +33,20 @@ public class DataInitializer implements CommandLineRunner {
             User admin = new User();
             admin.setName("Admin User");
             admin.setEmail("admin@example.com");
+            admin.setRole("admin");
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setIsActive(true);
+            admin.setIsEmailVerified(true);
+            admin.setIsPhoneVerified(true);
 
             User user = new User();
             user.setName("John Doe");
             user.setEmail("john@example.com");
+            user.setRole("user");
             user.setPassword(passwordEncoder.encode("user123"));
             user.setIsActive(true);
+            user.setIsEmailVerified(true);
+            user.setIsPhoneVerified(true);
 
             userRepository.saveAll(List.of(admin, user));
             log.info("Users seeded successfully.");

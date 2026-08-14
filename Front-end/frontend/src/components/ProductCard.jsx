@@ -1,13 +1,15 @@
 import { ShoppingCart, Eye, Star, Heart, CheckSquare2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from './Toast';
-import { useComparisonStore } from '../store';
+import { useComparisonStore, useWishlistStore } from '../store';
 
 export default function ProductCard({ product, onAddToCart, onViewDetails }) {
   const navigate = useNavigate();
   const toast = useToast();
   const { addToComparison, removeFromComparison, isInComparison } = useComparisonStore();
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
   const inComparison = isInComparison(product.id);
+  const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = () => {
     onAddToCart(product);
@@ -19,13 +21,24 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
     if (onViewDetails) onViewDetails(product.id);
   };
 
-  const handleToggleComparison = () => {
+  const handleToggleComparison = (e) => {
+    e.stopPropagation();
     if (inComparison) {
       removeFromComparison(product.id);
       if (toast) toast(`Removed from comparison`, { type: 'info' });
     } else {
       addToComparison(product);
       if (toast) toast(`Added to comparison!`, { type: 'success' });
+    }
+  };
+
+  const handleToggleWishlist = (e) => {
+    e.stopPropagation();
+    toggleWishlist(product);
+    if (inWishlist) {
+      if (toast) toast(`${product.name} removed from wishlist`, { type: 'info' });
+    } else {
+      if (toast) toast(`${product.name} added to wishlist!`, { type: 'success', title: 'Saved to Wishlist' });
     }
   };
 
@@ -44,8 +57,16 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
         >
           <CheckSquare2 className="w-5 h-5" />
         </button>
-        <button className="p-2 rounded-full bg-white/80 backdrop-blur-md shadow-sm hover:bg-red-50 hover:text-red-500 transition-all">
-          <Heart className="w-5 h-5" />
+        <button 
+          onClick={handleToggleWishlist}
+          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${
+            inWishlist
+              ? 'bg-red-50 text-red-500 scale-110 shadow-md shadow-red-500/20'
+              : 'bg-white/80 hover:bg-red-50 hover:text-red-500'
+          }`}
+          title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          <Heart className={`w-5 h-5 transition-transform ${inWishlist ? 'fill-red-500 text-red-500' : ''}`} />
         </button>
       </div>
 

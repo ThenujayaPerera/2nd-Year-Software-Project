@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore, useCartStore, useComparisonStore } from '../store';
+import { useAuthStore, useCartStore, useComparisonStore, useWishlistStore } from '../store';
 import { ShoppingCart, User, LogOut, Search, Menu, X, ShieldCheck, Heart, Truck, Scale } from 'lucide-react';
 
 export default function Navbar() {
@@ -10,8 +10,10 @@ export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const cart = useCartStore((state) => state.cart);
   const comparison = useComparisonStore((state) => state.comparison);
+  const wishlist = useWishlistStore((state) => state.wishlist);
   const cartItemsCount = cart.length;
   const comparisonCount = comparison.length;
+  const wishlistCount = wishlist.length;
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -74,8 +76,13 @@ export default function Navbar() {
               <div className="h-8 w-px bg-slate-200 hidden md:block" />
 
               {/* Cart & Wishlist - Always Visible */}
-              <Link to="/wishlist" className={`p-2.5 ${isAuthenticated ? 'text-slate-600 hover:text-accent hover:bg-accent/5' : 'text-slate-400 cursor-not-allowed'} rounded-full transition-all relative`} onClick={(e) => !isAuthenticated && e.preventDefault()}>
-                <Heart className="w-6 h-6" />
+              <Link to="/wishlist" className="p-2.5 text-slate-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-all relative" title="Saved Wishlist">
+                <Heart className={`w-6 h-6 ${wishlistCount > 0 ? 'text-red-500 fill-red-500/20' : ''}`} />
+                {wishlistCount > 0 && (
+                  <span className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
 
               <Link to={isAuthenticated ? "/comparison" : "/login"} className="p-2.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all relative" title="Compare Products">

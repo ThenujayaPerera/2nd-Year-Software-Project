@@ -1,5 +1,6 @@
 package com.example.back_end.controller;
 
+import com.example.back_end.dto.UserCreateDTO;
 import com.example.back_end.dto.UserDTO;
 import com.example.back_end.entity.Order;
 import com.example.back_end.entity.PaymentTransaction;
@@ -42,15 +43,26 @@ public class AdminController {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 
-    // --- FR2.8: Customer Accounts Management ---
+    // --- FR2.8: Customer & Administrator Accounts Management ---
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @PostMapping("/users/create-admin")
+    public ResponseEntity<UserDTO> createAdmin(@RequestBody UserCreateDTO userCreateDTO) {
+        log.info("Admin creating new administrator: {}", userCreateDTO.getEmail());
+        return ResponseEntity.ok(userService.createAdminUser(userCreateDTO));
+    }
+
     @PutMapping("/users/{id}/toggle-status")
     public ResponseEntity<UserDTO> toggleUserStatus(@PathVariable Long id) {
         return ResponseEntity.ok(userService.toggleUserStatus(id));
+    }
+
+    @PutMapping("/users/{id}/toggle-role")
+    public ResponseEntity<UserDTO> toggleUserRole(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.toggleUserRole(id));
     }
 
     // --- FR2.6 & FR2.7: Sales, Revenue & Low Stock Reports ---

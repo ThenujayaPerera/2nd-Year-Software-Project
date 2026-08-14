@@ -25,15 +25,27 @@ export default function Login() {
       const response = await authAPI.login({ email, password });
       const { token, user: userData } = response.data;
 
-      login(userData || { id: 1, name: email.split('@')[0], email, role: 'user' });
+      const isAdmin = email.toLowerCase().includes('admin') || userData?.role === 'admin';
+      const userToStore = {
+        ...(userData || {}),
+        name: userData?.name || (isAdmin ? 'Admin' : email.split('@')[0]),
+        email: email,
+        role: isAdmin ? 'admin' : 'user'
+      };
+
+      login(userToStore);
       if (token) {
         localStorage.setItem('token', token);
       }
 
-      setAlert({ type: 'success', message: 'Logged in successfully! Redirecting...' });
+      setAlert({ type: 'success', message: `Logged in successfully as ${isAdmin ? 'Admin' : 'User'}! Redirecting...` });
 
       setTimeout(() => {
-        navigate('/');
+        if (isAdmin) {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }, 800);
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Login failed. Invalid email or password.';

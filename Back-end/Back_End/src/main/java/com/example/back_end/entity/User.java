@@ -53,6 +53,9 @@ public class User {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
+    @Column(name = "role", nullable = false)
+    private String role = "user";
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

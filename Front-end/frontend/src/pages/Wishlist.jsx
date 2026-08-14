@@ -1,53 +1,23 @@
-import { useState } from 'react';
 import Layout from '../components/Layout';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
-import { useCartStore } from '../store';
-
-const SAMPLE_WISHLIST = [
-  {
-    id: 10,
-    name: 'Anker MagSafe Wireless Charger',
-    price: 7800,
-    originalPrice: 9500,
-    image: 'https://images.unsplash.com/photo-1618218168350-6e7c81151b64?q=80&w=600&auto=format&fit=crop',
-    category: 'Wireless',
-    rating: 4.8,
-    stock: 5,
-  },
-  {
-    id: 11,
-    name: 'Spigen Ultra Hybrid Crystal Case',
-    price: 5400,
-    originalPrice: null,
-    image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop',
-    category: 'Cases',
-    rating: 4.9,
-    stock: 20,
-  },
-  {
-    id: 12,
-    name: 'UGREEN USB-C Hub 7-in-1',
-    price: 13500,
-    originalPrice: 16000,
-    image: 'https://images.unsplash.com/photo-1586953101226-996522c06170?q=80&w=600&auto=format&fit=crop',
-    category: 'Accessories',
-    rating: 4.7,
-    stock: 8,
-  },
-];
+import { useCartStore, useWishlistStore } from '../store';
+import { useToast } from '../components/Toast';
 
 export default function Wishlist() {
-  const [wishlist, setWishlist] = useState(SAMPLE_WISHLIST);
+  const { wishlist, toggleWishlist } = useWishlistStore();
   const addToCart = useCartStore((state) => state.addToCart);
+  const toast = useToast();
 
-  const handleRemove = (id) => {
-    setWishlist((prev) => prev.filter((item) => item.id !== id));
+  const handleRemove = (product) => {
+    toggleWishlist(product);
+    if (toast) toast(`${product.name} removed from wishlist`, { type: 'info' });
   };
 
   const handleMoveToCart = (product) => {
     addToCart(product);
-    handleRemove(product.id);
+    toggleWishlist(product);
+    if (toast) toast(`${product.name} moved to cart!`, { type: 'success', title: 'Moved to Cart' });
   };
 
   return (
@@ -75,8 +45,9 @@ export default function Wishlist() {
             {wishlist.map((item) => (
               <div key={item.id} className="card-premium group relative flex flex-col">
                 <button
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => handleRemove(item)}
                   className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow-md text-slate-400 hover:text-red-500 hover:scale-110 transition-all"
+                  title="Remove from wishlist"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

@@ -18,6 +18,7 @@ public class UserDTO {
     private Boolean isEmailVerified;
     private Boolean isPhoneVerified;
     private Boolean isActive;
+    private String role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
