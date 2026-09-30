@@ -204,7 +204,7 @@ logging.level.org.hibernate.SQL=DEBUG
 ## 📚 File Structure
 
 ```
-Back_End/
+backend/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/example/back_end/

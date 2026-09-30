@@ -59,7 +59,7 @@ src/
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
-cd Back-end/Back_End
+cd backend
 ```
 
 ### 2. Create MySQL Database
@@ -90,7 +90,7 @@ The Gradle build will automatically download all dependencies defined in `build.
 
 ```properties
 # Application Name
-spring.application.name=Back_End
+spring.application.name=backend
 
 # MySQL Configuration
 spring.datasource.url=jdbc:mysql://localhost:3306/gpsd_project
@@ -130,7 +130,7 @@ logging.level.com.example.back_end=DEBUG
 
 ```bash
 ./gradlew build
-java -jar build/libs/Back_End-0.0.1-SNAPSHOT.jar
+java -jar build/libs/backend-0.0.1-SNAPSHOT.jar
 ```
 
 ### Application will start at:

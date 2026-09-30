@@ -13,10 +13,10 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class SmsService {
 
-    @Value("${sms.user.id:32620}")
+    @Value("${sms.user.id:}")
     private String userId;
 
-    @Value("${sms.api.key:7lc7oqhkGyEDNQxsLsCy}")
+    @Value("${sms.api.key:}")
     private String smsApiKey;
 
     @Value("${sms.sender.id:NotifyDEMO}")
