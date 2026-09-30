@@ -54,7 +54,7 @@ public class Order {
     @Column(name = "payment_status")
     private String paymentStatus; // SUCCESS, PENDING, FAILED
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> items = new ArrayList<>();
 
     @CreationTimestamp

@@ -43,6 +43,12 @@ export default function Admin() {
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
   const [adminSaving, setAdminSaving] = useState(false);
   const [adminAlert, setAdminAlert] = useState(null);
+
+  // Edit Product Modal State
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [editSaving, setEditSaving] = useState(false);
+  const [editAlert, setEditAlert] = useState(null);
   const [newAdmin, setNewAdmin] = useState({
     name: '',
     email: '',
@@ -186,6 +192,54 @@ export default function Admin() {
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleEditClick = (product) => {
+    setEditingProduct({
+      id: product.id,
+      name: product.name || '',
+      price: product.price || '',
+      originalPrice: product.originalPrice || '',
+      category: product.category || 'Others',
+      brand: product.brand || '',
+      stock: product.stock ?? 0,
+      warranty: product.warranty || '1 Year Warranty',
+      image: product.image || '',
+      description: product.description || '',
+    });
+    setEditAlert(null);
+    setShowEditModal(true);
+  };
+
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+    setEditSaving(true);
+    setEditAlert(null);
+    try {
+      const res = await fetch(`http://localhost:8080/api/products/${editingProduct.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...editingProduct,
+          price: parseFloat(editingProduct.price),
+          originalPrice: parseFloat(editingProduct.originalPrice || editingProduct.price),
+          stock: parseInt(editingProduct.stock),
+        }),
+      });
+      if (res.ok) {
+        setShowEditModal(false);
+        setEditingProduct(null);
+        fetchAdminData();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setEditAlert(data.message || 'Failed to update product details.');
+      }
+    } catch (err) {
+      console.error(err);
+      setEditAlert('Server connection error. Please try again.');
+    } finally {
+      setEditSaving(false);
     }
   };
 
@@ -419,10 +473,18 @@ export default function Admin() {
                             {prod.stock} left {prod.stock <= 5 ? '⚠️ Low' : ''}
                           </span>
                         </td>
-                        <td className="py-3 text-right">
+                        <td className="py-3 text-right space-x-1">
+                          <button 
+                            onClick={() => handleEditClick(prod)}
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Edit Product Details"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
                           <button 
                             onClick={() => handleDeleteProduct(prod.id)}
                             className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Product"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -716,6 +778,134 @@ export default function Admin() {
                   <div className="flex gap-2 pt-2">
                     <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50">Cancel</button>
                     <button type="submit" className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-md shadow-blue-500/20">Save Product</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Edit Product Modal (FR2.2) */}
+          {showEditModal && editingProduct && (
+            <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-blue-100 text-blue-700 rounded-xl">
+                      <Pencil className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-black text-lg text-slate-900 leading-tight">Edit Product Details</h3>
+                      <p className="text-[11px] text-slate-500 font-medium">Modify inventory specs, pricing (LKR), or stock levels</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
+                </div>
+
+                {editAlert && (
+                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-semibold">
+                    {editAlert}
+                  </div>
+                )}
+
+                <form onSubmit={handleUpdateProduct} className="space-y-3 text-xs">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Product Title</label>
+                    <input 
+                      type="text" required 
+                      value={editingProduct.name} 
+                      onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 font-semibold"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">Price (LKR)</label>
+                      <input 
+                        type="number" required 
+                        value={editingProduct.price} 
+                        onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">Stock Quantity</label>
+                      <input 
+                        type="number" required 
+                        value={editingProduct.stock} 
+                        onChange={(e) => setEditingProduct({ ...editingProduct, stock: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">Category</label>
+                      <select 
+                        value={editingProduct.category} 
+                        onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 bg-white text-slate-900 font-medium"
+                      >
+                        <option>Apple iPhone</option>
+                        <option>Earphones & Headsets</option>
+                        <option>Power Banks</option>
+                        <option>Speakers</option>
+                        <option>Chargers & Cables & Adapters</option>
+                        <option>Phone Cases & Back Covers</option>
+                        <option>Screen Protectors</option>
+                        <option>Smart Watches</option>
+                        <option>Mouse & Keyboards</option>
+                        <option>Pendrives & SD Cards</option>
+                        <option>Others</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-bold text-slate-700 mb-1">Brand</label>
+                      <input 
+                        type="text" required 
+                        value={editingProduct.brand} 
+                        onChange={(e) => setEditingProduct({ ...editingProduct, brand: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 font-medium"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Image URL</label>
+                    <input 
+                      type="url" required 
+                      value={editingProduct.image} 
+                      onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 font-mono text-[11px]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Product Description</label>
+                    <textarea 
+                      rows={2}
+                      value={editingProduct.description} 
+                      onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-slate-900 font-medium resize-none"
+                    />
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <button 
+                      type="button" 
+                      onClick={() => setShowEditModal(false)} 
+                      className="flex-1 py-2.5 border border-slate-200 rounded-xl font-bold text-slate-600 hover:bg-slate-50"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      disabled={editSaving}
+                      className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl font-bold shadow-md shadow-blue-500/20"
+                    >
+                      {editSaving ? 'Updating...' : 'Save Changes'}
+                    </button>
                   </div>
                 </form>
               </div>

@@ -128,6 +128,55 @@ public class MailService {
         }
     }
 
+    public void sendOrderStatusUpdateEmail(Order order) {
+        try {
+            String subject = "Order Status Update #" + order.getOrderNumber() + " - " + order.getStatus() + " | NVSHOP.LK";
+            String statusColor = "SHIPPED".equalsIgnoreCase(order.getStatus()) ? "#9333ea" : 
+                                 "DELIVERED".equalsIgnoreCase(order.getStatus()) ? "#16a34a" : "#2563eb";
+
+            String html = String.format(
+                    "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;'>" +
+                    "<div style='background: #1e3a8a; color: white; padding: 28px; text-align: center;'>" +
+                    "<h1 style='margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 1px;'>NVSHOP.LK</h1>" +
+                    "<p style='margin: 6px 0 0 0; font-size: 14px; color: #93c5fd;'>Order Fulfillment Notification</p>" +
+                    "</div>" +
+                    "<div style='padding: 24px; text-align: center;'>" +
+                    "<h2 style='color: #0f172a; margin-top: 0;'>Order Reference: %s</h2>" +
+                    "<p style='font-size: 15px; color: #475569;'>Dear <strong>%s</strong>, your order status has been updated to:</p>" +
+                    "<div style='display: inline-block; padding: 12px 28px; background: %s; color: white; border-radius: 30px; font-weight: 900; font-size: 16px; letter-spacing: 1px; margin: 12px 0;'>" +
+                    "%s" +
+                    "</div>" +
+                    "<p style='font-size: 14px; color: #64748b; margin-top: 16px;'>Delivery Address: %s, %s</p>" +
+                    "<p style='font-size: 14px; color: #64748b;'>Total Amount: <strong>LKR %,.2f</strong></p>" +
+                    "</div>" +
+                    "<div style='background: #f8fafc; padding: 16px 24px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0;'>" +
+                    "Showroom: 185/1/2B New Road, Ambalangoda • Hotline: +94 76 989 0079 (Open 7 Days)" +
+                    "</div>" +
+                    "</div>",
+                    order.getOrderNumber(), order.getCustomerName(), statusColor,
+                    order.getStatus(), order.getShippingAddress(), order.getCity() != null ? order.getCity() : "",
+                    order.getTotalAmount()
+            );
+
+            if (StringUtils.hasText(resendApiKey)) {
+                if (sendWithResend(order.getUserEmail(), subject, html)) {
+                    return;
+                }
+            }
+
+            String textBody = String.format(
+                    "Hello %s,\n\nYour NVSHOP.LK order #%s status has been updated to: %s.\n\n" +
+                    "Delivery Address: %s\nTotal Amount: LKR %,.2f\n\nThank you for shopping with NVSHOP.LK!\nHotline: +94 76 989 0079",
+                    order.getCustomerName(), order.getOrderNumber(), order.getStatus(),
+                    order.getShippingAddress(), order.getTotalAmount()
+            );
+
+            sendWithSmtp(order.getUserEmail(), subject, html, textBody);
+        } catch (Exception ex) {
+            log.warn("Failed to send order status update email to {}: {}", order.getUserEmail(), ex.getMessage());
+        }
+    }
+
     private boolean sendWithResend(String toEmail, String subject, String html) {
         try {
             HttpHeaders headers = new HttpHeaders();

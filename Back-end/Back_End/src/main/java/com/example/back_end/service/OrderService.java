@@ -112,6 +112,15 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
         order.setStatus(status.toUpperCase());
-        return orderRepository.save(order);
+        Order updated = orderRepository.save(order);
+
+        // Dispatch status update notification email to customer
+        try {
+            mailService.sendOrderStatusUpdateEmail(updated);
+        } catch (Exception e) {
+            log.warn("Failed to dispatch order status update email: {}", e.getMessage());
+        }
+
+        return updated;
     }
 }

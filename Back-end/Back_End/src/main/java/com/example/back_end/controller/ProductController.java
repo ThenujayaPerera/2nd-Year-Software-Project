@@ -82,4 +82,16 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * AI Product Comparison Endpoint
+     * POST /api/products/ai-compare
+     */
+    @PostMapping("/ai-compare")
+    public ResponseEntity<java.util.Map<String, Object>> compareProductsWithAi(@RequestBody java.util.Map<String, Long> payload) {
+        Long id1 = payload.get("productId1");
+        Long id2 = payload.get("productId2");
+        log.info("Generating AI comparison for product ID: {} vs ID: {}", id1, id2);
+        return ResponseEntity.ok(productService.compareProductsWithAi(id1, id2));
+    }
 }
