@@ -1,5 +1,6 @@
 @echo off
 setlocal EnableExtensions
+set "JAVA_HOME=C:\Program Files\Java\jdk-21.0.10"
 
 set "ROOT=%~dp0"
 set "BACKEND_DIR=%ROOT%backend"

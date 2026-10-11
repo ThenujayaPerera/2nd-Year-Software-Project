@@ -7,7 +7,6 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Comparison from "./pages/Comparison";
-import Admin from "./pages/Admin";
 import Wishlist from "./pages/Wishlist";
 import UserProfile from "./pages/UserProfile";
 import Orders from "./pages/Orders";
@@ -35,7 +34,6 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/comparison" element={<Comparison />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/UserProfile" element={<UserProfile />} />

@@ -5,9 +5,11 @@ import com.example.back_end.dto.UserDTO;
 import com.example.back_end.entity.Order;
 import com.example.back_end.entity.PaymentTransaction;
 import com.example.back_end.entity.Product;
+import com.example.back_end.entity.Admin;
 import com.example.back_end.repository.OrderRepository;
 import com.example.back_end.repository.PaymentTransactionRepository;
 import com.example.back_end.repository.ProductRepository;
+import com.example.back_end.repository.AdminRepository;
 import com.example.back_end.service.OrderService;
 import com.example.back_end.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class AdminController {
     private final UserService userService;
     private final ProductRepository productRepository;
     private final PaymentTransactionRepository paymentTransactionRepository;
+    private final AdminRepository adminRepository;
 
     // --- FR2.4: Orders Management ---
     @GetMapping("/orders")
@@ -43,16 +46,10 @@ public class AdminController {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
     }
 
-    // --- FR2.8: Customer & Administrator Accounts Management ---
+    // --- Users Table Management ---
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
-    }
-
-    @PostMapping("/users/create-admin")
-    public ResponseEntity<UserDTO> createAdmin(@RequestBody UserCreateDTO userCreateDTO) {
-        log.info("Admin creating new administrator: {}", userCreateDTO.getEmail());
-        return ResponseEntity.ok(userService.createAdminUser(userCreateDTO));
     }
 
     @PutMapping("/users/{id}/toggle-status")
@@ -60,9 +57,46 @@ public class AdminController {
         return ResponseEntity.ok(userService.toggleUserStatus(id));
     }
 
-    @PutMapping("/users/{id}/toggle-role")
-    public ResponseEntity<UserDTO> toggleUserRole(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.toggleUserRole(id));
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserCreateDTO userCreateDTO) {
+        return ResponseEntity.ok(userService.updateUser(id, userCreateDTO));
+    }
+
+    // --- Admins Table Management ---
+    @GetMapping("/admins")
+    public ResponseEntity<List<Admin>> getAllAdmins() {
+        return ResponseEntity.ok(adminRepository.findAll());
+    }
+
+    @PostMapping("/admins")
+    public ResponseEntity<?> createAdmin(@RequestBody Admin admin) {
+        if (adminRepository.findByEmail(admin.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email already exists"));
+        }
+        if (admin.getRole() == null || admin.getRole().isEmpty()) {
+            admin.setRole("ADMIN");
+        }
+        return ResponseEntity.ok(adminRepository.save(admin));
+    }
+
+    @DeleteMapping("/admins/{id}")
+    public ResponseEntity<?> deleteAdmin(@PathVariable Long id) {
+        adminRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/admins/{id}/toggle-role")
+    public ResponseEntity<Admin> toggleAdminRole(@PathVariable Long id) {
+        Admin admin = adminRepository.findById(id).orElseThrow();
+        String newRole = "SUPER_ADMIN".equals(admin.getRole()) ? "ADMIN" : "SUPER_ADMIN";
+        admin.setRole(newRole);
+        return ResponseEntity.ok(adminRepository.save(admin));
     }
 
     // --- FR2.6 & FR2.7: Sales, Revenue & Low Stock Reports ---

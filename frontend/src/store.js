@@ -87,7 +87,7 @@ export const useAuthStore = create((set) => ({
 export const useFilterStore = create((set) => ({
   filters: {
     category: '',
-    priceRange: [0, 100000],
+    priceRange: [0, 500000],
     brand: '',
     inStock: false,
     rating: 0,
@@ -116,7 +116,7 @@ export const useFilterStore = create((set) => ({
   resetFilters: () => set(() => ({
     filters: {
       category: '',
-      priceRange: [0, 100000],
+      priceRange: [0, 500000],
       brand: '',
       inStock: false,
       rating: 0,

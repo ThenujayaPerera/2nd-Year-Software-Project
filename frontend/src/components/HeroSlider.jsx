@@ -2,57 +2,29 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const slides = [
-  {
-    id: 1,
-    title: 'Premium Mobile Cases',
-    subtitle: 'Protection meets style with our exclusive collection.',
-    image: '/slides/slide0001.png',
-    cta: 'Shop Cases',
-    link: '/products?category=Cases',
-    color: 'from-blue-950/80 via-blue-900/40 to-transparent',
-  },
-  {
-    id: 2,
-    title: 'Next-Gen Power & Fast Charging',
-    subtitle: 'High-speed GaN chargers & cables for Apple, Samsung & Android.',
-    image: '/slides/slide0002.png',
-    cta: 'Explore Chargers',
-    link: '/products?category=Chargers',
-    color: 'from-slate-950/85 via-slate-900/40 to-transparent',
-  },
-  {
-    id: 3,
-    title: 'Pure Bass & Studio Audio',
-    subtitle: 'Immerse in sound with genuine wireless earbuds & headphones.',
-    image: '/slides/slide0003.png',
-    cta: 'Browse Audio',
-    link: '/products?category=Audio',
-    color: 'from-indigo-950/85 via-indigo-900/40 to-transparent',
-  },
-  {
-    id: 4,
-    title: 'Ultimate Gaming & Smart Tech',
-    subtitle: 'PS5 accessories, VR headsets, and smart tech essentials.',
-    image: '/slides/slide0004.png',
-    cta: 'Discover Gear',
-    link: '/products',
-    color: 'from-slate-900/85 via-blue-950/40 to-transparent',
-  },
-];
-
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
+  const [slides, setSlides] = useState([]);
 
   useEffect(() => {
+    fetch('http://localhost:8080/api/home/slides')
+      .then(res => res.json())
+      .then(data => setSlides(data))
+      .catch(err => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    if (slides.length === 0) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides]);
 
   const nextSlide = () => setCurrent(current === slides.length - 1 ? 0 : current + 1);
   const prevSlide = () => setCurrent(current === 0 ? slides.length - 1 : current - 1);
+
+  if (slides.length === 0) return <div className="h-[480px] md:h-[580px] lg:h-[640px] bg-slate-950 flex items-center justify-center text-white/50">Loading Experience...</div>;
 
   return (
     <div className="relative h-[480px] md:h-[580px] lg:h-[640px] bg-slate-950 overflow-hidden group">

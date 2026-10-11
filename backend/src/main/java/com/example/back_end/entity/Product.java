@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 @Data
@@ -44,12 +47,25 @@ public class Product {
 
     private Boolean isNew = false;
 
+    @Column(name = "is_weekly_highlight")
+    private Boolean isWeeklyHighlight = false;
+
     private Integer stock = 10;
 
     private String warranty = "1 Year";
 
     private String returnPeriod = "30 Days";
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String description;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_description_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "image_url", length = 1000)
+    private List<String> descriptionImages = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "product_gallery_images", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "gallery_image_url", length = 1000)
+    private List<String> galleryImages = new ArrayList<>();
 }

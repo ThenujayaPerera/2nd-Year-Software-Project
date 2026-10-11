@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useCartStore, useWishlistStore } from '../store';
 import { productAPI } from '../services/api';
 import { 
   Star, ShoppingCart, Zap, Heart, ArrowLeft, Truck, ShieldCheck, 
-  RotateCcw, Check, Share2, Store, HelpCircle, Phone, MessageSquare
+  RotateCcw, Check, Share2, Store, HelpCircle, Phone, MessageSquare,
+  Battery, Rocket, Sparkles, Smartphone, Plug, Activity, Shield
 } from 'lucide-react';
 
 export default function ProductDetails() {
@@ -19,6 +20,10 @@ export default function ProductDetails() {
 
   const addToCart = useCartStore((state) => state.addToCart);
   const { toggleWishlist, isInWishlist } = useWishlistStore();
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   useEffect(() => {
     let isMounted = true;
@@ -87,11 +92,10 @@ export default function ProductDetails() {
     );
   }
 
-  // Multi-angle Gallery Thumbnails generator
+  // Real Gallery Images from Database
   const galleryImages = [
     product.image,
-    product.image?.includes('?') ? `${product.image}&angle=2` : `${product.image}?angle=2`,
-    product.image?.includes('?') ? `${product.image}&angle=3` : `${product.image}?angle=3`,
+    ...(product.galleryImages || [])
   ];
 
   const handleAddToCart = () => {
@@ -260,59 +264,57 @@ export default function ProductDetails() {
 
                 {/* Main Product Tagline */}
                 <p className="font-bold text-slate-900 flex items-center gap-2 text-sm">
-                  <span>🔋</span> {product.name}
+                  <Battery className="w-5 h-5 text-emerald-500" /> {product.name}
                 </p>
 
-                {/* Overview Paragraphs */}
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  ⚡ Stay powered throughout your day with the {product.name}. Designed with advanced technology and premium materials, it provides reliable, efficient, and long-lasting performance for your smartphones, tablets, earbuds, and other USB-powered devices.
-                </p>
-
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  🚀 Equipped with Power Delivery (PD) and Quick Charge (QC) support, this {brandName} gadget delivers fast and stable charging while protecting your devices with advanced safety features. Its compact and portable design makes it perfect for travel, office use, and everyday charging needs.
-                </p>
-
-                {/* Key Features Bullet List with Emojis */}
-                <div className="pt-2">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-500">
-                    <span>✨</span> Key Features:
-                  </h4>
-
-                  <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">🔋</span>
-                      <span><strong>High Capacity & Output</strong> – Delivers maximum efficient power output for all connected gadgets</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">⚡</span>
-                      <span><strong>Fast Charging Support</strong> – Quickly powers compatible iPhone, Samsung, and Android devices</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">🚀</span>
-                      <span><strong>PD & QC Fast Protocol</strong> – Smart voltage regulation for efficient and temperature-safe charging</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">📱</span>
-                      <span><strong>Multi-Device Compatibility</strong> – Compatible with smartphones, tablets, smartwatches, earbuds, and gaming gear</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">🔌</span>
-                      <span><strong>USB-C Input & Output</strong> – Modern, reversible, and high-speed bidirectional charging connection</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">📊</span>
-                      <span><strong>LED Status & Power Indicator</strong> – Easily check real-time charging status and remaining battery</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">🛡️</span>
-                      <span><strong>MultiProtect Safety System</strong> – Protection against overcharging, overcurrent, short circuits, and overheating</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="shrink-0 mt-0.5">🏬</span>
-                      <span><strong>Official Warranty & Showroom Pickup</strong> – Backed by {product.warranty || '1 Year Official Warranty'} at NVSHOP.LK Ambalangoda</span>
-                    </li>
-                  </ul>
+                {/* Dynamic Overview Paragraphs & Features */}
+                <div className="space-y-3">
+                  {product.description?.split('\n').map((line, idx) => {
+                    const t = line.trim();
+                    if (!t) return null;
+                    
+                    if (t.startsWith('-')) {
+                      const text = t.substring(1).trim();
+                      const boldPart = text.includes('–') ? text.split('–')[0] : '';
+                      const restPart = text.includes('–') ? '– ' + text.split('–').slice(1).join('–') : text;
+                      return (
+                        <div key={idx} className="flex items-start gap-2.5 ml-2 pt-1">
+                          <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+                          <span className="text-xs sm:text-sm text-slate-600">
+                            {boldPart ? <strong>{boldPart} </strong> : null}
+                            {restPart}
+                          </span>
+                        </div>
+                      );
+                    }
+                    
+                    if (t.toLowerCase().includes('key features')) {
+                       return (
+                        <h4 key={idx} className="font-bold text-slate-900 pb-1 mt-6 flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-500">
+                          <Sparkles className="w-4 h-4 text-indigo-500" /> {t}
+                        </h4>
+                       );
+                    }
+                    
+                    return (
+                      <p key={idx} className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        {idx === 0 ? <Zap className="w-4 h-4 text-amber-500 inline mr-1 -mt-0.5" /> : null}
+                        {t}
+                      </p>
+                    );
+                  })}
                 </div>
+
+                {/* Description Images (if any) */}
+                {product.descriptionImages && product.descriptionImages.length > 0 && (
+                  <div className="mt-6 space-y-4">
+                    {product.descriptionImages.map((imgUrl, idx) => (
+                      <div key={idx} className="rounded-2xl overflow-hidden border border-slate-200">
+                        <img src={imgUrl} alt={`Product Feature ${idx + 1}`} className="w-full h-auto object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Showroom & Islandwide Delivery Note */}
                 <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs text-blue-900 flex items-start gap-3 mt-4">

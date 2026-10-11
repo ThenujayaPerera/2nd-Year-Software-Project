@@ -41,6 +41,16 @@ public class ProductController {
     }
 
     /**
+     * Get weekly highlights
+     * GET /api/products/highlights
+     */
+    @GetMapping("/highlights")
+    public ResponseEntity<List<Product>> getWeeklyHighlights() {
+        log.info("Fetching weekly highlighted products");
+        return ResponseEntity.ok(productService.getWeeklyHighlights());
+    }
+
+    /**
      * Get product by ID
      * GET /api/products/{id}
      */
@@ -70,6 +80,16 @@ public class ProductController {
         log.info("Updating product ID: {}", id);
         Product updated = productService.updateProduct(id, product);
         return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * Toggle product weekly highlight
+     * PUT /api/products/{id}/highlight
+     */
+    @PutMapping("/{id}/highlight")
+    public ResponseEntity<Product> toggleHighlight(@PathVariable Long id) {
+        log.info("Toggling highlight for product ID: {}", id);
+        return ResponseEntity.ok(productService.toggleWeeklyHighlight(id));
     }
 
     /**

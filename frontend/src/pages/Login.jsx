@@ -25,12 +25,11 @@ export default function Login() {
       const response = await authAPI.login({ email, password });
       const { token, user: userData } = response.data;
 
-      const isAdmin = email.toLowerCase().includes('admin') || userData?.role === 'admin';
       const userToStore = {
         ...(userData || {}),
-        name: userData?.name || (isAdmin ? 'Admin' : email.split('@')[0]),
+        name: userData?.name || email.split('@')[0],
         email: email,
-        role: isAdmin ? 'admin' : 'user'
+        role: 'user'
       };
 
       login(userToStore);
@@ -38,14 +37,10 @@ export default function Login() {
         localStorage.setItem('token', token);
       }
 
-      setAlert({ type: 'success', message: `Logged in successfully as ${isAdmin ? 'Admin' : 'User'}! Redirecting...` });
+      setAlert({ type: 'success', message: 'Logged in successfully! Redirecting...' });
 
       setTimeout(() => {
-        if (isAdmin) {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
+        navigate('/');
       }, 800);
     } catch (error) {
       const errorMsg = error.response?.data?.message || 'Login failed. Invalid email or password.';

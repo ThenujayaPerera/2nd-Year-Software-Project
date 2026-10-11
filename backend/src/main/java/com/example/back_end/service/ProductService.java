@@ -99,12 +99,37 @@ public class ProductService {
         if (productDetails.getImage() != null) {
             existing.setImage(productDetails.getImage());
         }
+        if (productDetails.getDiscount() != null) {
+            existing.setDiscount(productDetails.getDiscount());
+        }
+        if (productDetails.getRating() != null) {
+            existing.setRating(productDetails.getRating());
+        }
+        if (productDetails.getReviews() != null) {
+            existing.setReviews(productDetails.getReviews());
+        }
+        if (productDetails.getIsNew() != null) {
+            existing.setIsNew(productDetails.getIsNew());
+        }
+        if (productDetails.getReturnPeriod() != null) {
+            existing.setReturnPeriod(productDetails.getReturnPeriod());
+        }
         return productRepository.save(existing);
     }
 
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
         productRepository.delete(product);
+    }
+
+    public List<Product> getWeeklyHighlights() {
+        return productRepository.findByIsWeeklyHighlightTrue();
+    }
+
+    public Product toggleWeeklyHighlight(Long id) {
+        Product product = getProductById(id);
+        product.setIsWeeklyHighlight(!product.getIsWeeklyHighlight());
+        return productRepository.save(product);
     }
 
     @org.springframework.beans.factory.annotation.Value("${openai.api.key:}")

@@ -4,9 +4,15 @@ import com.example.back_end.entity.Order;
 import com.example.back_end.entity.OrderItem;
 import com.example.back_end.entity.Product;
 import com.example.back_end.entity.User;
+import com.example.back_end.entity.HeroSlide;
+import com.example.back_end.entity.ShowroomPhoto;
 import com.example.back_end.repository.OrderRepository;
 import com.example.back_end.repository.ProductRepository;
+import com.example.back_end.entity.Admin;
+import com.example.back_end.repository.AdminRepository;
 import com.example.back_end.repository.UserRepository;
+import com.example.back_end.repository.HeroSlideRepository;
+import com.example.back_end.repository.ShowroomPhotoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -24,6 +30,9 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final AdminRepository adminRepository;
+    private final HeroSlideRepository heroSlideRepository;
+    private final ShowroomPhotoRepository showroomPhotoRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -50,6 +59,45 @@ public class DataInitializer implements CommandLineRunner {
 
             userRepository.saveAll(List.of(admin, user));
             log.info("Users seeded successfully.");
+        }
+
+        if (adminRepository.count() == 0) {
+            log.info("Seeding initial separate Admin...");
+            Admin realAdmin = new Admin();
+            realAdmin.setName("Super Admin");
+            realAdmin.setEmail("superadmin@example.com");
+            realAdmin.setPassword("admin123");
+            realAdmin.setRole("SUPER_ADMIN");
+            adminRepository.save(realAdmin);
+            log.info("Separate Admin seeded successfully.");
+        }
+
+        // Initialize Home Config Data if empty
+        if (heroSlideRepository.count() == 0) {
+            log.info("Seeding Hero Slides...");
+            List<HeroSlide> slides = List.of(
+                new HeroSlide("Premium Mobile Cases", "Protection meets style with our exclusive collection.", "/slides/slide0001.png", "Shop Cases", "/products?category=Cases", "from-blue-950/80 via-blue-900/40 to-transparent"),
+                new HeroSlide("Next-Gen Power & Fast Charging", "High-speed GaN chargers & cables for Apple, Samsung & Android.", "/slides/slide0002.png", "Explore Chargers", "/products?category=Chargers", "from-slate-950/85 via-slate-900/40 to-transparent"),
+                new HeroSlide("Pure Bass & Studio Audio", "Immerse in sound with genuine wireless earbuds & headphones.", "/slides/slide0003.png", "Browse Audio", "/products?category=Audio", "from-indigo-950/85 via-indigo-900/40 to-transparent"),
+                new HeroSlide("Ultimate Gaming & Smart Tech", "PS5 accessories, VR headsets, and smart tech essentials.", "/slides/slide0004.png", "Discover Gear", "/products", "from-slate-900/85 via-blue-950/40 to-transparent")
+            );
+            heroSlideRepository.saveAll(slides);
+        }
+
+        if (showroomPhotoRepository.count() == 0) {
+            log.info("Seeding Showroom Photos...");
+            List<ShowroomPhoto> photos = List.of(
+                new ShowroomPhoto("OFFICIAL HUB", "text-blue-400", "NVSHOP.LK Reception", "100% Genuine Tech Warranties & In-store Support", "Official reception & customer service counter with illuminated branding at NVSHOP.LK Ambalangoda showroom.", "/store/nvshop-store.jpg", "col-span-1 md:col-span-2 row-span-2 h-full min-h-[420px] md:min-h-[520px]"),
+                new ShowroomPhoto("MODERN AMBIENCE", "text-emerald-400", "Showroom Lounge & Seating", "Comfortable consultation area under honeycomb lighting", "Modern customer lounge area equipped with green accent seating and signature honeycomb ceiling lights.", "/store/nvshop-showroom-seating.webp", "col-span-1 aspect-[4/3] md:aspect-auto md:h-full min-h-[240px]"),
+                new ShowroomPhoto("INTERACTIVE DEMOS", "text-amber-400", "Live VR Experience Zone", "Test PS5 VR & Soundcore Pure Bass Headphones Live", "Customer testing area equipped with Sony PS5 VR headset, Soundcore audio range, and gaming consoles.", "/store/nvshop-vr-demo.webp", "col-span-1 aspect-[4/3] md:aspect-auto md:h-full min-h-[240px]"),
+                new ShowroomPhoto("GAMING TECH", "text-purple-400", "VR & Gaming Setup", "PlayStation 5, controllers, and VR display shelves", "Dedicated gaming shelf featuring PS5 consoles, dualsense controllers, VR headsets, and Soundcore audio.", "/store/nvshop-gaming-vr-zone.jpg", "col-span-1 aspect-[4/3]"),
+                new ShowroomPhoto("STORE OVERVIEW", "text-cyan-400", "Full Retail Space View", "Power banks, gaming gear, and consultation tables", "Full high-angle view of the NVSHOP.LK retail space — original chargers, audio displays, and consultation area.", "/store/nvshop-store-overview.jpg", "col-span-1 aspect-[4/3]"),
+                new ShowroomPhoto("AUDIO DISPLAY", "text-rose-400", "Branded Audio Shelving", "Anker Soundcore & Sony audio display collection", "Original Anker Soundcore wireless earbuds, headphones, and portable speakers organized on display shelves.", "/store/nvshop-audio-gaming-shelf.jpg", "col-span-1 aspect-[4/3]"),
+                new ShowroomPhoto("FULL AISLE", "text-teal-400", "Showroom Main Aisle", "Spacious aisle leading to the reception counter", "Main aisle view of NVSHOP.LK showroom with wall-to-wall accessories display and signature lighting.", "/store/nvshop-aisle-ugreen.jpg", "col-span-1 aspect-[4/3]"),
+                new ShowroomPhoto("INTERIOR DESIGN", "text-indigo-400", "Tech Lounge Interior", "Clean wooden finishes & futuristic ceiling lights", "Interior setup with wood paneling, LED accent strips, and customer consultation space.", "/store/nvshop-interior-branding.jpg", "col-span-1 aspect-[4/3]"),
+                new ShowroomPhoto("SOUND SYSTEMS", "text-amber-400", "Party Speakers & Audio Lineup", "Soundcore Rave, Motion+, & Sony Bluetooth speakers", "High-power bluetooth partybox speakers and wireless audio lineup on display at NVSHOP.LK.", "/store/nvshop-speakers-display.jpg", "col-span-1 aspect-[4/3]")
+            );
+            showroomPhotoRepository.saveAll(photos);
         }
 
         // Clean & Sync exact live products and photo assets from official nvshop.lk
@@ -566,10 +614,18 @@ public class DataInitializer implements CommandLineRunner {
         p.setImage(image);
         p.setDiscount(discount);
         p.setIsNew(isNew);
+        // Automatically make it a weekly highlight if discount is 15% or more, or if it's the iPhone
+        if ((discount != null && discount >= 15) || name.contains("iPhone 17")) {
+            p.setIsWeeklyHighlight(true);
+        } else {
+            p.setIsWeeklyHighlight(false);
+        }
         p.setStock(stock);
         p.setWarranty(warranty);
         p.setReturnPeriod(returnPeriod);
-        p.setDescription(description);
+        
+        String richDescription = ProductDescriptions.getDescription(name, description);
+        p.setDescription(richDescription);
         return p;
     }
 }

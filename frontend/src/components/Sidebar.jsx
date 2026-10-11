@@ -87,7 +87,7 @@ export default function Sidebar() {
           <input
             type="range"
             min="0"
-            max="50000"
+            max="500000"
             step="1000"
             value={filters.priceRange[1]}
             onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}

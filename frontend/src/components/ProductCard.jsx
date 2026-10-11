@@ -11,14 +11,19 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
   const inComparison = isInComparison(product.id);
   const inWishlist = isInWishlist(product.id);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     onAddToCart(product);
     if (toast) toast(`${product.name} added to cart!`, { type: 'success', title: 'Added to Cart' });
   };
 
-  const handleViewDetails = () => {
-    navigate(`/product/${product.id}`);
-    if (onViewDetails) onViewDetails(product.id);
+  const handleViewDetails = (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (onViewDetails) {
+      onViewDetails(product.id);
+    } else {
+      navigate(`/product/${product.id}`);
+    }
   };
 
   const handleToggleComparison = (e) => {
@@ -97,13 +102,6 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
             className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300"
           >
             <Eye className="w-5 h-5" />
-          </button>
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stock === 0}
-            className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 disabled:opacity-50"
-          >
-            <ShoppingCart className="w-5 h-5" />
           </button>
         </div>
       </div>

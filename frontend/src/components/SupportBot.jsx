@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Send, X, Minimize2, Maximize2, MessageCircle, Sparkles, ExternalLink, Bot, User, ArrowRight, ShieldCheck, MapPin, Phone, Clock } from 'lucide-react';
+import { Send, X, Minimize2, Maximize2, MessageCircle, Sparkles, ExternalLink, Bot, User, ArrowRight, ShieldCheck, MapPin, Phone, Clock, Watch, Battery, Zap, Headphones, Truck, Shield, PhoneCall } from 'lucide-react';
 
 export default function SupportBot({ isProducts = false }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -290,14 +290,14 @@ export default function SupportBot({ isProducts = false }) {
   };
 
   const QUICK_CHIPS = [
-    { label: '⌚ Smart Watches', query: 'smart watch' },
-    { label: '🔋 Power Banks', query: 'power bank' },
-    { label: '⚡ Fast Chargers', query: 'fast charger' },
-    { label: '🎧 Audio & Earbuds', query: 'earphones' },
-    { label: '🚚 Delivery & COD', query: 'delivery info' },
-    { label: '📍 Store Location', query: 'where is your shop' },
-    { label: '🛡️ Warranty Policy', query: 'warranty' },
-    { label: '📞 Contact Care', query: 'contact number' },
+    { label: 'Smart Watches', query: 'smart watch', icon: Watch },
+    { label: 'Power Banks', query: 'power bank', icon: Battery },
+    { label: 'Fast Chargers', query: 'fast charger', icon: Zap },
+    { label: 'Audio & Earbuds', query: 'earphones', icon: Headphones },
+    { label: 'Delivery & COD', query: 'delivery info', icon: Truck },
+    { label: 'Store Location', query: 'where is your shop', icon: MapPin },
+    { label: 'Warranty Policy', query: 'warranty', icon: Shield },
+    { label: 'Contact Care', query: 'contact number', icon: PhoneCall },
   ];
 
   return (
@@ -366,8 +366,9 @@ export default function SupportBot({ isProducts = false }) {
                   <button
                     key={idx}
                     onClick={() => handleQuickChipClick(chip.query)}
-                    className="shrink-0 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-300 rounded-full text-xs font-semibold transition-all shadow-2xs whitespace-nowrap active:scale-95"
+                    className="shrink-0 px-2.5 py-1 bg-white hover:bg-blue-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-300 rounded-full text-xs font-semibold transition-all shadow-2xs whitespace-nowrap active:scale-95 flex items-center gap-1.5"
                   >
+                    <chip.icon className="w-3.5 h-3.5 opacity-70" />
                     {chip.label}
                   </button>
                 ))}
@@ -413,8 +414,8 @@ export default function SupportBot({ isProducts = false }) {
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
                                   <span className="text-blue-600 font-extrabold text-xs">{item.price}</span>
-                                  <span className="text-[10px] text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                                    🛡️ {item.warranty}
+                                  <span className="text-[10px] text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200 flex items-center gap-1">
+                                    <ShieldCheck className="w-3 h-3" /> {item.warranty}
                                   </span>
                                 </div>
                               </div>
