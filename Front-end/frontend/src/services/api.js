@@ -41,11 +41,10 @@ export const authAPI = {
 
 // Cart endpoints
 export const cartAPI = {
-  getCart: () => api.get('/cart'),
-  addItem: (productId, quantity) => api.post('/cart/items', { productId, quantity }),
-  updateItem: (productId, quantity) => api.put(`/cart/items/${productId}`, { quantity }),
-  removeItem: (productId) => api.delete(`/cart/items/${productId}`),
-  clearCart: () => api.delete('/cart'),
+  fetchCart: (email) => api.get('/cart', { params: { email } }),
+  addToCartAPI: (email, productId, quantity) => api.post('/cart/add', { productId, quantity }, { params: { email } }),
+  removeFromCartAPI: (email, productId) => api.delete(`/cart/remove/${productId}`, { params: { email } }),
+  clearCartAPI: (email) => api.delete('/cart/clear', { params: { email } }),
 };
 
 // Order endpoints

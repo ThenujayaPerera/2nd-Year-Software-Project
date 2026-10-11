@@ -1,55 +1,146 @@
 import { create } from 'zustand';
-import { wishlistAPI } from './services/api';
+import { cartAPI, wishlistAPI } from './services/api';
+
+// Helper to get authenticated user's email safely
+const getAuthEmail = () => {
+  try {
+    return useAuthStore.getState()?.user?.email || JSON.parse(localStorage.getItem('user'))?.email || null;
+  } catch {
+    return null;
+  }
+};
 
 // Cart Store
-export const useCartStore = create((set) => ({
-  cart: JSON.parse(localStorage.getItem('cart')) || [],
+export const useCartStore = create((set, get) => ({
+  cart: [],
+  isLoading: false,
 
-  addToCart: (product) => set((state) => {
-    const existingItem = state.cart.find(item => item.id === product.id);
-    let updatedCart;
+  fetchCart: async () => {
+    const email = getAuthEmail();
+    if (!email) return;
+    try {
+      set({ isLoading: true });
+      const response = await cartAPI.fetchCart(email);
+      const mappedCart = (response.data?.items || []).map((item) => ({
+        ...item.product,
+        quantity: item.quantity,
+      }));
+      set({ cart: mappedCart, isLoading: false });
+    } catch (error) {
+      console.error('Failed to fetch cart from backend:', error);
+      set({ isLoading: false });
+    }
+  },
 
-    if (existingItem) {
-      updatedCart = state.cart.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
+  addToCart: async (product) => {
+    const email = getAuthEmail();
+    const qtyToAdd = product.quantity && product.quantity > 0 ? product.quantity : 1;
+
+    if (email) {
+      try {
+        const response = await cartAPI.addToCartAPI(email, product.id, qtyToAdd);
+        const mappedCart = (response.data?.items || []).map((item) => ({
+          ...item.product,
+          quantity: item.quantity,
+        }));
+        set({ cart: mappedCart });
+      } catch (error) {
+        console.error('Failed to add to cart:', error);
+      }
     } else {
-      updatedCart = [...state.cart, { ...product, quantity: 1 }];
+      // Guest local cart fallback
+      const state = get();
+      const existing = state.cart.find((item) => item.id === product.id);
+      let updatedCart;
+      if (existing) {
+        updatedCart = state.cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + qtyToAdd }
+            : item
+        );
+      } else {
+        updatedCart = [...state.cart, { ...product, quantity: qtyToAdd }];
+      }
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      set({ cart: updatedCart });
+    }
+  },
+
+  removeFromCart: async (productId) => {
+    const email = getAuthEmail();
+    if (email) {
+      try {
+        const response = await cartAPI.removeFromCartAPI(email, productId);
+        const mappedCart = (response.data?.items || []).map((item) => ({
+          ...item.product,
+          quantity: item.quantity,
+        }));
+        set({ cart: mappedCart });
+      } catch (error) {
+        console.error('Failed to remove from cart:', error);
+      }
+    } else {
+      const updatedCart = get().cart.filter((item) => item.id !== productId);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      set({ cart: updatedCart });
+    }
+  },
+
+  updateQuantity: async (productId, quantity) => {
+    const currentItem = get().cart.find((item) => item.id === productId);
+    if (!currentItem) return;
+
+    if (quantity <= 0) {
+      return get().removeFromCart(productId);
     }
 
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    return { cart: updatedCart };
-  }),
+    const delta = quantity - currentItem.quantity;
+    if (delta === 0) return;
 
-  removeFromCart: (productId) => set((state) => {
-    const updatedCart = state.cart.filter(item => item.id !== productId);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    return { cart: updatedCart };
-  }),
+    const email = getAuthEmail();
+    if (email) {
+      try {
+        const response = await cartAPI.addToCartAPI(email, productId, delta);
+        const mappedCart = (response.data?.items || []).map((item) => ({
+          ...item.product,
+          quantity: item.quantity,
+        }));
+        set({ cart: mappedCart });
+      } catch (error) {
+        console.error('Failed to update cart quantity:', error);
+      }
+    } else {
+      const updatedCart = get().cart.map((item) =>
+        item.id === productId ? { ...item, quantity } : item
+      );
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      set({ cart: updatedCart });
+    }
+  },
 
-  updateQuantity: (productId, quantity) => set((state) => {
-    const updatedCart = state.cart.map(item =>
-      item.id === productId ? { ...item, quantity } : item
-    ).filter(item => item.quantity > 0);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
-    return { cart: updatedCart };
-  }),
-
-  clearCart: () => set(() => {
-    localStorage.removeItem('cart');
-    return { cart: [] };
-  }),
+  clearCart: async () => {
+    const email = getAuthEmail();
+    if (email) {
+      try {
+        await cartAPI.clearCartAPI(email);
+        set({ cart: [] });
+      } catch (error) {
+        console.error('Failed to clear cart:', error);
+      }
+    } else {
+      localStorage.removeItem('cart');
+      set({ cart: [] });
+    }
+  },
 
   getCartTotal: () => {
     const state = useCartStore.getState();
-    return state.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return state.cart.reduce((total, item) => total + ((Number(item.price) || 0) * (item.quantity || 1)), 0);
   },
 
   getCartCount: () => {
     const state = useCartStore.getState();
-    return state.cart.reduce((count, item) => count + item.quantity, 0);
+    return state.cart.reduce((count, item) => count + (item.quantity || 1), 0);
   },
 }));
 
@@ -63,6 +154,7 @@ export const useAuthStore = create((set) => ({
     if (userData?.email) {
       setTimeout(() => {
         useWishlistStore.getState().fetchBackendWishlist(userData.email);
+        useCartStore.getState().fetchCart();
       }, 0);
     }
     set({
@@ -74,6 +166,7 @@ export const useAuthStore = create((set) => ({
   logout: () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    useCartStore.setState({ cart: [] });
     set({
       user: null,
       isAuthenticated: false
@@ -85,6 +178,7 @@ export const useAuthStore = create((set) => ({
     if (userData?.email) {
       setTimeout(() => {
         useWishlistStore.getState().fetchBackendWishlist(userData.email);
+        useCartStore.getState().fetchCart();
       }, 0);
     }
     set({

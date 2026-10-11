@@ -1,5 +1,7 @@
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuthStore, useCartStore } from "./store";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
@@ -22,6 +24,18 @@ import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 function App() {
+  const { user } = useAuthStore();
+  const { fetchCart } = useCartStore();
+
+  useEffect(() => {
+    // Clear legacy local storage cart just in case
+    localStorage.removeItem("cart");
+
+    if (user?.email) {
+      fetchCart();
+    }
+  }, [user, fetchCart]);
+
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Routes>
