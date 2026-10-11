@@ -66,4 +66,13 @@ export const userAPI = {
   deleteAddress: (id) => api.delete(`/users/addresses/${id}`),
 };
 
+// Wishlist endpoints
+export const wishlistAPI = {
+  getWishlist: (userEmail) => api.get('/wishlist', { params: { userEmail } }),
+  addItem: (data) => api.post('/wishlist', data),
+  removeItem: (productId, userEmail) => api.delete(`/wishlist/${productId}`, { params: { userEmail } }),
+  clearWishlist: (userEmail) => api.delete('/wishlist/clear', { params: { userEmail } }),
+  syncWishlist: (userEmail, items) => api.post(`/wishlist/sync?userEmail=${encodeURIComponent(userEmail)}`, items),
+};
+
 export default api;

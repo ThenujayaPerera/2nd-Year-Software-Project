@@ -1,23 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Package, Clock, CheckCircle, AlertCircle, Calendar, Shield, 
-  Download, MessageSquare, ChevronDown, User, MapPin, Phone, Mail, 
+import {
+  Package, Clock, CheckCircle, AlertCircle, Calendar, Shield,
+  Download, MessageSquare, ChevronDown, User, MapPin, Phone, Mail,
   ShoppingBag, LogOut, ArrowRight, ShieldCheck, Truck, Store, ExternalLink,
-  Edit2, X, Check, Home as HomeIcon, Receipt, RefreshCw, Printer
+  Edit2, X, Check, Home as HomeIcon, Receipt, RefreshCw, Printer, Heart
 } from 'lucide-react';
-import { useAuthStore, useCartStore } from '../store';
+import { useAuthStore, useCartStore, useWishlistStore } from '../store';
 import Layout from '../components/Layout';
 
 export default function UserProfile() {
   const navigate = useNavigate();
   const { user, isAuthenticated, setUser, logout } = useAuthStore();
   const { addToCart } = useCartStore();
+  const { wishlist, removeFromWishlist } = useWishlistStore();
   const [activeTab, setActiveTab] = useState('orders');
   const [liveOrders, setLiveOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-  
+
   // Edit Profile / Address Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -253,7 +254,7 @@ export default function UserProfile() {
     <Layout>
       <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto space-y-8">
-          
+
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
             <Link to="/" className="hover:text-blue-600">Home</Link>
@@ -282,13 +283,13 @@ export default function UserProfile() {
                   <span className="flex items-center gap-1.5 font-medium">
                     <Mail className="w-3.5 h-3.5 text-blue-600" /> {user?.email}
                   </span>
-                  
+
                   {user?.phone && (
                     <span className="flex items-center gap-1.5 font-medium font-mono">
                       <Phone className="w-3.5 h-3.5 text-emerald-600" /> {user?.phone}
                     </span>
                   )}
-                  
+
                   {/* Real User Personal Delivery Address */}
                   <span className="flex items-center gap-1.5 font-medium">
                     <MapPin className="w-3.5 h-3.5 text-purple-600 shrink-0" />
@@ -316,6 +317,12 @@ export default function UserProfile() {
 
             <div className="flex items-center gap-3 w-full md:w-auto">
               <Link
+                to="/wishlist"
+                className="flex-1 md:flex-initial px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 border border-red-100"
+              >
+                <Heart className="w-4 h-4 fill-red-500" /> Wishlist ({wishlist.length})
+              </Link>
+              <Link
                 to="/orders"
                 className="flex-1 md:flex-initial px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-blue-100"
               >
@@ -335,35 +342,42 @@ export default function UserProfile() {
           <div className="flex gap-2 border-b border-slate-200/80 pb-1 overflow-x-auto">
             <button
               onClick={() => setActiveTab('orders')}
-              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${
-                activeTab === 'orders'
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'orders'
                   ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
-              }`}
+                }`}
             >
               <ShoppingBag className="w-4 h-4" /> Orders & Invoices ({liveOrders.length})
             </button>
 
             <button
               onClick={() => setActiveTab('warranties')}
-              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${
-                activeTab === 'warranties'
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'warranties'
                   ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
-              }`}
+                }`}
             >
               <ShieldCheck className="w-4 h-4" /> Official Warranties ({warrantyItems.length})
             </button>
 
             <button
               onClick={() => setActiveTab('showroom')}
-              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${
-                activeTab === 'showroom'
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'showroom'
                   ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
-              }`}
+                }`}
             >
               <Store className="w-4 h-4" /> Showroom Pickup & Support
+            </button>
+
+            <button
+              onClick={() => setActiveTab('wishlist')}
+              className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'wishlist'
+                  ? 'border-red-500 text-red-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                }`}
+            >
+              <Heart className={`w-4 h-4 ${activeTab === 'wishlist' ? 'fill-red-500 text-red-500' : ''}`} /> Saved Wishlist ({wishlist.length})
             </button>
           </div>
 
@@ -392,7 +406,7 @@ export default function UserProfile() {
                 liveOrders.map((ord) => {
                   const isDelivered = ord.status === 'DELIVERED';
                   const isShipped = ord.status === 'SHIPPED';
-                  
+
                   return (
                     <div
                       key={ord.id || ord.orderNumber}
@@ -416,13 +430,12 @@ export default function UserProfile() {
 
                         <div className="flex items-center gap-3">
                           <span
-                            className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${
-                              isDelivered
+                            className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${isDelivered
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                 : isShipped
-                                ? 'bg-blue-50 text-blue-700 border-blue-200'
-                                : 'bg-amber-50 text-amber-700 border-amber-200'
-                            }`}
+                                  ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                  : 'bg-amber-50 text-amber-700 border-amber-200'
+                              }`}
                           >
                             {ord.status || 'PROCESSING'}
                           </span>
@@ -459,27 +472,24 @@ export default function UserProfile() {
                           </div>
 
                           <div className="text-center">
-                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${
-                              isShipped || isDelivered ? 'bg-emerald-600 text-white' : 'bg-blue-600 text-white animate-pulse'
-                            }`}>
+                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isShipped || isDelivered ? 'bg-emerald-600 text-white' : 'bg-blue-600 text-white animate-pulse'
+                              }`}>
                               {isShipped || isDelivered ? '✓' : '2'}
                             </div>
                             <span className="text-[10px] font-bold text-slate-700 block">Packed</span>
                           </div>
 
                           <div className="text-center">
-                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${
-                              isDelivered ? 'bg-emerald-600 text-white' : isShipped ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-200 text-slate-500'
-                            }`}>
+                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isDelivered ? 'bg-emerald-600 text-white' : isShipped ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-200 text-slate-500'
+                              }`}>
                               {isDelivered ? '✓' : '3'}
                             </div>
                             <span className="text-[10px] font-bold text-slate-700 block">In Transit</span>
                           </div>
 
                           <div className="text-center">
-                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${
-                              isDelivered ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
-                            }`}>
+                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isDelivered ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
+                              }`}>
                               {isDelivered ? '✓' : '4'}
                             </div>
                             <span className="text-[10px] font-bold text-slate-700 block">Delivered</span>
@@ -626,6 +636,81 @@ export default function UserProfile() {
               </a>
             </div>
           )}
+
+          {/* TAB 4: WISHLIST */}
+          {activeTab === 'wishlist' && (
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-red-500 fill-red-500" />
+                    My Saved Items ({wishlist.length})
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Products you've saved to buy later or monitor for price drops.
+                  </p>
+                </div>
+                <Link
+                  to="/wishlist"
+                  className="btn-primary text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm"
+                >
+                  Manage Full Wishlist <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              {wishlist.length === 0 ? (
+                <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100">
+                  <Heart className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                  <p className="text-slate-700 font-bold text-sm">No items in your wishlist</p>
+                  <p className="text-slate-400 text-xs mb-4">Discover premium accessories and save the ones you love.</p>
+                  <Link to="/products" className="btn-secondary text-xs px-4 py-2 inline-flex">
+                    Browse Products
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {wishlist.map((item) => (
+                    <div key={item.id} className="p-4 rounded-2xl border border-slate-200/70 hover:border-slate-300 transition-all flex flex-col justify-between">
+                      <div className="flex gap-3">
+                        <img
+                          src={item.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
+                          alt={item.name}
+                          className="w-16 h-16 rounded-xl object-cover bg-slate-100 shrink-0"
+                        />
+                        <div className="overflow-hidden">
+                          <p className="text-[10px] font-bold text-primary uppercase">{item.category}</p>
+                          <Link to={`/product/${item.id}`} className="font-bold text-slate-900 text-xs hover:text-primary transition-colors line-clamp-1 block">
+                            {item.name}
+                          </Link>
+                          <p className="text-xs font-black text-slate-900 mt-1">Rs. {item.price?.toLocaleString()}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100">
+                        <button
+                          onClick={() => {
+                            addToCart(item);
+                            removeFromWishlist(item.id);
+                          }}
+                          className="flex-1 py-1.5 px-3 bg-slate-900 hover:bg-primary text-white text-[11px] font-bold rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <ShoppingCart className="w-3.5 h-3.5" /> Move to Cart
+                        </button>
+                        <button
+                          onClick={() => removeFromWishlist(item.id)}
+                          className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+                          title="Remove"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
 
         </div>
       </div>

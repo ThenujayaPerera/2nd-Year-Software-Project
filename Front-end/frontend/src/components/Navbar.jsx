@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore, useCartStore, useComparisonStore } from '../store';
+import { useAuthStore, useCartStore, useComparisonStore, useWishlistStore } from '../store';
 import { ShoppingCart, User, LogOut, Search, Menu, X, ShieldCheck, Heart, Truck, Scale } from 'lucide-react';
 
 export default function Navbar() {
@@ -10,8 +10,10 @@ export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const cart = useCartStore((state) => state.cart);
   const comparison = useComparisonStore((state) => state.comparison);
+  const wishlist = useWishlistStore((state) => state.wishlist);
   const cartItemsCount = cart.length;
   const comparisonCount = comparison.length;
+  const wishlistCount = wishlist.length;
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -38,10 +40,10 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" onClick={closeMobileMenu} className="flex items-center gap-3 group">
-              <img 
-                src="/logo.png" 
-                alt="NVSHOP.LK" 
-                className="h-10 md:h-11 w-auto object-contain group-hover:scale-105 transition-transform" 
+              <img
+                src="/logo.png"
+                alt="NVSHOP.LK"
+                className="h-10 md:h-11 w-auto object-contain group-hover:scale-105 transition-transform"
               />
             </Link>
 
@@ -74,8 +76,18 @@ export default function Navbar() {
               <div className="h-8 w-px bg-slate-200 hidden md:block" />
 
               {/* Cart & Wishlist - Always Visible */}
-              <Link to="/wishlist" className={`p-2.5 ${isAuthenticated ? 'text-slate-600 hover:text-accent hover:bg-accent/5' : 'text-slate-400 cursor-not-allowed'} rounded-full transition-all relative`} onClick={(e) => !isAuthenticated && e.preventDefault()}>
-                <Heart className="w-6 h-6" />
+              <Link
+                to="/wishlist"
+                className="p-2.5 text-slate-600 hover:text-red-500 hover:bg-red-50 rounded-full transition-all relative"
+                title="My Wishlist"
+                aria-label="Wishlist"
+              >
+                <Heart className={`w-6 h-6 transition-transform ${wishlistCount > 0 ? 'text-red-500 fill-red-500' : ''}`} />
+                {wishlistCount > 0 && (
+                  <span className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm animate-scaleIn">
+                    {wishlistCount}
+                  </span>
+                )}
               </Link>
 
               <Link to={isAuthenticated ? "/comparison" : "/login"} className="p-2.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all relative" title="Compare Products">
@@ -110,7 +122,7 @@ export default function Navbar() {
                         {user?.name?.split(' ')[0] || 'Account'}
                       </span>
                     </button>
-                    
+
                     {/* Enhanced Dropdown */}
                     <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 overflow-hidden">
                       <div className="px-4 py-3 bg-slate-50 border-b border-slate-100">
@@ -150,10 +162,10 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-              
+
               {/* Mobile Hamburger Toggle Button */}
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Toggle Mobile Menu"
                 className="md:hidden p-2 text-slate-700 hover:text-primary hover:bg-slate-100 rounded-xl transition-all"
               >
@@ -182,23 +194,40 @@ export default function Navbar() {
 
             {/* Mobile Navigation Links */}
             <div className="flex flex-col space-y-3 font-bold text-slate-800">
-              <Link 
-                to="/products" 
+              <Link
+                to="/products"
                 onClick={closeMobileMenu}
                 className="py-2.5 px-4 rounded-xl hover:bg-primary/5 hover:text-primary transition-all flex items-center justify-between"
               >
                 <span>Products Catalog</span>
                 <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-semibold">Browse</span>
               </Link>
-              <Link 
-                to="/about" 
+              <Link
+                to="/about"
                 onClick={closeMobileMenu}
                 className="py-2.5 px-4 rounded-xl hover:bg-primary/5 hover:text-primary transition-all"
               >
                 About NVSHOP
               </Link>
-              <Link 
-                to="/contact" 
+              <Link
+                to="/wishlist"
+                onClick={closeMobileMenu}
+                className="py-2.5 px-4 rounded-xl hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Heart className={`w-5 h-5 ${wishlistCount > 0 ? 'text-red-500 fill-red-500' : 'text-slate-500'}`} />
+                  <span>My Wishlist</span>
+                </div>
+                {wishlistCount > 0 ? (
+                  <span className="text-xs bg-red-100 text-red-600 font-bold px-2.5 py-0.5 rounded-full">
+                    {wishlistCount}
+                  </span>
+                ) : (
+                  <span className="text-xs text-slate-400">0 items</span>
+                )}
+              </Link>
+              <Link
+                to="/contact"
                 onClick={closeMobileMenu}
                 className="py-2.5 px-4 rounded-xl hover:bg-primary/5 hover:text-primary transition-all"
               >
@@ -219,26 +248,26 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  <Link 
-                    to="/profile" 
-                    onClick={closeMobileMenu} 
+                  <Link
+                    to="/profile"
+                    onClick={closeMobileMenu}
                     className="flex items-center gap-3 py-2.5 px-4 rounded-xl text-slate-700 hover:bg-slate-50 font-semibold"
                   >
                     <User className="w-5 h-5 text-slate-400" /> My Profile
                   </Link>
 
-                  <Link 
-                    to="/orders" 
-                    onClick={closeMobileMenu} 
+                  <Link
+                    to="/orders"
+                    onClick={closeMobileMenu}
                     className="flex items-center gap-3 py-2.5 px-4 rounded-xl text-slate-700 hover:bg-slate-50 font-semibold"
                   >
                     <ShoppingCart className="w-5 h-5 text-slate-400" /> My Orders
                   </Link>
 
                   {user?.role === 'admin' && (
-                    <Link 
-                      to="/admin" 
-                      onClick={closeMobileMenu} 
+                    <Link
+                      to="/admin"
+                      onClick={closeMobileMenu}
                       className="flex items-center gap-3 py-2.5 px-4 rounded-xl bg-primary/5 text-primary font-bold"
                     >
                       <ShieldCheck className="w-5 h-5" /> Admin Panel
@@ -254,15 +283,15 @@ export default function Navbar() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-3 pt-2">
-                  <Link 
-                    to="/login" 
+                  <Link
+                    to="/login"
                     onClick={closeMobileMenu}
                     className="py-3 text-center rounded-xl font-bold bg-slate-100 text-slate-800 hover:bg-slate-200 transition-colors"
                   >
                     Log In
                   </Link>
-                  <Link 
-                    to="/signup" 
+                  <Link
+                    to="/signup"
                     onClick={closeMobileMenu}
                     className="py-3 text-center rounded-xl font-bold bg-primary text-white hover:bg-blue-700 transition-colors shadow-md"
                   >
