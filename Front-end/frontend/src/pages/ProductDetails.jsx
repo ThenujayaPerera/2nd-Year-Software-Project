@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useCartStore, useWishlistStore } from '../store';
+import { useToast } from '../components/Toast';
 import { productAPI } from '../services/api';
-import { 
-  Star, ShoppingCart, Zap, Heart, ArrowLeft, Truck, ShieldCheck, 
+import {
+  Star, ShoppingCart, Zap, Heart, ArrowLeft, Truck, ShieldCheck,
   RotateCcw, Check, Share2, Store, HelpCircle, Phone, MessageSquare
 } from 'lucide-react';
 
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const toast = useToast();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -19,6 +21,23 @@ export default function ProductDetails() {
 
   const addToCart = useCartStore((state) => state.addToCart);
   const { toggleWishlist, isInWishlist } = useWishlistStore();
+
+  const handleToggleWishlist = () => {
+    if (!product) return;
+    const isSaved = isInWishlist(product.id);
+    toggleWishlist(product);
+    if (toast) {
+      toast(
+        isSaved
+          ? `${product.name} removed from your wishlist`
+          : `${product.name} saved to your wishlist!`,
+        {
+          type: isSaved ? 'info' : 'success',
+          title: isSaved ? 'Removed from Wishlist' : 'Saved to Wishlist',
+        }
+      );
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -128,12 +147,12 @@ export default function ProductDetails() {
 
           {/* Main 2-Column Product Stage */}
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 mb-16">
-            
+
             {/* Left Column: Image Gallery with Discount Badge (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               {/* Main Showcase Image Frame */}
               <div className="relative bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm flex items-center justify-center aspect-square overflow-hidden group">
-                
+
                 {/* Rs. 1000 OFF Badge (Exact NVSHOP Style) */}
                 <div className="absolute top-4 left-4 bg-red-600 text-white font-black text-xs px-3.5 py-1.5 rounded-full shadow-md z-10 tracking-wide">
                   Rs.{discountAmount.toLocaleString()} OFF
@@ -152,11 +171,10 @@ export default function ProductDetails() {
                   <button
                     key={idx}
                     onClick={() => setSelectedImgIndex(idx)}
-                    className={`w-20 h-20 rounded-2xl bg-white p-1.5 border-2 transition-all overflow-hidden shrink-0 ${
-                      selectedImgIndex === idx
-                        ? 'border-blue-600 shadow-md shadow-blue-500/10'
-                        : 'border-slate-200 hover:border-slate-300'
-                    }`}
+                    className={`w-20 h-20 rounded-2xl bg-white p-1.5 border-2 transition-all overflow-hidden shrink-0 ${selectedImgIndex === idx
+                      ? 'border-blue-600 shadow-md shadow-blue-500/10'
+                      : 'border-slate-200 hover:border-slate-300'
+                      }`}
                   >
                     <img src={img} alt={`thumb-${idx}`} className="w-full h-full object-contain" />
                   </button>
@@ -166,7 +184,7 @@ export default function ProductDetails() {
 
             {/* Right Column: Title, Quantity, Add to Cart & "About this product" (7 cols) */}
             <div className="lg:col-span-7 space-y-6">
-              
+
               {/* Product Header */}
               <div>
                 <span className="text-xs font-bold uppercase tracking-widest text-blue-600 font-mono">
@@ -175,7 +193,7 @@ export default function ProductDetails() {
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 leading-snug">
                   {product.name}
                 </h1>
-                
+
                 {/* Price Display */}
                 <div className="flex items-baseline gap-3 mt-3">
                   <span className="text-3xl font-black text-slate-900 font-sans">
@@ -232,15 +250,15 @@ export default function ProductDetails() {
                 </button>
 
                 <button
-                  onClick={() => toggleWishlist(product)}
-                  className={`p-3.5 rounded-xl border transition-all ${
-                    isInWishlist(product.id)
-                      ? 'border-red-400 bg-red-50 text-red-500'
-                      : 'border-slate-300 bg-white text-slate-500 hover:text-slate-800 hover:bg-slate-50'
-                  }`}
-                  title="Save to Wishlist"
+                  onClick={handleToggleWishlist}
+                  className={`p-3.5 rounded-xl border transition-all flex items-center justify-center gap-2 ${isInWishlist(product.id)
+                    ? 'border-red-400 bg-red-50 text-red-500 shadow-sm shadow-red-500/10'
+                    : 'border-slate-300 bg-white text-slate-600 hover:text-red-500 hover:border-red-200 hover:bg-red-50/50'
+                    }`}
+                  title={isInWishlist(product.id) ? "Remove from Wishlist" : "Save to Wishlist"}
+                  aria-label="Wishlist"
                 >
-                  <Heart className="w-5 h-5" fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
+                  <Heart className="w-5 h-5 transition-transform active:scale-125" fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
                 </button>
               </div>
 
@@ -253,7 +271,7 @@ export default function ProductDetails() {
 
               {/* Structured "About this [Brand] product" Specification Card (Exact NVSHOP Layout) */}
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-5 text-sm text-slate-700">
-                
+
                 <h3 className="text-lg font-black text-slate-900">
                   About this {brandName} product
                 </h3>

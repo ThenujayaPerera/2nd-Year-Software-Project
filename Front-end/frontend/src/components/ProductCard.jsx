@@ -74,18 +74,29 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
   const handleToggleWishlist = (e) => {
     e.stopPropagation();
 
-    toggleWishlist(product);
+    toggleWishlist({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      category: product.category,
+      brand: product.brand,
+      image: product.image,
+      rating: product.rating,
+      stock: product.stock,
+      discount: product.discount,
+    });
 
     if (toast) {
       toast(
         isWishlisted
           ? `${product.name} removed from wishlist`
-          : `${product.name} added to wishlist!`,
+          : `${product.name} added to your wishlist!`,
         {
           type: isWishlisted ? 'info' : 'success',
           title: isWishlisted
             ? 'Removed from Wishlist'
-            : 'Added to Wishlist'
+            : 'Saved to Wishlist'
         }
       );
     }
@@ -95,17 +106,17 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
     <div className="card-premium group relative flex flex-col h-full">
 
       {/* Wishlist & Comparison Buttons */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
+      <div className={`absolute top-4 right-4 z-10 flex flex-col gap-2 transition-all duration-200 ${isWishlisted || inComparison ? 'opacity-100' : 'opacity-90 sm:opacity-0 sm:group-hover:opacity-100'
+        }`}>
 
         {/* Comparison Button */}
         <button
           type="button"
           onClick={handleToggleComparison}
-          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${
-            inComparison
-              ? 'bg-primary text-white'
-              : 'bg-white/80 hover:bg-primary/10 hover:text-primary'
-          }`}
+          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${inComparison
+              ? 'bg-primary text-white shadow-md'
+              : 'bg-white/90 hover:bg-primary/10 hover:text-primary text-slate-600'
+            }`}
           title={
             inComparison
               ? 'Remove from comparison'
@@ -119,11 +130,10 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
         <button
           type="button"
           onClick={handleToggleWishlist}
-          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${
-            isWishlisted
-              ? 'bg-red-500 text-white'
-              : 'bg-white/80 hover:bg-red-50 hover:text-red-500'
-          }`}
+          className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 transform active:scale-90 ${isWishlisted
+              ? 'bg-red-500 text-white shadow-md shadow-red-500/30 scale-105'
+              : 'bg-white/90 text-slate-600 hover:bg-red-50 hover:text-red-500 hover:scale-105 shadow-sm'
+            }`}
           title={
             isWishlisted
               ? 'Remove from wishlist'
@@ -136,7 +146,8 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
           }
         >
           <Heart
-            className="w-5 h-5"
+            className={`w-5 h-5 transition-transform duration-300 ${isWishlisted ? 'scale-110' : ''
+              }`}
             fill={isWishlisted ? 'currentColor' : 'none'}
           />
         </button>
