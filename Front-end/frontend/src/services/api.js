@@ -41,11 +41,10 @@ export const authAPI = {
 
 // Cart endpoints
 export const cartAPI = {
-  getCart: () => api.get('/cart'),
-  addItem: (productId, quantity) => api.post('/cart/items', { productId, quantity }),
-  updateItem: (productId, quantity) => api.put(`/cart/items/${productId}`, { quantity }),
-  removeItem: (productId) => api.delete(`/cart/items/${productId}`),
-  clearCart: () => api.delete('/cart'),
+  fetchCart: (email) => api.get('/cart', { params: { email } }),
+  addToCartAPI: (email, productId, quantity) => api.post('/cart/add', { productId, quantity }, { params: { email } }),
+  removeFromCartAPI: (email, productId) => api.delete(`/cart/remove/${productId}`, { params: { email } }),
+  clearCartAPI: (email) => api.delete('/cart/clear', { params: { email } }),
 };
 
 // Order endpoints
@@ -65,6 +64,15 @@ export const userAPI = {
   addAddress: (data) => api.post('/users/addresses', data),
   updateAddress: (id, data) => api.put(`/users/addresses/${id}`, data),
   deleteAddress: (id) => api.delete(`/users/addresses/${id}`),
+};
+
+// Wishlist endpoints
+export const wishlistAPI = {
+  getWishlist: (userEmail) => api.get('/wishlist', { params: { userEmail } }),
+  addItem: (data) => api.post('/wishlist', data),
+  removeItem: (productId, userEmail) => api.delete(`/wishlist/${productId}`, { params: { userEmail } }),
+  clearWishlist: (userEmail) => api.delete('/wishlist/clear', { params: { userEmail } }),
+  syncWishlist: (userEmail, items) => api.post(`/wishlist/sync?userEmail=${encodeURIComponent(userEmail)}`, items),
 };
 
 export default api;

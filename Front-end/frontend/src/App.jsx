@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+<<<<<<< HEAD
 import { useThemeStore } from "./store";
+=======
+import { useEffect } from "react";
+import { useAuthStore, useCartStore } from "./store";
+>>>>>>> origin/main
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
@@ -24,6 +29,7 @@ import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 function App() {
+<<<<<<< HEAD
   const theme = useThemeStore((state) => state.theme);
 
   useEffect(() => {
@@ -35,6 +41,19 @@ function App() {
       document.body.classList.remove("dark");
     }
   }, [theme]);
+=======
+  const { user } = useAuthStore();
+  const { fetchCart } = useCartStore();
+
+  useEffect(() => {
+    // Clear legacy local storage cart just in case
+    localStorage.removeItem("cart");
+
+    if (user?.email) {
+      fetchCart();
+    }
+  }, [user, fetchCart]);
+>>>>>>> origin/main
 
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
