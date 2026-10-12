@@ -67,17 +67,17 @@ export default function Faq() {
 
   return (
     <Layout>
-      <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-16 px-4 sm:px-6 transition-colors duration-300">
+      <div className="bg-slate-50 dark:bg-darkBg text-slate-900 dark:text-darkText min-h-screen py-16 px-4 sm:px-6 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
           {/* FAQ Header */}
           <div className="text-center mb-16 space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-900/60">
               Help Center & Support
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-darkText">
               Frequently Asked Questions
             </h1>
-            <p className="text-slate-600 dark:text-slate-300 text-lg max-w-xl mx-auto">
+            <p className="text-slate-600 dark:text-darkMuted text-lg max-w-xl mx-auto">
               Everything you need to know about shopping, shipping, original warranties, and payments at NVSHOP.LK.
             </p>
           </div>
@@ -85,12 +85,12 @@ export default function Faq() {
           {/* FAQ Categories & Questions */}
           <div className="space-y-10">
             {FAQS.map((cat, catIdx) => (
-              <div key={catIdx} className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-100 dark:border-slate-800 shadow-sm transition-colors duration-300">
-                <div className="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div key={catIdx} className="bg-white dark:bg-darkCard rounded-3xl p-6 md:p-8 border border-slate-100 dark:border-darkBorder shadow-sm transition-colors duration-300">
+                <div className="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-darkBorder pb-4">
                   <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400">
                     <cat.icon className="w-6 h-6" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">{cat.category}</h2>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-darkText">{cat.category}</h2>
                 </div>
 
                 <div className="space-y-4">
@@ -101,22 +101,22 @@ export default function Faq() {
                     return (
                       <div 
                         key={qIdx}
-                        className="border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-300"
+                        className="border border-slate-100 dark:border-darkBorder rounded-2xl overflow-hidden transition-all duration-300"
                       >
                         <button
                           onClick={() => toggleAccordion(uniqueId)}
-                          className="w-full p-5 text-left font-bold text-slate-800 dark:text-slate-200 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                          className="w-full p-5 text-left font-bold text-slate-800 dark:text-darkText flex justify-between items-center bg-slate-50/50 dark:bg-darkNav/60 hover:bg-slate-50 dark:hover:bg-darkNav transition-colors"
                         >
                           <span className="text-base md:text-lg pr-4">{faq.q}</span>
                           <ChevronDown 
-                            className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-300 ${
+                            className={`w-5 h-5 text-slate-400 dark:text-darkMuted shrink-0 transition-transform duration-300 ${
                               isOpen ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
                             }`} 
                           />
                         </button>
 
                         {isOpen && (
-                          <div className="p-5 pt-2 text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+                          <div className="p-5 pt-2 text-slate-600 dark:text-darkMuted text-sm md:text-base leading-relaxed bg-white dark:bg-darkCard border-t border-slate-100 dark:border-darkBorder">
                             {faq.a}
                           </div>
                         )}
@@ -139,7 +139,7 @@ export default function Faq() {
                 href="https://wa.me/94769890079"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+                className="bg-white dark:bg-darkCard text-slate-900 dark:text-darkText px-8 py-4 rounded-2xl font-bold hover:bg-blue-50 dark:hover:bg-darkNav transition-colors flex items-center justify-center gap-2"
               >
                 <MessageSquare className="w-5 h-5 text-emerald-600" /> WhatsApp Support
               </a>

@@ -111,14 +111,14 @@ export default function Contact() {
 
   return (
     <Layout>
-      <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen py-12 px-4 relative">
+      <div className="bg-slate-50 dark:bg-darkBg min-h-screen py-12 px-4 relative transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-darkText mb-4">
               Get in Touch
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 dark:text-darkMuted max-w-2xl mx-auto">
               Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </p>
           </div>
@@ -126,15 +126,15 @@ export default function Contact() {
           <div className="grid lg:grid-cols-3 gap-8 mb-16">
             {/* Contact Form - 2 columns */}
             <div className="lg:col-span-2">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-8 border border-slate-100 dark:border-slate-800 transition-colors duration-300">
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-6">Send us a Message</h2>
+              <div className="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-8 border border-slate-100 dark:border-darkBorder transition-colors duration-300">
+                <h2 className="text-2xl font-black text-slate-900 dark:text-darkText mb-6">Send us a Message</h2>
 
                 {submitted && (
-                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3 animate-in fade-in">
-                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="mb-6 p-4 bg-green-50 dark:bg-emerald-950/40 border border-green-200 dark:border-emerald-800 rounded-lg flex items-start gap-3 animate-in fade-in">
+                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-semibold text-green-900">Thank you for your message!</p>
-                      <p className="text-sm text-green-800">We'll get back to you within 2 hours.</p>
+                      <p className="font-semibold text-green-900 dark:text-emerald-300">Thank you for your message!</p>
+                      <p className="text-sm text-green-800 dark:text-emerald-400">We'll get back to you within 2 hours.</p>
                     </div>
                   </div>
                 )}
@@ -143,7 +143,7 @@ export default function Contact() {
                   {/* Name & Email Row */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-darkText mb-2">Name</label>
                       <input
                         type="text"
                         name="name"
@@ -152,15 +152,15 @@ export default function Contact() {
                         placeholder="John Doe"
                         className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
                           errors.name
-                            ? 'border-red-300 bg-red-50 focus:border-red-500'
-                            : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
+                            ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30 focus:border-red-500 text-slate-900 dark:text-darkText'
+                            : 'border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText focus:border-primary focus:bg-white dark:focus:bg-darkNav'
                         }`}
                       />
-                      {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name}</p>}
+                      {errors.name && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.name}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-darkText mb-2">Email</label>
                       <input
                         type="email"
                         name="email"
@@ -169,18 +169,18 @@ export default function Contact() {
                         placeholder="john@example.com"
                         className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
                           errors.email
-                            ? 'border-red-300 bg-red-50 focus:border-red-500'
-                            : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
+                            ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30 focus:border-red-500 text-slate-900 dark:text-darkText'
+                            : 'border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText focus:border-primary focus:bg-white dark:focus:bg-darkNav'
                         }`}
                       />
-                      {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
+                      {errors.email && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.email}</p>}
                     </div>
                   </div>
 
                   {/* Phone & Subject Row */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-darkText mb-2">Phone</label>
                       <input
                         type="tel"
                         name="phone"
@@ -189,15 +189,15 @@ export default function Contact() {
                         placeholder="+94 71 234 5678"
                         className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
                           errors.phone
-                            ? 'border-red-300 bg-red-50 focus:border-red-500'
-                            : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
+                            ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30 focus:border-red-500 text-slate-900 dark:text-darkText'
+                            : 'border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText focus:border-primary focus:bg-white dark:focus:bg-darkNav'
                         }`}
                       />
-                      {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
+                      {errors.phone && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.phone}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Subject</label>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-darkText mb-2">Subject</label>
                       <input
                         type="text"
                         name="subject"
@@ -206,17 +206,17 @@ export default function Contact() {
                         placeholder="How can we help?"
                         className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
                           errors.subject
-                            ? 'border-red-300 bg-red-50 focus:border-red-500'
-                            : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
+                            ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30 focus:border-red-500 text-slate-900 dark:text-darkText'
+                            : 'border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText focus:border-primary focus:bg-white dark:focus:bg-darkNav'
                         }`}
                       />
-                      {errors.subject && <p className="text-xs text-red-600 mt-1">{errors.subject}</p>}
+                      {errors.subject && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.subject}</p>}
                     </div>
                   </div>
 
                   {/* Message */}
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Message</label>
+                    <label className="block text-sm font-semibold text-slate-700 dark:text-darkText mb-2">Message</label>
                     <textarea
                       name="message"
                       value={formData.message}
@@ -225,11 +225,11 @@ export default function Contact() {
                       rows="6"
                       className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none resize-none ${
                         errors.message
-                          ? 'border-red-300 bg-red-50 focus:border-red-500'
-                          : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
+                          ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/30 focus:border-red-500 text-slate-900 dark:text-darkText'
+                          : 'border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText focus:border-primary focus:bg-white dark:focus:bg-darkNav'
                       }`}
                     />
-                    {errors.message && <p className="text-xs text-red-600 mt-1">{errors.message}</p>}
+                    {errors.message && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.message}</p>}
                   </div>
 
                   {/* Submit Button */}
@@ -249,13 +249,13 @@ export default function Contact() {
                   const Icon = method.icon;
                   const CardContent = (
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                      <div className="w-12 h-12 bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                         <Icon className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-slate-900 mb-1">{method.title}</h4>
+                        <h4 className="font-bold text-slate-900 dark:text-darkText mb-1">{method.title}</h4>
                         <p className="font-semibold text-primary text-sm mb-1">{method.value}</p>
-                        <p className="text-xs text-slate-500">{method.description}</p>
+                        <p className="text-xs text-slate-500 dark:text-darkMuted">{method.description}</p>
                       </div>
                     </div>
                   );
@@ -266,12 +266,12 @@ export default function Contact() {
                       href={method.link}
                       target={method.link.startsWith('http') ? '_blank' : '_self'}
                       rel="noreferrer"
-                      className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-primary/40 hover:shadow-lg transition-all group block"
+                      className="bg-white dark:bg-darkCard rounded-2xl p-6 border border-slate-100 dark:border-darkBorder hover:border-primary/40 hover:shadow-lg transition-all group block"
                     >
                       {CardContent}
                     </a>
                   ) : (
-                    <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-100 hover:shadow-lg transition-all group">
+                    <div key={idx} className="bg-white dark:bg-darkCard rounded-2xl p-6 border border-slate-100 dark:border-darkBorder hover:shadow-lg transition-all group">
                       {CardContent}
                     </div>
                   );
@@ -283,13 +283,13 @@ export default function Contact() {
             <div className="lg:col-span-1">
               <div 
                 onClick={() => window.dispatchEvent(new CustomEvent('open-support-bot'))}
-                className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100 h-full cursor-pointer hover:border-primary/30 transition-all group"
+                className="bg-white dark:bg-darkCard rounded-2xl shadow-lg p-6 border border-slate-100 dark:border-darkBorder h-full cursor-pointer hover:border-primary/30 transition-all group"
               >
-                <h3 className="text-lg font-black text-slate-900 mb-4">Need Quick Help?</h3>
-                <p className="text-sm text-slate-600 mb-6">
+                <h3 className="text-lg font-black text-slate-900 dark:text-darkText mb-4">Need Quick Help?</h3>
+                <p className="text-sm text-slate-600 dark:text-darkMuted mb-6">
                   Our AI-powered support bot is available 24/7 to answer your questions instantly.
                 </p>
-                <div className="flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl group-hover:bg-primary/15 transition-all">
+                <div className="flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-xl group-hover:bg-primary/15 transition-all">
                   <div className="text-center">
                     <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🤖</div>
                     <p className="text-sm font-bold text-primary">Click to Open AI Live Chat 💬</p>
@@ -300,16 +300,16 @@ export default function Contact() {
           </div>
 
           {/* FAQ Section */}
-          <div className="bg-slate-50 rounded-2xl p-8 md:p-12">
-            <h2 className="text-3xl font-black text-slate-900 mb-8 text-center">Frequently Asked Questions</h2>
+          <div className="bg-slate-50 dark:bg-darkCard rounded-2xl p-8 md:p-12 border border-slate-100 dark:border-darkBorder">
+            <h2 className="text-3xl font-black text-slate-900 dark:text-darkText mb-8 text-center">Frequently Asked Questions</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {faqs.map((faq, idx) => (
-                <div key={idx} className="bg-white rounded-xl p-6 border border-slate-100 hover:border-primary/20 hover:shadow-md transition-all">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-start gap-3">
+                <div key={idx} className="bg-white dark:bg-darkNav/80 rounded-xl p-6 border border-slate-100 dark:border-darkBorder hover:border-primary/20 hover:shadow-md transition-all">
+                  <h4 className="font-bold text-slate-900 dark:text-darkText mb-3 flex items-start gap-3">
                     <span className="text-primary font-black">Q.</span>
                     {faq.question}
                   </h4>
-                  <p className="text-slate-600 text-sm leading-relaxed flex items-start gap-3">
+                  <p className="text-slate-600 dark:text-darkMuted text-sm leading-relaxed flex items-start gap-3">
                     <span className="text-primary/60 font-black">A.</span>
                     {faq.answer}
                   </p>
@@ -319,11 +319,11 @@ export default function Contact() {
           </div>
 
           {/* CTA Section */}
-          <div className="mt-16 bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 md:p-12 border border-primary/20 text-center">
-            <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4">
+          <div className="mt-16 bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-2xl p-8 md:p-12 border border-primary/20 dark:border-primary/30 text-center">
+            <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-darkText mb-4">
               Still have questions?
             </h3>
-            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-slate-600 dark:text-darkMuted mb-6 max-w-2xl mx-auto">
               Our expert support team is available 24/7. Don't hesitate to reach out—we're always happy to help!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

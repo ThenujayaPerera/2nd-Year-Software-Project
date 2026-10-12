@@ -10,16 +10,27 @@
   --accent: #b32b95;
   --accent-hover: #96207c;
   --koko: #00d1b2;
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-nav: rgba(255, 255, 255, 0.95);
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  color-scheme: light;
 }
 
-* {
-  @apply transition-all duration-300;
+.dark {
+  --bg-main: #121212;
+  --bg-card: #1E1E1E;
+  --bg-nav: rgba(24, 24, 24, 0.95);
+  --text-primary: #F5F5F5;
+  --text-secondary: #B3B3B3;
+  --border-color: #333333;
+  color-scheme: dark;
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300;
+  @apply bg-slate-50 text-slate-900 dark:bg-darkBg dark:text-darkText transition-colors duration-300;
   font-family: 'Poppins', 'Montserrat', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -51,11 +62,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100 dark:bg-slate-900;
+  @apply bg-slate-100 dark:bg-darkBg;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-700 rounded-full hover:bg-slate-400 dark:hover:bg-slate-600;
+  @apply bg-slate-300 dark:bg-darkBorder rounded-full hover:bg-slate-400 dark:hover:bg-zinc-600;
 }
 
 /* Custom Components */
@@ -69,27 +80,27 @@ body {
   }
 
   .btn-secondary {
-    @apply btn bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-md;
+    @apply btn bg-white dark:bg-darkCard text-slate-900 dark:text-darkText border border-slate-200 dark:border-darkBorder hover:bg-slate-50 dark:hover:bg-[#252525] hover:border-slate-300 dark:hover:border-zinc-700 hover:shadow-md;
   }
 
   .btn-ghost {
-    @apply btn bg-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white;
+    @apply btn bg-transparent text-slate-600 dark:text-darkMuted hover:bg-slate-100 dark:hover:bg-darkCard hover:text-slate-900 dark:hover:text-white;
   }
 
   .card-premium {
-    @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800/80 p-5 hover:shadow-2xl hover:border-transparent hover:-translate-y-2 transition-all duration-500;
+    @apply bg-white dark:bg-darkCard text-slate-900 dark:text-darkText rounded-2xl shadow-sm border border-slate-100 dark:border-darkBorder p-5 hover:shadow-2xl hover:border-transparent hover:-translate-y-2 transition-all duration-500;
   }
 
   .nav-link {
-    @apply relative text-slate-600 dark:text-slate-300 font-medium hover:text-primary dark:hover:text-primary py-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full;
+    @apply relative text-slate-600 dark:text-darkMuted font-medium hover:text-primary dark:hover:text-primary py-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full;
   }
 
   .input-premium {
-    @apply w-full px-5 py-3 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-transparent dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:bg-white dark:focus:bg-slate-900 transition-all outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500;
+    @apply w-full px-5 py-3 bg-slate-100 dark:bg-darkCard text-slate-900 dark:text-darkText border border-transparent dark:border-darkBorder rounded-2xl focus:ring-2 focus:ring-primary/20 focus:bg-white dark:focus:bg-darkNav transition-all outline-none placeholder:text-slate-400 dark:placeholder:text-zinc-500;
   }
 
   .glass-card {
-    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/20 dark:border-slate-800/50 shadow-xl;
+    @apply bg-white/80 dark:bg-darkCard/90 backdrop-blur-md border border-white/20 dark:border-darkBorder shadow-xl;
   }
 }
 

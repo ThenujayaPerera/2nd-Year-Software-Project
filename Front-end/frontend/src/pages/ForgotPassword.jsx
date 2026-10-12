@@ -16,17 +16,17 @@ export default function ForgotPassword() {
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center py-16 px-4 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-        <div className="w-full max-w-xl bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-lg p-10">
+      <div className="min-h-screen flex items-center justify-center py-16 px-4 bg-slate-50 dark:bg-darkBg text-slate-900 dark:text-darkText transition-colors duration-300">
+        <div className="w-full max-w-xl bg-white dark:bg-darkCard rounded-[2rem] border border-slate-200 dark:border-darkBorder shadow-lg p-10">
           <div className="mb-8">
-            <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-semibold">
+            <div className="flex items-center gap-3 text-slate-700 dark:text-darkText font-semibold">
               <ArrowLeft className="w-5 h-5" />
               <Link to="/login" className="text-blue-600 dark:text-blue-400 hover:text-blue-700">
                 Back to Sign In
               </Link>
             </div>
-            <h1 className="mt-6 text-3xl font-black text-slate-900 dark:text-white">Forgot Password</h1>
-            <p className="mt-3 text-slate-600 dark:text-slate-400">Enter your email and we will send you instructions to reset your password.</p>
+            <h1 className="mt-6 text-3xl font-black text-slate-900 dark:text-darkText">Forgot Password</h1>
+            <p className="mt-3 text-slate-600 dark:text-darkMuted">Enter your email and we will send you instructions to reset your password.</p>
           </div>
 
           {status && (
@@ -36,16 +36,16 @@ export default function ForgotPassword() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <label className="block text-sm font-semibold text-slate-700">Email Address</label>
+            <label className="block text-sm font-semibold text-slate-700 dark:text-darkText">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-darkMuted" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-2xl focus:outline-none focus:border-blue-500"
+                className="w-full pl-12 pr-4 py-4 border border-slate-200 dark:border-darkBorder bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText rounded-2xl focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -57,9 +57,9 @@ export default function ForgotPassword() {
             </button>
           </form>
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-slate-500 dark:text-darkMuted">
             Remembered your password?{' '}
-            <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
+            <Link to="/login" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-semibold">
               Sign in
             </Link>
           </p>

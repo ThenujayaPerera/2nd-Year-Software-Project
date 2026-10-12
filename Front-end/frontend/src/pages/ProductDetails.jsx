@@ -132,17 +132,17 @@ export default function ProductDetails() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
+      <div className="bg-slate-50/60 dark:bg-darkBg min-h-screen py-8 px-4 sm:px-6 transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-darkMuted mb-6 font-medium">
             <Link to="/" className="hover:text-blue-600">Home</Link>
             <span>/</span>
             <Link to="/products" className="hover:text-blue-600">Products</Link>
             <span>/</span>
             <Link to={`/products?q=${encodeURIComponent(product.category || '')}`} className="hover:text-blue-600">{product.category || 'Accessories'}</Link>
             <span>/</span>
-            <span className="text-slate-800 font-bold truncate max-w-xs">{product.name}</span>
+            <span className="text-slate-800 dark:text-darkText font-bold truncate max-w-xs">{product.name}</span>
           </div>
 
           {/* Main 2-Column Product Stage */}
@@ -151,7 +151,7 @@ export default function ProductDetails() {
             {/* Left Column: Image Gallery with Discount Badge (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
               {/* Main Showcase Image Frame */}
-              <div className="relative bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm flex items-center justify-center aspect-square overflow-hidden group">
+              <div className="relative bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center justify-center aspect-square overflow-hidden group">
 
                 {/* Rs. 1000 OFF Badge (Exact NVSHOP Style) */}
                 <div className="absolute top-4 left-4 bg-red-600 text-white font-black text-xs px-3.5 py-1.5 rounded-full shadow-md z-10 tracking-wide">
@@ -171,9 +171,9 @@ export default function ProductDetails() {
                   <button
                     key={idx}
                     onClick={() => setSelectedImgIndex(idx)}
-                    className={`w-20 h-20 rounded-2xl bg-white p-1.5 border-2 transition-all overflow-hidden shrink-0 ${selectedImgIndex === idx
+                    className={`w-20 h-20 rounded-2xl bg-white dark:bg-darkCard p-1.5 border-2 transition-all overflow-hidden shrink-0 ${selectedImgIndex === idx
                       ? 'border-blue-600 shadow-md shadow-blue-500/10'
-                      : 'border-slate-200 hover:border-slate-300'
+                      : 'border-slate-200 dark:border-darkBorder hover:border-slate-300 dark:hover:border-slate-600'
                       }`}
                   >
                     <img src={img} alt={`thumb-${idx}`} className="w-full h-full object-contain" />
@@ -187,24 +187,24 @@ export default function ProductDetails() {
 
               {/* Product Header */}
               <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-blue-600 font-mono">
+                <span className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 font-mono">
                   {product.brand} • {product.category}
                 </span>
-                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 leading-snug">
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-darkText mt-1 leading-snug">
                   {product.name}
                 </h1>
 
                 {/* Price Display */}
                 <div className="flex items-baseline gap-3 mt-3">
-                  <span className="text-3xl font-black text-slate-900 font-sans">
+                  <span className="text-3xl font-black text-slate-900 dark:text-darkText font-sans">
                     Rs. {product.price?.toLocaleString()}
                   </span>
                   {product.originalPrice && (
-                    <span className="text-lg font-bold text-slate-400 line-through">
+                    <span className="text-lg font-bold text-slate-400 dark:text-darkMuted line-through">
                       Rs. {product.originalPrice?.toLocaleString()}
                     </span>
                   )}
-                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
                     In Stock
                   </span>
                 </div>
@@ -212,21 +212,21 @@ export default function ProductDetails() {
 
               {/* Quantity Selector */}
               <div>
-                <label className="block text-xs font-bold text-slate-600 mb-2">Quantity:</label>
-                <div className="inline-flex items-center border border-slate-300 rounded-xl bg-white overflow-hidden shadow-sm">
+                <label className="block text-xs font-bold text-slate-600 dark:text-darkMuted mb-2">Quantity:</label>
+                <div className="inline-flex items-center border border-slate-300 dark:border-darkBorder rounded-xl bg-white dark:bg-darkCard overflow-hidden shadow-sm">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
-                    className="px-4 py-2 text-slate-600 hover:bg-slate-100 font-bold transition-colors disabled:opacity-40"
+                    className="px-4 py-2 text-slate-600 dark:text-darkText hover:bg-slate-100 dark:hover:bg-darkNav font-bold transition-colors disabled:opacity-40"
                   >
                     −
                   </button>
-                  <span className="px-5 py-2 font-bold text-slate-900 text-sm border-x border-slate-200">
+                  <span className="px-5 py-2 font-bold text-slate-900 dark:text-darkText text-sm border-x border-slate-200 dark:border-darkBorder">
                     {quantity}
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-2 text-slate-600 hover:bg-slate-100 font-bold transition-colors"
+                    className="px-4 py-2 text-slate-600 dark:text-darkText hover:bg-slate-100 dark:hover:bg-darkNav font-bold transition-colors"
                   >
                     +
                   </button>
@@ -244,7 +244,7 @@ export default function ProductDetails() {
 
                 <button
                   onClick={handleBuyNow}
-                  className="flex-1 min-w-[150px] py-3.5 px-6 bg-[#111827] hover:bg-black text-white font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-md"
+                  className="flex-1 min-w-[150px] py-3.5 px-6 bg-[#111827] dark:bg-slate-800 hover:bg-black dark:hover:bg-slate-700 text-white font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-md"
                 >
                   <Zap className="w-4 h-4 text-amber-400 fill-amber-400" /> Buy Now
                 </button>
@@ -252,8 +252,8 @@ export default function ProductDetails() {
                 <button
                   onClick={handleToggleWishlist}
                   className={`p-3.5 rounded-xl border transition-all flex items-center justify-center gap-2 ${isInWishlist(product.id)
-                    ? 'border-red-400 bg-red-50 text-red-500 shadow-sm shadow-red-500/10'
-                    : 'border-slate-300 bg-white text-slate-600 hover:text-red-500 hover:border-red-200 hover:bg-red-50/50'
+                    ? 'border-red-400 bg-red-50 dark:bg-red-950/40 text-red-500 shadow-sm shadow-red-500/10'
+                    : 'border-slate-300 dark:border-darkBorder bg-white dark:bg-darkCard text-slate-600 dark:text-darkText hover:text-red-500 hover:border-red-200 hover:bg-red-50/50'
                     }`}
                   title={isInWishlist(product.id) ? "Remove from Wishlist" : "Save to Wishlist"}
                   aria-label="Wishlist"
@@ -264,80 +264,80 @@ export default function ProductDetails() {
 
               {/* Toast Message when added */}
               {addedToCartToast && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2 animate-in fade-in">
-                  <Check className="w-4 h-4 text-emerald-600" /> Added to your shopping cart!
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+                  <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Added to your shopping cart!
                 </div>
               )}
 
               {/* Structured "About this [Brand] product" Specification Card (Exact NVSHOP Layout) */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-5 text-sm text-slate-700">
+              <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-darkBorder shadow-sm space-y-5 text-sm text-slate-700 dark:text-darkMuted">
 
-                <h3 className="text-lg font-black text-slate-900">
+                <h3 className="text-lg font-black text-slate-900 dark:text-darkText">
                   About this {brandName} product
                 </h3>
 
                 {/* Main Product Tagline */}
-                <p className="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                <p className="font-bold text-slate-900 dark:text-darkText flex items-center gap-2 text-sm">
                   <span>🔋</span> {product.name}
                 </p>
 
                 {/* Overview Paragraphs */}
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-darkMuted leading-relaxed">
                   ⚡ Stay powered throughout your day with the {product.name}. Designed with advanced technology and premium materials, it provides reliable, efficient, and long-lasting performance for your smartphones, tablets, earbuds, and other USB-powered devices.
                 </p>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-darkMuted leading-relaxed">
                   🚀 Equipped with Power Delivery (PD) and Quick Charge (QC) support, this {brandName} gadget delivers fast and stable charging while protecting your devices with advanced safety features. Its compact and portable design makes it perfect for travel, office use, and everyday charging needs.
                 </p>
 
                 {/* Key Features Bullet List with Emojis */}
                 <div className="pt-2">
-                  <h4 className="font-bold text-slate-900 mb-3 flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-500">
+                  <h4 className="font-bold text-slate-900 dark:text-darkText mb-3 flex items-center gap-1.5 text-xs uppercase tracking-wider text-slate-500 dark:text-darkMuted">
                     <span>✨</span> Key Features:
                   </h4>
 
-                  <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
+                  <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-darkMuted">
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">🔋</span>
-                      <span><strong>High Capacity & Output</strong> – Delivers maximum efficient power output for all connected gadgets</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">High Capacity & Output</strong> – Delivers maximum efficient power output for all connected gadgets</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">⚡</span>
-                      <span><strong>Fast Charging Support</strong> – Quickly powers compatible iPhone, Samsung, and Android devices</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">Fast Charging Support</strong> – Quickly powers compatible iPhone, Samsung, and Android devices</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">🚀</span>
-                      <span><strong>PD & QC Fast Protocol</strong> – Smart voltage regulation for efficient and temperature-safe charging</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">PD & QC Fast Protocol</strong> – Smart voltage regulation for efficient and temperature-safe charging</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">📱</span>
-                      <span><strong>Multi-Device Compatibility</strong> – Compatible with smartphones, tablets, smartwatches, earbuds, and gaming gear</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">Multi-Device Compatibility</strong> – Compatible with smartphones, tablets, smartwatches, earbuds, and gaming gear</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">🔌</span>
-                      <span><strong>USB-C Input & Output</strong> – Modern, reversible, and high-speed bidirectional charging connection</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">USB-C Input & Output</strong> – Modern, reversible, and high-speed bidirectional charging connection</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">📊</span>
-                      <span><strong>LED Status & Power Indicator</strong> – Easily check real-time charging status and remaining battery</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">LED Status & Power Indicator</strong> – Easily check real-time charging status and remaining battery</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">🛡️</span>
-                      <span><strong>MultiProtect Safety System</strong> – Protection against overcharging, overcurrent, short circuits, and overheating</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">MultiProtect Safety System</strong> – Protection against overcharging, overcurrent, short circuits, and overheating</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="shrink-0 mt-0.5">🏬</span>
-                      <span><strong>Official Warranty & Showroom Pickup</strong> – Backed by {product.warranty || '1 Year Official Warranty'} at NVSHOP.LK Ambalangoda</span>
+                      <span><strong className="text-slate-900 dark:text-darkText">Official Warranty & Showroom Pickup</strong> – Backed by {product.warranty || '1 Year Official Warranty'} at NVSHOP.LK Ambalangoda</span>
                     </li>
                   </ul>
                 </div>
 
                 {/* Showroom & Islandwide Delivery Note */}
-                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs text-blue-900 flex items-start gap-3 mt-4">
-                  <Store className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-darkNav border border-blue-100 dark:border-darkBorder text-xs text-blue-900 dark:text-blue-300 flex items-start gap-3 mt-4">
+                  <Store className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold">Available in Showroom & Online Delivery</p>
-                    <p className="text-blue-700 mt-0.5">
+                    <p className="text-blue-700 dark:text-blue-400/80 mt-0.5">
                       Visit our showroom at 185/1/2B New Road, Ambalangoda or order online with Cash on Delivery (1-3 days islandwide).
                     </p>
                   </div>

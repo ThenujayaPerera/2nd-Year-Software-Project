@@ -167,25 +167,25 @@ export default function SupportBot({ isProducts = false }) {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-8 right-8 w-96 max-h-[32rem] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border border-slate-100 animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-8 right-8 w-96 max-h-[32rem] bg-white dark:bg-darkCard rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border border-slate-100 dark:border-darkBorder animate-in fade-in slide-in-from-bottom-5 duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-primary to-primary/80 text-white p-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-primary to-secondary text-white p-4 flex items-center justify-between">
             <div>
               <h3 className="font-bold text-lg">
                 {isProducts ? '🤖 Product Assistant' : '💬 Support Bot'}
               </h3>
-              <p className="text-xs text-primary-light/80">Always here to help</p>
+              <p className="text-xs text-white/80">Always here to help</p>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
-                className="p-1 hover:bg-primary/80 rounded transition-colors"
+                className="p-1 hover:bg-white/20 rounded transition-colors"
               >
                 {isMinimized ? <Maximize2 className="w-5 h-5" /> : <Minimize2 className="w-5 h-5" />}
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-primary/80 rounded transition-colors"
+                className="p-1 hover:bg-white/20 rounded transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -195,7 +195,7 @@ export default function SupportBot({ isProducts = false }) {
           {!isMinimized && (
             <>
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-darkBg">
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
@@ -205,7 +205,7 @@ export default function SupportBot({ isProducts = false }) {
                       className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                         msg.type === 'user'
                           ? 'bg-primary text-white rounded-br-none'
-                          : 'bg-white text-slate-900 rounded-bl-none border border-slate-200'
+                          : 'bg-white dark:bg-darkCard text-slate-900 dark:text-darkText rounded-bl-none border border-slate-200 dark:border-darkBorder shadow-xs'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
@@ -216,7 +216,7 @@ export default function SupportBot({ isProducts = false }) {
                           {msg.suggestions.map((product, idx) => (
                             <div
                               key={idx}
-                              className="bg-slate-100 rounded-lg p-2 cursor-pointer hover:bg-primary hover:text-white transition-colors text-xs"
+                              className="bg-slate-100 dark:bg-darkNav rounded-lg p-2 cursor-pointer hover:bg-primary dark:hover:bg-primary text-slate-800 dark:text-darkText hover:text-white transition-colors text-xs border border-transparent dark:border-darkBorder/50"
                             >
                               <p className="font-semibold">{product.name}</p>
                               <div className="flex justify-between text-[10px] mt-1 gap-2">
@@ -237,7 +237,7 @@ export default function SupportBot({ isProducts = false }) {
                 
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-white text-slate-900 rounded-2xl rounded-bl-none border border-slate-200 px-4 py-2.5">
+                    <div className="bg-white dark:bg-darkCard text-slate-900 dark:text-darkText rounded-2xl rounded-bl-none border border-slate-200 dark:border-darkBorder px-4 py-2.5 shadow-xs">
                       <div className="flex gap-2">
                         <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" />
                         <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce delay-100" />
@@ -250,19 +250,19 @@ export default function SupportBot({ isProducts = false }) {
               </div>
 
               {/* Input */}
-              <div className="border-t border-slate-100 p-4 bg-white">
+              <div className="border-t border-slate-100 dark:border-darkBorder p-4 bg-white dark:bg-darkNav">
                 <form onSubmit={handleSendMessage} className="flex gap-2">
                   <input
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder={isProducts ? "Ask about products..." : "Type your message..."}
-                    className="flex-1 px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 text-sm"
+                    className="flex-1 px-3 py-2 border border-slate-200 dark:border-darkBorder rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 text-sm bg-white dark:bg-darkCard text-slate-900 dark:text-darkText placeholder:text-slate-400 dark:placeholder:text-zinc-500"
                   />
                   <button
                     type="submit"
                     disabled={!inputValue.trim()}
-                    className="bg-primary hover:bg-primary/90 disabled:bg-slate-300 text-white rounded-lg p-2 transition-colors"
+                    className="bg-primary hover:bg-primary/90 disabled:bg-slate-300 dark:disabled:bg-zinc-700 text-white rounded-lg p-2 transition-colors"
                   >
                     <Send className="w-5 h-5" />
                   </button>

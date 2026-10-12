@@ -115,7 +115,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
           onClick={handleToggleComparison}
           className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${inComparison
               ? 'bg-primary text-white shadow-md'
-              : 'bg-white/90 hover:bg-primary/10 hover:text-primary text-slate-600'
+              : 'bg-white/90 dark:bg-darkCard/90 hover:bg-primary/10 hover:text-primary text-slate-600 dark:text-darkMuted border border-transparent dark:border-darkBorder'
             }`}
           title={
             inComparison
@@ -132,7 +132,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
           onClick={handleToggleWishlist}
           className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 transform active:scale-90 ${isWishlisted
               ? 'bg-red-500 text-white shadow-md shadow-red-500/30 scale-105'
-              : 'bg-white/90 text-slate-600 hover:bg-red-50 hover:text-red-500 hover:scale-105 shadow-sm'
+              : 'bg-white/90 dark:bg-darkCard/90 text-slate-600 dark:text-darkMuted hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-500 hover:scale-105 shadow-sm border border-transparent dark:border-darkBorder'
             }`}
           title={
             isWishlisted
@@ -156,7 +156,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
 
       {/* Image Container */}
       <div
-        className="relative mb-6 bg-slate-100 rounded-xl overflow-hidden aspect-square cursor-pointer"
+        className="relative mb-6 bg-slate-100 dark:bg-darkNav/80 rounded-xl overflow-hidden aspect-square cursor-pointer border border-transparent dark:border-darkBorder/50"
         onClick={handleViewDetails}
       >
         <img
@@ -181,7 +181,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
         )}
 
         {/* Quick View Overlay */}
-        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+        <div className="absolute inset-0 bg-slate-900/40 dark:bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
 
           <button
             type="button"
@@ -189,7 +189,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
               e.stopPropagation();
               handleViewDetails();
             }}
-            className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300"
+            className="w-12 h-12 rounded-full bg-white dark:bg-darkCard flex items-center justify-center text-slate-900 dark:text-darkText hover:bg-primary dark:hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 border border-transparent dark:border-darkBorder"
           >
             <Eye className="w-5 h-5" />
           </button>
@@ -201,7 +201,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
               handleAddToCart();
             }}
             disabled={product.stock === 0}
-            className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 disabled:opacity-50"
+            className="w-12 h-12 rounded-full bg-white dark:bg-darkCard flex items-center justify-center text-slate-900 dark:text-darkText hover:bg-primary dark:hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75 disabled:opacity-50 border border-transparent dark:border-darkBorder"
           >
             <ShoppingCart className="w-5 h-5" />
           </button>
@@ -221,7 +221,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
           <div className="flex items-center gap-1">
             <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
 
-            <span className="text-xs font-bold text-slate-700">
+            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
               {product.rating || '4.5'}
             </span>
           </div>
@@ -230,12 +230,12 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
 
         <h3
           onClick={handleViewDetails}
-          className="font-bold text-slate-900 mb-1 line-clamp-1 group-hover:text-primary transition-colors cursor-pointer"
+          className="font-bold text-slate-900 dark:text-darkText mb-1 line-clamp-1 group-hover:text-primary transition-colors cursor-pointer"
         >
           {product.name}
         </h3>
 
-        <p className="text-xs text-slate-550 mb-3 font-semibold italic text-slate-400">
+        <p className="text-xs text-slate-550 mb-3 font-semibold italic text-slate-400 dark:text-darkMuted">
           by {product.brand || 'Premium Brand'}
         </p>
 
@@ -246,12 +246,12 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
             <div className="flex flex-col">
 
               {product.originalPrice && (
-                <span className="text-xs text-slate-400 line-through">
+                <span className="text-xs text-slate-400 dark:text-zinc-500 line-through">
                   LKR {product.originalPrice.toLocaleString()}
                 </span>
               )}
 
-              <span className="text-lg font-black text-slate-900">
+              <span className="text-lg font-black text-slate-900 dark:text-darkText">
                 LKR {product.price.toLocaleString()}
               </span>
 
@@ -261,7 +261,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
               type="button"
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="p-3 rounded-xl bg-slate-900 text-white hover:bg-primary transition-all disabled:bg-slate-200 disabled:text-slate-400"
+              className="p-3 rounded-xl bg-slate-900 dark:bg-primary text-white hover:bg-primary dark:hover:bg-primary/90 transition-all disabled:bg-slate-200 dark:disabled:bg-zinc-800 disabled:text-slate-400 dark:disabled:text-zinc-600 shadow-sm"
             >
               <ShoppingCart className="w-5 h-5" />
             </button>
@@ -269,7 +269,7 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
           </div>
 
           {/* Koko Installment Banner */}
-          <div className="border-t border-slate-100 pt-2 text-[10px] font-semibold text-slate-500 flex items-center justify-between">
+          <div className="border-t border-slate-100 dark:border-darkBorder pt-2 text-[10px] font-semibold text-slate-500 dark:text-darkMuted flex items-center justify-between">
             <span>Or 3 installments of</span>
 
             <span className="text-koko font-bold">

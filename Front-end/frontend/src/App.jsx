@@ -1,12 +1,7 @@
 import { useEffect } from "react";
 import Home from "./pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
 import { useThemeStore } from "./store";
-=======
-import { useEffect } from "react";
-import { useAuthStore, useCartStore } from "./store";
->>>>>>> origin/main
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Products from "./pages/Products";
@@ -29,8 +24,8 @@ import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 function App() {
-<<<<<<< HEAD
   const theme = useThemeStore((state) => state.theme);
+  const setTheme = useThemeStore((state) => state.setTheme);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -41,19 +36,20 @@ function App() {
       document.body.classList.remove("dark");
     }
   }, [theme]);
-=======
-  const { user } = useAuthStore();
-  const { fetchCart } = useCartStore();
 
+  // Listen to system theme preference change if no explicit saved theme
   useEffect(() => {
-    // Clear legacy local storage cart just in case
-    localStorage.removeItem("cart");
-
-    if (user?.email) {
-      fetchCart();
-    }
-  }, [user, fetchCart]);
->>>>>>> origin/main
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => {
+      const savedTheme = localStorage.getItem('theme');
+      if (!savedTheme) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [setTheme]);
 
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>

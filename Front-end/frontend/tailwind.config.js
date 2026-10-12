@@ -17,6 +17,12 @@ export default {
         error: "#dc2626",
         light: "#f8fafc",
         dark: "#0f172a",
+        darkBg: "#121212",
+        darkCard: "#1E1E1E",
+        darkNav: "#181818",
+        darkBorder: "#333333",
+        darkText: "#F5F5F5",
+        darkMuted: "#B3B3B3",
       },
       boxShadow: {
         'card': '0 2px 8px rgba(37, 150, 190, 0.1)',

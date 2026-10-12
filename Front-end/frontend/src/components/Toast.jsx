@@ -9,22 +9,22 @@ export function useToast() {
 
 const toastStyles = {
   success: {
-    bg: 'bg-emerald-50 border-emerald-200',
+    bg: 'bg-emerald-50 dark:bg-darkCard border-emerald-200 dark:border-emerald-800/80',
     icon: CheckCircle,
-    iconColor: 'text-emerald-500',
-    text: 'text-emerald-800',
+    iconColor: 'text-emerald-500 dark:text-emerald-400',
+    text: 'text-emerald-800 dark:text-emerald-300',
   },
   error: {
-    bg: 'bg-red-50 border-red-200',
+    bg: 'bg-red-50 dark:bg-darkCard border-red-200 dark:border-red-800/80',
     icon: AlertCircle,
-    iconColor: 'text-red-500',
-    text: 'text-red-800',
+    iconColor: 'text-red-500 dark:text-red-400',
+    text: 'text-red-800 dark:text-red-300',
   },
   info: {
-    bg: 'bg-blue-50 border-blue-200',
+    bg: 'bg-blue-50 dark:bg-darkCard border-blue-200 dark:border-blue-800/80',
     icon: Info,
-    iconColor: 'text-primary',
-    text: 'text-blue-800',
+    iconColor: 'text-primary dark:text-primary',
+    text: 'text-blue-800 dark:text-blue-300',
   },
 };
 

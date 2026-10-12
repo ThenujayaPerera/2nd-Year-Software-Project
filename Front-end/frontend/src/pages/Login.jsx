@@ -45,8 +45,8 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="min-h-[700px] flex items-center justify-center py-16 px-6 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
-        <div className="w-full max-w-5xl bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-2xl overflow-hidden grid md:grid-cols-2">
+      <div className="min-h-[700px] flex items-center justify-center py-16 px-6 bg-slate-50 dark:bg-darkBg text-slate-900 dark:text-darkText transition-colors duration-300">
+        <div className="w-full max-w-5xl bg-white dark:bg-darkCard rounded-[2rem] border border-slate-100 dark:border-darkBorder shadow-2xl overflow-hidden grid md:grid-cols-2">
           {/* Visual Brand Side */}
           <div className="hidden md:flex flex-col justify-between p-16 bg-gradient-to-br from-blue-600 to-indigo-800 text-white relative">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)]" />
@@ -75,8 +75,8 @@ export default function Login() {
           {/* Form Side */}
           <div className="p-8 md:p-16 flex flex-col justify-center">
             <div className="mb-8">
-              <h1 className="text-3xl font-black text-slate-900 mb-2">Account Login</h1>
-              <p className="text-sm text-slate-500 font-medium">Enter your email and password to log in.</p>
+              <h1 className="text-3xl font-black text-slate-900 dark:text-darkText mb-2">Account Login</h1>
+              <p className="text-sm text-slate-500 dark:text-darkMuted font-medium">Enter your email and password to log in.</p>
             </div>
 
             {alert && (
@@ -92,11 +92,11 @@ export default function Login() {
             <form onSubmit={handleLogin} className="space-y-5">
               {/* Email */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-darkMuted mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-darkMuted" />
                   <input
                     type="email"
                     value={email}
@@ -111,11 +111,16 @@ export default function Login() {
 
               {/* Password */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                  Password
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-darkMuted">
+                    Password
+                  </label>
+                  <Link to="/forgot-password" className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
+                    Forgot Password?
+                  </Link>
+                </div>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-darkMuted" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
@@ -128,7 +133,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-darkText transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -146,10 +151,10 @@ export default function Login() {
             </form>
 
             {/* Sign Up Link */}
-            <div className="mt-8 text-center text-sm font-semibold text-slate-650">
+            <div className="mt-8 text-center text-sm font-semibold text-slate-600 dark:text-darkMuted">
               <p>
                 Don't have an account?{' '}
-                <Link to="/signup" className="text-blue-600 hover:text-blue-700 transition-colors font-bold">
+                <Link to="/signup" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold">
                   Sign up
                 </Link>
               </p>

@@ -15,7 +15,7 @@ export default function ComparisonFloatingButton() {
   return (
     <div className="fixed bottom-28 right-6 z-40 flex flex-col gap-3">
       {/* Comparison Badge */}
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
+      <div className="bg-white dark:bg-darkCard rounded-2xl shadow-2xl border border-slate-100 dark:border-darkBorder overflow-hidden">
         <button
           onClick={() => navigate('/comparison')}
           className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white flex items-center justify-center gap-3 transition-all"
@@ -28,18 +28,18 @@ export default function ComparisonFloatingButton() {
         </button>
         
         {/* Product Pills */}
-        <div className="p-3 bg-slate-50 border-t border-slate-100 max-h-40 overflow-y-auto">
+        <div className="p-3 bg-slate-50 dark:bg-darkNav border-t border-slate-100 dark:border-darkBorder max-h-40 overflow-y-auto">
           {comparison.map((product) => (
             <div
               key={product.id}
-              className="flex items-center gap-2 p-2 bg-white rounded-lg mb-2 text-xs last:mb-0 group hover:bg-blue-50 transition-all"
+              className="flex items-center gap-2 p-2 bg-white dark:bg-darkCard rounded-lg mb-2 text-xs last:mb-0 group hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-transparent dark:border-darkBorder transition-all"
             >
               <img
                 src={product.image}
                 alt={product.name}
                 className="w-8 h-8 rounded object-cover"
               />
-              <span className="flex-1 font-semibold text-slate-700 line-clamp-1">
+              <span className="flex-1 font-semibold text-slate-700 dark:text-darkText line-clamp-1">
                 {product.name}
               </span>
               <button
@@ -57,7 +57,7 @@ export default function ComparisonFloatingButton() {
       </div>
 
       {/* Info Text */}
-      <p className="text-xs text-slate-500 text-center px-2">
+      <p className="text-xs text-slate-500 dark:text-darkMuted text-center px-2">
         Click to view comparison
       </p>
     </div>

@@ -252,18 +252,18 @@ export default function UserProfile() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/60 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen py-8 px-4 sm:px-6 transition-colors duration-300">
+      <div className="bg-slate-50/60 dark:bg-darkBg text-slate-900 dark:text-darkText min-h-screen py-8 px-4 sm:px-6 transition-colors duration-300">
         <div className="max-w-6xl mx-auto space-y-8">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-darkMuted font-medium">
             <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-slate-800 dark:text-slate-200 font-bold">Customer Account</span>
+            <span className="text-slate-800 dark:text-darkText font-bold">Customer Account</span>
           </div>
 
           {/* User Profile Card Header */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-colors duration-300">
+          <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-darkBorder shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-colors duration-300">
             <div className="flex items-center gap-4 sm:gap-5">
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white font-black text-2xl flex items-center justify-center shadow-md shrink-0">
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
@@ -271,34 +271,34 @@ export default function UserProfile() {
 
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white capitalize">
+                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-darkText capitalize">
                     {user?.name || 'Valued Customer'}
                   </h1>
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md">
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-md">
                     Verified Customer
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 mt-2">
+                <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-darkMuted mt-2">
                   <span className="flex items-center gap-1.5 font-medium">
-                    <Mail className="w-3.5 h-3.5 text-blue-600" /> {user?.email}
+                    <Mail className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> {user?.email}
                   </span>
 
                   {user?.phone && (
                     <span className="flex items-center gap-1.5 font-medium font-mono">
-                      <Phone className="w-3.5 h-3.5 text-emerald-600" /> {user?.phone}
+                      <Phone className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> {user?.phone}
                     </span>
                   )}
 
                   {/* Real User Personal Delivery Address */}
                   <span className="flex items-center gap-1.5 font-medium">
-                    <MapPin className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                     {userDisplayAddress ? (
-                      <span className="text-slate-800 font-semibold">{userDisplayAddress}</span>
+                      <span className="text-slate-800 dark:text-darkText font-semibold">{userDisplayAddress}</span>
                     ) : (
                       <button
                         onClick={() => setIsEditModalOpen(true)}
-                        className="text-blue-600 hover:underline font-bold text-[11px]"
+                        className="text-blue-600 dark:text-blue-400 hover:underline font-bold text-[11px]"
                       >
                         + Add Delivery Address
                       </button>
@@ -307,7 +307,7 @@ export default function UserProfile() {
 
                   <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md hover:bg-blue-100 transition-colors"
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-darkNav px-2 py-0.5 rounded-md hover:bg-blue-100 dark:hover:bg-darkBorder transition-colors"
                   >
                     <Edit2 className="w-3 h-3" /> Edit Profile
                   </button>
@@ -318,19 +318,19 @@ export default function UserProfile() {
             <div className="flex items-center gap-3 w-full md:w-auto">
               <Link
                 to="/wishlist"
-                className="flex-1 md:flex-initial px-4 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 border border-red-100"
+                className="flex-1 md:flex-initial px-4 py-2.5 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 border border-red-100 dark:border-red-900/40"
               >
                 <Heart className="w-4 h-4 fill-red-500" /> Wishlist ({wishlist.length})
               </Link>
               <Link
                 to="/orders"
-                className="flex-1 md:flex-initial px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-blue-100"
+                className="flex-1 md:flex-initial px-5 py-2.5 bg-blue-50 dark:bg-darkNav hover:bg-blue-100 dark:hover:bg-darkBorder text-blue-700 dark:text-blue-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-blue-100 dark:border-darkBorder"
               >
                 <Package className="w-4 h-4" /> Live Tracking
               </Link>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5"
+                className="px-4 py-2.5 bg-slate-100 dark:bg-darkNav hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 text-slate-600 dark:text-darkMuted font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 border border-transparent dark:border-darkBorder"
                 title="Sign Out"
               >
                 <LogOut className="w-4 h-4" /> Sign Out
@@ -339,12 +339,12 @@ export default function UserProfile() {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex gap-2 border-b border-slate-200/80 pb-1 overflow-x-auto">
+          <div className="flex gap-2 border-b border-slate-200/80 dark:border-darkBorder pb-1 overflow-x-auto">
             <button
               onClick={() => setActiveTab('orders')}
               className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'orders'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-slate-500 dark:text-darkMuted hover:text-slate-900 dark:hover:text-darkText'
                 }`}
             >
               <ShoppingBag className="w-4 h-4" /> Orders & Invoices ({liveOrders.length})
@@ -353,8 +353,8 @@ export default function UserProfile() {
             <button
               onClick={() => setActiveTab('warranties')}
               className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'warranties'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-slate-500 dark:text-darkMuted hover:text-slate-900 dark:hover:text-darkText'
                 }`}
             >
               <ShieldCheck className="w-4 h-4" /> Official Warranties ({warrantyItems.length})
@@ -363,8 +363,8 @@ export default function UserProfile() {
             <button
               onClick={() => setActiveTab('showroom')}
               className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'showroom'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-slate-500 dark:text-darkMuted hover:text-slate-900 dark:hover:text-darkText'
                 }`}
             >
               <Store className="w-4 h-4" /> Showroom Pickup & Support
@@ -373,8 +373,8 @@ export default function UserProfile() {
             <button
               onClick={() => setActiveTab('wishlist')}
               className={`pb-3 px-5 text-xs font-bold flex items-center gap-2 border-b-2 transition-all shrink-0 ${activeTab === 'wishlist'
-                  ? 'border-red-500 text-red-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-red-500 text-red-600 dark:text-red-400'
+                  : 'border-transparent text-slate-500 dark:text-darkMuted hover:text-slate-900 dark:hover:text-darkText'
                 }`}
             >
               <Heart className={`w-4 h-4 ${activeTab === 'wishlist' ? 'fill-red-500 text-red-500' : ''}`} /> Saved Wishlist ({wishlist.length})
@@ -385,14 +385,14 @@ export default function UserProfile() {
           {activeTab === 'orders' && (
             <div className="space-y-6">
               {loadingOrders ? (
-                <div className="bg-white rounded-3xl p-12 text-center text-slate-400 text-xs animate-pulse">
+                <div className="bg-white dark:bg-darkCard rounded-3xl p-12 text-center text-slate-400 dark:text-darkMuted text-xs animate-pulse">
                   Loading your orders...
                 </div>
               ) : liveOrders.length === 0 ? (
-                <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm">
-                  <Package className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                  <h3 className="font-bold text-slate-800 text-base mb-1">No Orders Placed Yet</h3>
-                  <p className="text-slate-500 text-xs mb-6 max-w-sm mx-auto">
+                <div className="bg-white dark:bg-darkCard rounded-3xl p-12 text-center border border-slate-200/80 dark:border-darkBorder shadow-sm">
+                  <Package className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <h3 className="font-bold text-slate-800 dark:text-darkText text-base mb-1">No Orders Placed Yet</h3>
+                  <p className="text-slate-500 dark:text-darkMuted text-xs mb-6 max-w-sm mx-auto">
                     When you order original Anker, UGREEN or Baseus accessories, your receipt and live delivery tracking will appear here.
                   </p>
                   <Link
@@ -410,20 +410,20 @@ export default function UserProfile() {
                   return (
                     <div
                       key={ord.id || ord.orderNumber}
-                      className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-blue-300 transition-all space-y-6"
+                      className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-darkBorder shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-500 transition-all space-y-6"
                     >
                       {/* Top Bar: Order ID, Date, Status */}
-                      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-darkBorder">
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider font-mono">
+                            <span className="text-[10px] text-slate-400 dark:text-darkMuted font-bold uppercase tracking-wider font-mono">
                               ORDER NO.
                             </span>
-                            <span className="font-black text-slate-900 text-base font-mono">
+                            <span className="font-black text-slate-900 dark:text-darkText text-base font-mono">
                               {ord.orderNumber || `#NV-${ord.id}`}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-slate-500 dark:text-darkMuted">
                             Placed on {new Date(ord.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </p>
                         </div>
@@ -431,10 +431,10 @@ export default function UserProfile() {
                         <div className="flex items-center gap-3">
                           <span
                             className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${isDelivered
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
                                 : isShipped
-                                  ? 'bg-blue-50 text-blue-700 border-blue-200'
-                                  : 'bg-amber-50 text-amber-700 border-amber-200'
+                                  ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
+                                  : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
                               }`}
                           >
                             {ord.status || 'PROCESSING'}
@@ -442,22 +442,22 @@ export default function UserProfile() {
 
                           <button
                             onClick={() => setSelectedInvoice(ord)}
-                            className="px-3.5 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl border border-slate-200/80 transition-all flex items-center gap-1.5"
+                            className="px-3.5 py-1.5 bg-slate-50 dark:bg-darkNav hover:bg-slate-100 dark:hover:bg-darkBorder text-slate-700 dark:text-darkText font-bold text-xs rounded-xl border border-slate-200/80 dark:border-darkBorder transition-all flex items-center gap-1.5"
                           >
-                            <Receipt className="w-3.5 h-3.5 text-blue-600" /> View Invoice
+                            <Receipt className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> View Invoice
                           </button>
                         </div>
                       </div>
 
                       {/* Delivery Stepper */}
-                      <div className="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-100">
-                        <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-3">
-                          <span className="flex items-center gap-1.5 text-slate-900">
-                            <Truck className="w-4 h-4 text-blue-600" />
+                      <div className="bg-slate-50/80 dark:bg-darkNav rounded-2xl p-4 sm:p-5 border border-slate-100 dark:border-darkBorder">
+                        <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-darkText mb-3">
+                          <span className="flex items-center gap-1.5 text-slate-900 dark:text-darkText">
+                            <Truck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                             {isDelivered ? 'Delivered to Destination' : isShipped ? 'Package On The Way (In Transit)' : 'Order Processing & Quality Check'}
                           </span>
                           {ord.courier && (
-                            <span className="text-[11px] text-slate-500 font-mono">
+                            <span className="text-[11px] text-slate-500 dark:text-darkMuted font-mono">
                               Courier: {ord.courier}
                             </span>
                           )}
@@ -468,7 +468,7 @@ export default function UserProfile() {
                             <div className="w-6 h-6 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs">
                               ✓
                             </div>
-                            <span className="text-[10px] font-bold text-slate-700 block">Confirmed</span>
+                            <span className="text-[10px] font-bold text-slate-700 dark:text-darkText block">Confirmed</span>
                           </div>
 
                           <div className="text-center">
@@ -476,51 +476,51 @@ export default function UserProfile() {
                               }`}>
                               {isShipped || isDelivered ? '✓' : '2'}
                             </div>
-                            <span className="text-[10px] font-bold text-slate-700 block">Packed</span>
+                            <span className="text-[10px] font-bold text-slate-700 dark:text-darkText block">Packed</span>
                           </div>
 
                           <div className="text-center">
-                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isDelivered ? 'bg-emerald-600 text-white' : isShipped ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-200 text-slate-500'
+                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isDelivered ? 'bg-emerald-600 text-white' : isShipped ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-200 dark:bg-darkCard text-slate-500 dark:text-darkMuted'
                               }`}>
                               {isDelivered ? '✓' : '3'}
                             </div>
-                            <span className="text-[10px] font-bold text-slate-700 block">In Transit</span>
+                            <span className="text-[10px] font-bold text-slate-700 dark:text-darkText block">In Transit</span>
                           </div>
 
                           <div className="text-center">
-                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isDelivered ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500'
+                            <div className={`w-6 h-6 mx-auto rounded-full flex items-center justify-center text-[10px] font-bold mb-1 shadow-xs ${isDelivered ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-darkCard text-slate-500 dark:text-darkMuted'
                               }`}>
                               {isDelivered ? '✓' : '4'}
                             </div>
-                            <span className="text-[10px] font-bold text-slate-700 block">Delivered</span>
+                            <span className="text-[10px] font-bold text-slate-700 dark:text-darkText block">Delivered</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Ordered Products List */}
-                      <div className="divide-y divide-slate-100">
+                      <div className="divide-y divide-slate-100 dark:divide-darkBorder">
                         {(ord.items || []).map((item, idx) => (
                           <div key={idx} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-3.5">
                               <img
                                 src={item.productImage || 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=120'}
                                 alt={item.productName}
-                                className="w-14 h-14 rounded-xl object-contain bg-slate-50 p-1.5 border border-slate-100 shrink-0"
+                                className="w-14 h-14 rounded-xl object-contain bg-slate-50 dark:bg-darkNav p-1.5 border border-slate-100 dark:border-darkBorder shrink-0"
                               />
                               <div>
-                                <h5 className="font-bold text-slate-900 text-xs sm:text-sm line-clamp-1">
+                                <h5 className="font-bold text-slate-900 dark:text-darkText text-xs sm:text-sm line-clamp-1">
                                   {item.productName}
                                 </h5>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-[11px] text-slate-500">Qty: <b>{item.quantity}</b></span>
-                                  <span className="text-slate-300">•</span>
-                                  <span className="text-[11px] font-bold text-blue-600 font-mono">
+                                  <span className="text-[11px] text-slate-500 dark:text-darkMuted">Qty: <b>{item.quantity}</b></span>
+                                  <span className="text-slate-300 dark:text-darkBorder">•</span>
+                                  <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 font-mono">
                                     Rs. {(item.price || 0).toLocaleString()}
                                   </span>
                                   {item.warranty && (
                                     <>
-                                      <span className="text-slate-300">•</span>
-                                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                      <span className="text-slate-300 dark:text-darkBorder">•</span>
+                                      <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded">
                                         {item.warranty}
                                       </span>
                                     </>
@@ -531,7 +531,7 @@ export default function UserProfile() {
 
                             <button
                               onClick={() => handleReorder(item)}
-                              className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[11px] rounded-xl transition-all flex items-center gap-1 shrink-0"
+                              className="px-3 py-1.5 bg-blue-50 dark:bg-darkNav hover:bg-blue-100 dark:hover:bg-darkBorder text-blue-700 dark:text-blue-400 font-bold text-[11px] rounded-xl transition-all flex items-center gap-1 shrink-0 border border-transparent dark:border-darkBorder"
                             >
                               <RefreshCw className="w-3 h-3" /> Buy Again
                             </button>
@@ -540,23 +540,23 @@ export default function UserProfile() {
                       </div>
 
                       {/* Order Footer: Payment & Delivery Summary */}
-                      <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+                      <div className="pt-4 border-t border-slate-100 dark:border-darkBorder flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
                         <div className="space-y-1">
-                          <p className="text-slate-500">
-                            <span className="font-bold text-slate-700">Delivery Address:</span>{' '}
+                          <p className="text-slate-500 dark:text-darkMuted">
+                            <span className="font-bold text-slate-700 dark:text-darkText">Delivery Address:</span>{' '}
                             {ord.shippingAddress || userDisplayAddress}
                           </p>
-                          <p className="text-slate-500">
-                            <span className="font-bold text-slate-700">Payment:</span>{' '}
+                          <p className="text-slate-500 dark:text-darkMuted">
+                            <span className="font-bold text-slate-700 dark:text-darkText">Payment:</span>{' '}
                             {ord.paymentMethod === 'CARD' ? 'Debit/Credit Card (Paid Online)' : 'Cash on Delivery (COD)'}
                           </p>
                         </div>
 
                         <div className="text-right sm:self-center shrink-0">
-                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
+                          <span className="text-[10px] text-slate-400 dark:text-darkMuted font-bold uppercase tracking-wider block">
                             Total Paid
                           </span>
-                          <span className="text-lg font-black text-slate-900 font-sans">
+                          <span className="text-lg font-black text-slate-900 dark:text-darkText font-sans">
                             Rs. {(ord.totalAmount || 0).toLocaleString()}
                           </span>
                         </div>
@@ -573,23 +573,23 @@ export default function UserProfile() {
           {activeTab === 'warranties' && (
             <div className="space-y-4">
               {warrantyItems.map((w) => (
-                <div key={w.id} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div key={w.id} className="bg-white dark:bg-darkCard rounded-3xl p-6 border border-slate-200/80 dark:border-darkBorder shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 font-mono bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 font-mono bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md border border-blue-100 dark:border-blue-800">
                         {w.brand} Official
                       </span>
-                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md">
                         {w.status}
                       </span>
                     </div>
-                    <h4 className="font-bold text-slate-900 text-sm">{w.productName}</h4>
-                    <p className="text-xs text-slate-400 font-mono">Serial: {w.serialNumber} • Claimable at NVSHOP Ambalangoda</p>
+                    <h4 className="font-bold text-slate-900 dark:text-darkText text-sm">{w.productName}</h4>
+                    <p className="text-xs text-slate-400 dark:text-darkMuted font-mono">Serial: {w.serialNumber} • Claimable at NVSHOP Ambalangoda</p>
                   </div>
 
                   <div className="text-left sm:text-right shrink-0">
-                    <span className="text-xs font-bold text-slate-900 block">{w.warrantyPeriod}</span>
-                    <span className="text-[11px] text-emerald-600 font-bold">{w.daysRemaining} Days Remaining</span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-darkText block">{w.warrantyPeriod}</span>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">{w.daysRemaining} Days Remaining</span>
                   </div>
                 </div>
               ))}
@@ -598,31 +598,31 @@ export default function UserProfile() {
 
           {/* TAB 3: SHOWROOM & SUPPORT */}
           {activeTab === 'showroom' && (
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+            <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-darkBorder shadow-sm space-y-6">
               <div>
-                <h3 className="text-lg font-black text-slate-900 mb-1">Ambalangoda Showroom Direct Support</h3>
-                <p className="text-xs text-slate-500">
+                <h3 className="text-lg font-black text-slate-900 dark:text-darkText mb-1">Ambalangoda Showroom Direct Support</h3>
+                <p className="text-xs text-slate-500 dark:text-darkMuted">
                   Pick up your online orders in person or visit for device testing and warranty claims.
                 </p>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4 text-xs">
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/60 space-y-2">
-                  <p className="font-bold text-slate-900 flex items-center gap-2">
-                    <Store className="w-4 h-4 text-blue-600" /> Showroom Address:
+                <div className="p-4 bg-slate-50 dark:bg-darkNav rounded-2xl border border-slate-200/60 dark:border-darkBorder space-y-2">
+                  <p className="font-bold text-slate-900 dark:text-darkText flex items-center gap-2">
+                    <Store className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Showroom Address:
                   </p>
-                  <p className="text-slate-600 leading-relaxed">
+                  <p className="text-slate-600 dark:text-darkMuted leading-relaxed">
                     185/1/2B New Road, Ambalangoda 80300, Sri Lanka
                   </p>
-                  <p className="text-[11px] text-slate-400 font-medium">Open 7 days a week: 10:00 AM – 8:00 PM</p>
+                  <p className="text-[11px] text-slate-400 dark:text-darkMuted font-medium">Open 7 days a week: 10:00 AM – 8:00 PM</p>
                 </div>
 
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/60 space-y-2">
-                  <p className="font-bold text-slate-900 flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-emerald-600" /> Hotlines & WhatsApp:
+                <div className="p-4 bg-slate-50 dark:bg-darkNav rounded-2xl border border-slate-200/60 dark:border-darkBorder space-y-2">
+                  <p className="font-bold text-slate-900 dark:text-darkText flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Hotlines & WhatsApp:
                   </p>
-                  <p className="text-slate-600 font-bold">+94 76 989 0079 / +94 77 747 0186</p>
-                  <p className="text-slate-600">Email: nvshopamba@gmail.com</p>
+                  <p className="text-slate-600 dark:text-darkMuted font-bold">+94 76 989 0079 / +94 77 747 0186</p>
+                  <p className="text-slate-600 dark:text-darkMuted">Email: nvshopamba@gmail.com</p>
                 </div>
               </div>
 
@@ -639,14 +639,14 @@ export default function UserProfile() {
 
           {/* TAB 4: WISHLIST */}
           {activeTab === 'wishlist' && (
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+            <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-darkBorder shadow-sm space-y-6">
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                  <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <h3 className="text-lg font-black text-slate-900 dark:text-darkText flex items-center gap-2">
                     <Heart className="w-5 h-5 text-red-500 fill-red-500" />
                     My Saved Items ({wishlist.length})
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-darkMuted">
                     Products you've saved to buy later or monitor for price drops.
                   </p>
                 </div>
@@ -659,10 +659,10 @@ export default function UserProfile() {
               </div>
 
               {wishlist.length === 0 ? (
-                <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-100">
-                  <Heart className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-                  <p className="text-slate-700 font-bold text-sm">No items in your wishlist</p>
-                  <p className="text-slate-400 text-xs mb-4">Discover premium accessories and save the ones you love.</p>
+                <div className="text-center py-12 bg-slate-50 dark:bg-darkNav rounded-2xl border border-slate-100 dark:border-darkBorder">
+                  <Heart className="w-10 h-10 text-slate-300 dark:text-darkBorder mx-auto mb-2" />
+                  <p className="text-slate-700 dark:text-darkText font-bold text-sm">No items in your wishlist</p>
+                  <p className="text-slate-400 dark:text-darkMuted text-xs mb-4">Discover premium accessories and save the ones you love.</p>
                   <Link to="/products" className="btn-secondary text-xs px-4 py-2 inline-flex">
                     Browse Products
                   </Link>
@@ -670,35 +670,35 @@ export default function UserProfile() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {wishlist.map((item) => (
-                    <div key={item.id} className="p-4 rounded-2xl border border-slate-200/70 hover:border-slate-300 transition-all flex flex-col justify-between">
+                    <div key={item.id} className="p-4 rounded-2xl border border-slate-200/70 dark:border-darkBorder bg-white dark:bg-darkNav/60 hover:border-slate-300 dark:hover:border-slate-600 transition-all flex flex-col justify-between">
                       <div className="flex gap-3">
                         <img
                           src={item.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
                           alt={item.name}
-                          className="w-16 h-16 rounded-xl object-cover bg-slate-100 shrink-0"
+                          className="w-16 h-16 rounded-xl object-cover bg-slate-100 dark:bg-darkNav shrink-0"
                         />
                         <div className="overflow-hidden">
                           <p className="text-[10px] font-bold text-primary uppercase">{item.category}</p>
-                          <Link to={`/product/${item.id}`} className="font-bold text-slate-900 text-xs hover:text-primary transition-colors line-clamp-1 block">
+                          <Link to={`/product/${item.id}`} className="font-bold text-slate-900 dark:text-darkText text-xs hover:text-primary transition-colors line-clamp-1 block">
                             {item.name}
                           </Link>
-                          <p className="text-xs font-black text-slate-900 mt-1">Rs. {item.price?.toLocaleString()}</p>
+                          <p className="text-xs font-black text-slate-900 dark:text-darkText mt-1">Rs. {item.price?.toLocaleString()}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100">
+                      <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-darkBorder">
                         <button
                           onClick={() => {
                             addToCart(item);
                             removeFromWishlist(item.id);
                           }}
-                          className="flex-1 py-1.5 px-3 bg-slate-900 hover:bg-primary text-white text-[11px] font-bold rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                          className="flex-1 py-1.5 px-3 bg-slate-900 dark:bg-primary dark:text-white hover:bg-primary text-white text-[11px] font-bold rounded-xl transition-colors flex items-center justify-center gap-1.5"
                         >
                           <ShoppingCart className="w-3.5 h-3.5" /> Move to Cart
                         </button>
                         <button
                           onClick={() => removeFromWishlist(item.id)}
-                          className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+                          className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
                           title="Remove"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -717,57 +717,57 @@ export default function UserProfile() {
 
       {/* VIEW / PRINT INVOICE MODAL */}
       {selectedInvoice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-100 space-y-6 animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-100 dark:border-darkBorder space-y-6 animate-in zoom-in-95">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-darkBorder">
               <div>
-                <span className="text-blue-600 font-black text-lg tracking-tight">NVSHOP.LK</span>
-                <p className="text-[11px] text-slate-400 font-mono">Invoice #{selectedInvoice.orderNumber}</p>
+                <span className="text-blue-600 dark:text-blue-400 font-black text-lg tracking-tight">NVSHOP.LK</span>
+                <p className="text-[11px] text-slate-400 dark:text-darkMuted font-mono">Invoice #{selectedInvoice.orderNumber}</p>
               </div>
               <button
                 onClick={() => setSelectedInvoice(null)}
-                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-darkText rounded-xl hover:bg-slate-100 dark:hover:bg-darkNav transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 rounded-2xl">
+              <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-darkNav rounded-2xl border border-slate-100 dark:border-darkBorder">
                 <div>
-                  <span className="text-slate-400 block font-medium">Billed To:</span>
-                  <span className="font-bold text-slate-900 block">{user?.name}</span>
-                  <span className="text-slate-600 block">{user?.email}</span>
-                  <span className="text-slate-600 block">{selectedInvoice.shippingAddress || userDisplayAddress}</span>
+                  <span className="text-slate-400 dark:text-darkMuted block font-medium">Billed To:</span>
+                  <span className="font-bold text-slate-900 dark:text-darkText block">{user?.name}</span>
+                  <span className="text-slate-600 dark:text-darkMuted block">{user?.email}</span>
+                  <span className="text-slate-600 dark:text-darkMuted block">{selectedInvoice.shippingAddress || userDisplayAddress}</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-slate-400 block font-medium">Date & Status:</span>
-                  <span className="font-bold text-slate-900 block">
+                  <span className="text-slate-400 dark:text-darkMuted block font-medium">Date & Status:</span>
+                  <span className="font-bold text-slate-900 dark:text-darkText block">
                     {new Date(selectedInvoice.createdAt || Date.now()).toLocaleDateString()}
                   </span>
-                  <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded inline-block mt-1">
+                  <span className="text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded inline-block mt-1">
                     {selectedInvoice.status}
                   </span>
                 </div>
               </div>
 
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-slate-100 dark:divide-darkBorder">
                 {(selectedInvoice.items || []).map((it, idx) => (
                   <div key={idx} className="py-2.5 flex justify-between">
                     <div>
-                      <p className="font-bold text-slate-800">{it.productName}</p>
-                      <p className="text-[10px] text-slate-400">Qty: {it.quantity}</p>
+                      <p className="font-bold text-slate-800 dark:text-darkText">{it.productName}</p>
+                      <p className="text-[10px] text-slate-400 dark:text-darkMuted">Qty: {it.quantity}</p>
                     </div>
-                    <p className="font-black text-slate-900 font-mono">
+                    <p className="font-black text-slate-900 dark:text-darkText font-mono">
                       Rs. {((it.price || 0) * (it.quantity || 1)).toLocaleString()}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-sm">
-                <span className="font-bold text-slate-700">Total Amount:</span>
-                <span className="font-black text-blue-600 text-base font-sans">
+              <div className="pt-3 border-t border-slate-100 dark:border-darkBorder flex justify-between items-center text-sm">
+                <span className="font-bold text-slate-700 dark:text-darkText">Total Amount:</span>
+                <span className="font-black text-blue-600 dark:text-blue-400 text-base font-sans">
                   Rs. {(selectedInvoice.totalAmount || 0).toLocaleString()}
                 </span>
               </div>
@@ -782,7 +782,7 @@ export default function UserProfile() {
               </button>
               <button
                 onClick={() => setSelectedInvoice(null)}
-                className="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all"
+                className="px-5 py-3 bg-slate-100 dark:bg-darkNav hover:bg-slate-200 dark:hover:bg-darkBorder text-slate-700 dark:text-darkText font-bold text-xs rounded-xl transition-all"
               >
                 Close
               </button>
@@ -793,57 +793,57 @@ export default function UserProfile() {
 
       {/* EDIT PROFILE / DELIVERY ADDRESS MODAL */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-100 space-y-5 animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 dark:bg-black/80 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-100 dark:border-darkBorder space-y-5 animate-in zoom-in-95">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-darkBorder">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
                   <HomeIcon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-black text-slate-900 text-base">Edit Delivery Address</h3>
-                  <p className="text-[11px] text-slate-400">Update your personal shipping details</p>
+                  <h3 className="font-black text-slate-900 dark:text-darkText text-base">Edit Delivery Address</h3>
+                  <p className="text-[11px] text-slate-400 dark:text-darkMuted">Update your personal shipping details</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-darkText rounded-xl hover:bg-slate-100 dark:hover:bg-darkNav transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {saveMessage && (
-              <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-xl flex items-center gap-2">
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-xl flex items-center gap-2">
                 <Check className="w-4 h-4" /> {saveMessage}
               </div>
             )}
 
             <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Full Name</label>
+                <label className="block font-bold text-slate-700 dark:text-darkText mb-1">Full Name</label>
                 <input
                   type="text"
                   value={editForm.name}
                   onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                   placeholder="Kulashi Himasha"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50 font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-darkBorder focus:border-blue-600 focus:outline-none bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Phone Number</label>
+                <label className="block font-bold text-slate-700 dark:text-darkText mb-1">Phone Number</label>
                 <input
                   type="tel"
                   value={editForm.phone}
                   onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
                   placeholder="+94 7X XXX XXXX"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50 font-mono"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-darkBorder focus:border-blue-600 focus:outline-none bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">
+                <label className="block font-bold text-slate-700 dark:text-darkText mb-1">
                   Personal Delivery Address <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -851,10 +851,10 @@ export default function UserProfile() {
                   value={editForm.address}
                   onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
                   placeholder="e.g. 185/1/2B New Road, Ambalangoda, Sri Lanka"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50 leading-relaxed font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-darkBorder focus:border-blue-600 focus:outline-none bg-slate-50 dark:bg-darkNav text-slate-900 dark:text-darkText leading-relaxed font-medium"
                   required
                 />
-                <p className="text-[10px] text-slate-400 mt-1">
+                <p className="text-[10px] text-slate-400 dark:text-darkMuted mt-1">
                   This address will be used for your Islandwide courier deliveries.
                 </p>
               </div>
@@ -863,14 +863,14 @@ export default function UserProfile() {
                 <button
                   type="button"
                   onClick={() => setIsEditModalOpen(false)}
-                  className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all"
+                  className="flex-1 py-3 bg-slate-100 dark:bg-darkNav hover:bg-slate-200 dark:hover:bg-darkBorder text-slate-700 dark:text-darkText font-bold rounded-xl transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={savingProfile}
-                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold rounded-xl shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-1.5"
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white font-bold rounded-xl shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-1.5"
                 >
                   {savingProfile ? 'Saving...' : 'Save Address'}
                 </button>

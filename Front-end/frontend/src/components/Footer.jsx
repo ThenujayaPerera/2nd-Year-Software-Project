@@ -37,7 +37,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-950 text-slate-200 border-t border-slate-900">
+    <footer className="bg-slate-950 dark:bg-darkNav text-slate-200 dark:text-darkText border-t border-slate-900 dark:border-darkBorder transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           {/* Brand */}
@@ -49,12 +49,12 @@ export default function Footer() {
                 className="h-10 w-auto object-contain bg-white/90 p-1.5 rounded-lg" 
               />
             </Link>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-400 dark:text-darkMuted leading-relaxed">
               Elevating your mobile experience with curated, high-performance accessories designed to protect and power your devices.
             </p>
             <div className="flex gap-3 mt-2">
               {socialLinks.map((social, idx) => (
-                <a key={idx} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="p-2.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850 hover:border-slate-700 transition-all">
+                <a key={idx} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="p-2.5 rounded-full bg-slate-900 dark:bg-darkCard border border-slate-800 dark:border-darkBorder text-slate-400 dark:text-darkMuted hover:text-white hover:bg-slate-850 dark:hover:bg-[#252525] hover:border-slate-700 dark:hover:border-zinc-700 transition-all">
                   {social.svg}
                 </a>
               ))}

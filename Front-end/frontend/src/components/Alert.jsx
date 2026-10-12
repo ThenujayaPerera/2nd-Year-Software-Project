@@ -1,9 +1,9 @@
 export default function Alert({ type = 'info', message, onClose }) {
   const colors = {
-    success: 'bg-green-100 text-green-800 border-green-300',
-    error: 'bg-red-100 text-red-800 border-red-300',
-    info: 'bg-blue-100 text-blue-800 border-blue-300',
-    warning: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+    success: 'bg-green-100 dark:bg-emerald-950/60 text-green-800 dark:text-emerald-300 border-green-300 dark:border-emerald-800/80',
+    error: 'bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800/80',
+    info: 'bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-800/80',
+    warning: 'bg-yellow-100 dark:bg-amber-950/60 text-yellow-800 dark:text-amber-300 border-yellow-300 dark:border-amber-800/80',
   };
 
   const icons = {

@@ -230,20 +230,20 @@ export default function Wishlist() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/70 min-h-screen py-8 sm:py-12 px-4 sm:px-6">
+      <div className="bg-slate-50/70 dark:bg-darkBg min-h-screen py-8 sm:py-12 px-4 sm:px-6 transition-colors duration-300">
         <div className="max-w-7xl mx-auto space-y-8">
 
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-darkMuted font-medium">
             <Link to="/" className="hover:text-primary transition-colors">Home</Link>
             <span>/</span>
             <Link to="/products" className="hover:text-primary transition-colors">Products</Link>
             <span>/</span>
-            <span className="text-slate-900 font-bold">My Wishlist</span>
+            <span className="text-slate-900 dark:text-darkText font-bold">My Wishlist</span>
           </div>
 
           {/* Header Banner */}
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm relative overflow-hidden">
+          <div className="bg-white dark:bg-darkCard rounded-3xl p-6 sm:p-10 border border-slate-200/80 dark:border-darkBorder shadow-sm relative overflow-hidden">
             <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute right-12 top-6 hidden lg:block opacity-10">
               <Heart className="w-48 h-48 text-red-500 fill-red-500" />
@@ -251,14 +251,14 @@ export default function Wishlist() {
 
             <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 border border-red-200/60 rounded-full text-red-600 font-bold text-xs uppercase tracking-wider mb-3">
-                  <Heart className="w-3.5 h-3.5 fill-red-600" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-red-50 dark:bg-red-950/40 border border-red-200/60 dark:border-red-900/60 rounded-full text-red-600 dark:text-red-400 font-bold text-xs uppercase tracking-wider mb-3">
+                  <Heart className="w-3.5 h-3.5 fill-red-600 dark:fill-red-400" />
                   Saved Tech Items
                 </div>
-                <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-darkText tracking-tight">
                   My Wishlist
                 </h1>
-                <p className="text-slate-500 text-sm mt-1 max-w-xl">
+                <p className="text-slate-500 dark:text-darkMuted text-sm mt-1 max-w-xl">
                   Keep track of premium chargers, wireless gear, cases and audio products you love. Don't let them sell out!
                 </p>
               </div>
@@ -271,7 +271,7 @@ export default function Wishlist() {
                     className="btn-secondary text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-sm"
                     title="Share your wishlist"
                   >
-                    <Share2 className="w-4 h-4 text-slate-600" />
+                    <Share2 className="w-4 h-4 text-slate-600 dark:text-darkText" />
                     Share List
                   </button>
 
@@ -286,7 +286,7 @@ export default function Wishlist() {
 
                   <button
                     onClick={() => setIsClearModalOpen(true)}
-                    className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                    className="p-2.5 text-slate-400 dark:text-darkMuted hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"
                     title="Clear wishlist"
                     aria-label="Clear wishlist"
                   >
@@ -298,9 +298,9 @@ export default function Wishlist() {
 
             {/* Guest Banner Notice */}
             {!isAuthenticated && wishlist.length > 0 && (
-              <div className="mt-6 p-3.5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-blue-900">
+              <div className="mt-6 p-3.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-darkNav dark:to-darkNav border border-blue-200/80 dark:border-darkBorder rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-blue-900 dark:text-blue-300">
                 <div className="flex items-center gap-2.5">
-                  <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                  <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                   <span>
                     <b>Browsing as Guest:</b> Items are saved in this browser. Log in to sync across your smartphone, laptop, and tablet.
                   </span>
@@ -318,43 +318,43 @@ export default function Wishlist() {
           {/* Aggregate Stats Ribbon (Only if items exist) */}
           {wishlist.length > 0 && (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+              <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-500 flex items-center justify-center shrink-0">
                   <Heart className="w-6 h-6 fill-red-500" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Saved</p>
-                  <p className="text-xl sm:text-2xl font-black text-slate-900">{wishlist.length} item{wishlist.length !== 1 ? 's' : ''}</p>
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-darkMuted uppercase tracking-wider">Total Saved</p>
+                  <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-darkText">{wishlist.length} item{wishlist.length !== 1 ? 's' : ''}</p>
                 </div>
               </div>
 
-              <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
+              <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <Tag className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Estimated Value</p>
-                  <p className="text-xl sm:text-2xl font-black text-slate-900">Rs. {totalValue.toLocaleString()}</p>
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-darkMuted uppercase tracking-wider">Estimated Value</p>
+                  <p className="text-xl sm:text-2xl font-black text-slate-900 dark:text-darkText">Rs. {totalValue.toLocaleString()}</p>
                 </div>
               </div>
 
-              <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center shrink-0">
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Stock Status</p>
-                  <p className="text-xl sm:text-2xl font-black text-emerald-600">{inStockCount} / {wishlist.length} in stock</p>
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-darkMuted uppercase tracking-wider">Stock Status</p>
+                  <p className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">{inStockCount} / {wishlist.length} in stock</p>
                 </div>
               </div>
 
-              <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+              <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center shrink-0">
                   <Zap className="w-6 h-6 fill-amber-500" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Potential Savings</p>
-                  <p className="text-xl sm:text-2xl font-black text-amber-600">
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-darkMuted uppercase tracking-wider">Potential Savings</p>
+                  <p className="text-xl sm:text-2xl font-black text-amber-600 dark:text-amber-400">
                     {totalSavings > 0 ? `Rs. ${totalSavings.toLocaleString()}` : 'Best Prices'}
                   </p>
                 </div>
@@ -366,14 +366,14 @@ export default function Wishlist() {
           {wishlist.length === 0 ? (
             /* EMPTY STATE WITH CURATED RECOMMENDATIONS */
             <div className="space-y-12">
-              <div className="bg-white rounded-3xl border border-slate-200/80 p-12 sm:p-16 text-center max-w-2xl mx-auto shadow-sm">
-                <div className="w-24 h-24 bg-gradient-to-tr from-red-100 to-pink-50 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+              <div className="bg-white dark:bg-darkCard rounded-3xl border border-slate-200/80 dark:border-darkBorder p-12 sm:p-16 text-center max-w-2xl mx-auto shadow-sm">
+                <div className="w-24 h-24 bg-gradient-to-tr from-red-100 to-pink-50 dark:from-red-950/40 dark:to-pink-950/20 text-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
                   <Heart className="w-12 h-12 fill-red-500 animate-pulse" />
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3">
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-darkText mb-3">
                   Your Wishlist is Empty
                 </h2>
-                <p className="text-slate-500 text-sm max-w-md mx-auto mb-8 leading-relaxed">
+                <p className="text-slate-500 dark:text-darkMuted text-sm max-w-md mx-auto mb-8 leading-relaxed">
                   You haven't saved any products yet. Browse our selection of genuine chargers, cables, earbuds, and accessories, and tap the heart icon to save items.
                 </p>
 
@@ -398,11 +398,11 @@ export default function Wishlist() {
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
+                      <h3 className="text-xl font-black text-slate-900 dark:text-darkText flex items-center gap-2">
                         <Sparkles className="w-5 h-5 text-amber-500" />
                         Popular Tech Accessories
                       </h3>
-                      <p className="text-xs text-slate-500">Add these customer favorites directly to your wishlist or cart</p>
+                      <p className="text-xs text-slate-500 dark:text-darkMuted">Add these customer favorites directly to your wishlist or cart</p>
                     </div>
                     <Link to="/products" className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                       View all products <ArrowRight className="w-3.5 h-3.5" />
@@ -413,7 +413,7 @@ export default function Wishlist() {
                     {recommendedProducts.map((product) => (
                       <div key={product.id} className="card-premium group relative flex flex-col justify-between">
                         <div>
-                          <div className="relative overflow-hidden rounded-xl mb-4 bg-slate-100 aspect-square">
+                          <div className="relative overflow-hidden rounded-xl mb-4 bg-slate-100 dark:bg-darkNav aspect-square">
                             <img
                               src={product.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
                               alt={product.name}
@@ -429,22 +429,22 @@ export default function Wishlist() {
                           <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
                             {product.category || 'Accessories'}
                           </span>
-                          <h4 className="font-bold text-slate-900 text-sm mt-1 mb-2 line-clamp-2">
+                          <h4 className="font-bold text-slate-900 dark:text-darkText text-sm mt-1 mb-2 line-clamp-2">
                             {product.name}
                           </h4>
                           <div className="flex items-baseline gap-2 mb-4">
-                            <span className="text-base font-black text-slate-900">
+                            <span className="text-base font-black text-slate-900 dark:text-darkText">
                               Rs. {product.price?.toLocaleString()}
                             </span>
                             {product.originalPrice && (
-                              <span className="text-xs text-slate-400 line-through">
+                              <span className="text-xs text-slate-400 dark:text-darkMuted line-through">
                                 Rs. {product.originalPrice?.toLocaleString()}
                               </span>
                             )}
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                        <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-darkBorder">
                           <button
                             onClick={() => {
                               useWishlistStore.getState().addToWishlist(product);
@@ -452,9 +452,9 @@ export default function Wishlist() {
                                 toast(`${product.name} saved to wishlist!`, { type: 'success' });
                               }
                             }}
-                            className="flex-1 py-2 px-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                            className="flex-1 py-2 px-3 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-950/60 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
                           >
-                            <Heart className="w-3.5 h-3.5 fill-red-600" /> Wishlist
+                            <Heart className="w-3.5 h-3.5 fill-red-600 dark:fill-red-400" /> Wishlist
                           </button>
                           <button
                             onClick={() => {
@@ -463,7 +463,7 @@ export default function Wishlist() {
                                 toast(`${product.name} added to cart!`, { type: 'success' });
                               }
                             }}
-                            className="p-2 bg-slate-900 hover:bg-primary text-white rounded-xl transition-colors"
+                            className="p-2 bg-slate-900 dark:bg-slate-800 hover:bg-primary text-white rounded-xl transition-colors"
                             title="Add to cart"
                           >
                             <ShoppingCart className="w-4 h-4" />
@@ -480,22 +480,22 @@ export default function Wishlist() {
             <div className="space-y-6">
 
               {/* Toolbar Controls */}
-              <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div className="bg-white dark:bg-darkCard rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-darkBorder shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 
                 {/* Left: Search input */}
                 <div className="relative flex-1 max-w-md">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-slate-400 dark:text-darkMuted absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Filter saved items by name or brand..."
-                    className="w-full pl-10 pr-9 py-2 bg-slate-100 hover:bg-slate-200/60 focus:bg-white border-none rounded-xl text-xs outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    className="w-full pl-10 pr-9 py-2 bg-slate-100 hover:bg-slate-200/60 dark:bg-darkNav dark:hover:bg-darkNav/80 focus:bg-white dark:focus:bg-darkBg text-slate-900 dark:text-darkText border border-transparent dark:border-darkBorder rounded-xl text-xs outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-400 dark:placeholder:text-darkMuted"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-darkMuted hover:text-slate-600 dark:hover:text-slate-200"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
@@ -510,8 +510,8 @@ export default function Wishlist() {
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${selectedCategory === cat
-                            ? 'bg-slate-900 text-white shadow-sm'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                            ? 'bg-slate-900 dark:bg-primary text-white shadow-sm'
+                            : 'bg-slate-100 dark:bg-darkNav text-slate-600 dark:text-darkMuted hover:bg-slate-200/70 dark:hover:bg-darkBg'
                           }`}
                       >
                         {cat}
@@ -522,7 +522,7 @@ export default function Wishlist() {
 
                 {/* Right: In-stock toggle, Sorting dropdown & View layout mode */}
                 <div className="flex items-center gap-3 self-end lg:self-auto">
-                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+                  <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-darkMuted cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={inStockOnly}
@@ -532,15 +532,15 @@ export default function Wishlist() {
                     In-Stock Only
                   </label>
 
-                  <div className="h-6 w-px bg-slate-200" />
+                  <div className="h-6 w-px bg-slate-200 dark:bg-darkBorder" />
 
                   {/* Sort selector */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
-                    <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                  <div className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-darkMuted">
+                    <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 dark:text-darkMuted" />
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-slate-100 hover:bg-slate-200/70 border-none rounded-xl text-xs font-bold px-2.5 py-1.5 outline-none cursor-pointer"
+                      className="bg-slate-100 dark:bg-darkNav text-slate-900 dark:text-darkText hover:bg-slate-200/70 dark:hover:bg-darkBg border border-transparent dark:border-darkBorder rounded-xl text-xs font-bold px-2.5 py-1.5 outline-none cursor-pointer"
                     >
                       <option value="recent">Recently Added</option>
                       <option value="price_asc">Price: Low to High</option>
@@ -550,13 +550,13 @@ export default function Wishlist() {
                     </select>
                   </div>
 
-                  <div className="h-6 w-px bg-slate-200 hidden sm:block" />
+                  <div className="h-6 w-px bg-slate-200 dark:bg-darkBorder hidden sm:block" />
 
                   {/* Grid vs List toggle */}
-                  <div className="hidden sm:flex items-center bg-slate-100 rounded-xl p-0.5">
+                  <div className="hidden sm:flex items-center bg-slate-100 dark:bg-darkNav rounded-xl p-0.5 border border-transparent dark:border-darkBorder">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+                      className={`p-1.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-darkCard text-slate-900 dark:text-darkText shadow-sm' : 'text-slate-400 dark:text-darkMuted hover:text-slate-600 dark:hover:text-slate-200'
                         }`}
                       title="Grid View"
                     >
@@ -564,7 +564,7 @@ export default function Wishlist() {
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
-                      className={`p-1.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+                      className={`p-1.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white dark:bg-darkCard text-slate-900 dark:text-darkText shadow-sm' : 'text-slate-400 dark:text-darkMuted hover:text-slate-600 dark:hover:text-slate-200'
                         }`}
                       title="List View"
                     >
@@ -577,10 +577,10 @@ export default function Wishlist() {
 
               {/* If search/filter returns zero results */}
               {filteredWishlist.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-slate-200/80 p-12 text-center max-w-lg mx-auto">
+                <div className="bg-white dark:bg-darkCard rounded-3xl border border-slate-200/80 dark:border-darkBorder p-12 text-center max-w-lg mx-auto">
                   <AlertCircle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-bold text-slate-900 mb-1">No items match your filter</h3>
-                  <p className="text-xs text-slate-500 mb-4">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-darkText mb-1">No items match your filter</h3>
+                  <p className="text-xs text-slate-500 dark:text-darkMuted mb-4">
                     Try clearing your search query or toggling off the in-stock filter.
                   </p>
                   <button
@@ -602,11 +602,11 @@ export default function Wishlist() {
                     const isLowStock = item.stock !== undefined && item.stock > 0 && item.stock <= 5;
 
                     return (
-                      <div key={item.id} className="card-premium group relative flex flex-col justify-between h-full bg-white">
+                      <div key={item.id} className="card-premium group relative flex flex-col justify-between h-full bg-white dark:bg-darkCard border border-slate-200/80 dark:border-darkBorder">
 
                         {/* Top Badges & Action Buttons */}
                         <div className="relative">
-                          <div className="relative overflow-hidden rounded-xl mb-4 bg-slate-100 aspect-square">
+                          <div className="relative overflow-hidden rounded-xl mb-4 bg-slate-100 dark:bg-darkNav aspect-square">
                             <img
                               src={item.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
                               alt={item.name}
@@ -625,7 +625,7 @@ export default function Wishlist() {
                             <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-10">
                               <button
                                 onClick={() => setQuickViewProduct(item)}
-                                className="p-2 bg-white/90 hover:bg-white text-slate-700 hover:text-primary rounded-full shadow-md backdrop-blur-sm transition-all"
+                                className="p-2 bg-white/90 dark:bg-darkCard/90 hover:bg-white dark:hover:bg-darkCard text-slate-700 dark:text-darkText hover:text-primary rounded-full shadow-md backdrop-blur-sm transition-all"
                                 title="Quick View"
                                 aria-label="Quick View"
                               >
@@ -634,7 +634,7 @@ export default function Wishlist() {
 
                               <button
                                 onClick={() => handleRemove(item)}
-                                className="p-2 bg-white/90 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-full shadow-md backdrop-blur-sm transition-all"
+                                className="p-2 bg-white/90 dark:bg-darkCard/90 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-400 hover:text-red-600 rounded-full shadow-md backdrop-blur-sm transition-all"
                                 title="Remove from Wishlist"
                                 aria-label="Remove item"
                               >
@@ -661,36 +661,36 @@ export default function Wishlist() {
                           </div>
 
                           {/* Brand & Category */}
-                          <div className="flex items-center justify-between gap-2 mb-1 text-[11px] font-semibold text-slate-400">
+                          <div className="flex items-center justify-between gap-2 mb-1 text-[11px] font-semibold text-slate-400 dark:text-darkMuted">
                             <span className="uppercase tracking-wider">{item.category || 'Accessories'}</span>
-                            {item.brand && <span className="text-slate-600 font-bold">{item.brand}</span>}
+                            {item.brand && <span className="text-slate-600 dark:text-darkText font-bold">{item.brand}</span>}
                           </div>
 
                           {/* Title */}
                           <Link
                             to={`/product/${item.id}`}
-                            className="font-bold text-slate-900 text-sm line-clamp-2 hover:text-primary transition-colors block mb-2"
+                            className="font-bold text-slate-900 dark:text-darkText text-sm line-clamp-2 hover:text-primary dark:hover:text-primary transition-colors block mb-2"
                           >
                             {item.name}
                           </Link>
                         </div>
 
                         {/* Price & Cart Actions */}
-                        <div className="pt-3 border-t border-slate-100 space-y-3">
+                        <div className="pt-3 border-t border-slate-100 dark:border-darkBorder space-y-3">
                           <div>
                             <div className="flex items-baseline gap-2">
-                              <span className="text-lg font-black text-slate-900">
+                              <span className="text-lg font-black text-slate-900 dark:text-darkText">
                                 Rs. {item.price?.toLocaleString()}
                               </span>
                               {item.originalPrice && (
-                                <span className="text-xs text-slate-400 line-through">
+                                <span className="text-xs text-slate-400 dark:text-darkMuted line-through">
                                   Rs. {item.originalPrice?.toLocaleString()}
                                 </span>
                               )}
                             </div>
 
                             {/* Koko 3x Installment Callout */}
-                            <p className="text-[10px] font-semibold text-slate-500 mt-0.5">
+                            <p className="text-[10px] font-semibold text-slate-500 dark:text-darkMuted mt-0.5">
                               Or 3x <span className="text-[#00d1b2] font-bold">Rs. {Math.round(item.price / 3).toLocaleString()}</span> with Koko
                             </p>
                           </div>
@@ -699,7 +699,7 @@ export default function Wishlist() {
                             <button
                               onClick={() => handleMoveToCart(item)}
                               disabled={isOutOfStock}
-                              className="btn-primary w-full justify-center text-xs py-2.5 rounded-xl shadow-md disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
+                              className="btn-primary w-full justify-center text-xs py-2.5 rounded-xl shadow-md disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 disabled:shadow-none"
                             >
                               <ShoppingCart className="w-3.5 h-3.5" />
                               {isOutOfStock ? 'Sold Out' : 'Move to Cart'}
@@ -721,13 +721,13 @@ export default function Wishlist() {
                     return (
                       <div
                         key={item.id}
-                        className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center justify-between gap-5"
+                        className="bg-white dark:bg-darkCard rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-darkBorder shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row items-center justify-between gap-5"
                       >
                         {/* Left: Thumbnail & Details */}
                         <div className="flex items-center gap-4 w-full sm:w-auto">
                           <div
                             onClick={() => navigate(`/product/${item.id}`)}
-                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-slate-100 overflow-hidden shrink-0 cursor-pointer relative group"
+                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-slate-100 dark:bg-darkNav overflow-hidden shrink-0 cursor-pointer relative group"
                           >
                             <img
                               src={item.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
@@ -747,7 +747,7 @@ export default function Wishlist() {
                                 {item.category || 'Accessories'}
                               </span>
                               {item.brand && (
-                                <span className="text-[10px] font-semibold text-slate-500">
+                                <span className="text-[10px] font-semibold text-slate-500 dark:text-darkMuted">
                                   by {item.brand}
                                 </span>
                               )}
@@ -755,22 +755,22 @@ export default function Wishlist() {
 
                             <Link
                               to={`/product/${item.id}`}
-                              className="font-bold text-slate-900 text-sm hover:text-primary transition-colors line-clamp-1"
+                              className="font-bold text-slate-900 dark:text-darkText text-sm hover:text-primary dark:hover:text-primary transition-colors line-clamp-1"
                             >
                               {item.name}
                             </Link>
 
                             <div className="flex items-center gap-2">
                               {isOutOfStock ? (
-                                <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-md">
+                                <span className="text-[10px] font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-2 py-0.5 rounded-md">
                                   Out of Stock
                                 </span>
                               ) : isLowStock ? (
-                                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+                                <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md">
                                   Only {item.stock} Remaining
                                 </span>
                               ) : (
-                                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> In Stock
                                 </span>
                               )}
@@ -779,19 +779,19 @@ export default function Wishlist() {
                         </div>
 
                         {/* Right: Price & Actions */}
-                        <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                        <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-darkBorder">
                           <div className="text-left sm:text-right">
                             <div className="flex items-baseline sm:justify-end gap-2">
-                              <span className="text-lg font-black text-slate-900">
+                              <span className="text-lg font-black text-slate-900 dark:text-darkText">
                                 Rs. {item.price?.toLocaleString()}
                               </span>
                               {item.originalPrice && (
-                                <span className="text-xs text-slate-400 line-through">
+                                <span className="text-xs text-slate-400 dark:text-darkMuted line-through">
                                   Rs. {item.originalPrice?.toLocaleString()}
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-slate-400 block">
+                            <span className="text-[10px] text-slate-400 dark:text-darkMuted block">
                               3x Rs. {Math.round(item.price / 3).toLocaleString()} Koko
                             </span>
                           </div>
@@ -799,7 +799,7 @@ export default function Wishlist() {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => setQuickViewProduct(item)}
-                              className="p-2.5 rounded-xl border border-slate-200 text-slate-600 hover:text-primary hover:border-primary/30 transition-all"
+                              className="p-2.5 rounded-xl border border-slate-200 dark:border-darkBorder text-slate-600 dark:text-darkText hover:text-primary hover:border-primary/30 transition-all"
                               title="Quick View"
                             >
                               <Eye className="w-4 h-4" />
@@ -816,7 +816,7 @@ export default function Wishlist() {
 
                             <button
                               onClick={() => handleRemove(item)}
-                              className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                              className="p-2.5 text-slate-400 dark:text-darkMuted hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"
                               title="Remove"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -835,33 +835,33 @@ export default function Wishlist() {
 
           {/* NVSHOP Guarantee Badges */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+            <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-darkNav text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <Truck className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="font-bold text-slate-900 text-xs">Island-wide Fast Delivery</h5>
-                <p className="text-[11px] text-slate-500">Prompt 24-48h dispatch across Sri Lanka</p>
+                <h5 className="font-bold text-slate-900 dark:text-darkText text-xs">Island-wide Fast Delivery</h5>
+                <p className="text-[11px] text-slate-500 dark:text-darkMuted">Prompt 24-48h dispatch across Sri Lanka</p>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-darkNav text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="font-bold text-slate-900 text-xs">100% Genuine Guarantee</h5>
-                <p className="text-[11px] text-slate-500">Official brand warranties with invoices</p>
+                <h5 className="font-bold text-slate-900 dark:text-darkText text-xs">100% Genuine Guarantee</h5>
+                <p className="text-[11px] text-slate-500 dark:text-darkMuted">Official brand warranties with invoices</p>
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <div className="bg-white dark:bg-darkCard p-5 rounded-2xl border border-slate-200/80 dark:border-darkBorder shadow-sm flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-darkNav text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
                 <Zap className="w-5 h-5" />
               </div>
               <div>
-                <h5 className="font-bold text-slate-900 text-xs">Flexible Payment Options</h5>
-                <p className="text-[11px] text-slate-500">Bank transfer, card, and 3x Koko installments</p>
+                <h5 className="font-bold text-slate-900 dark:text-darkText text-xs">Flexible Payment Options</h5>
+                <p className="text-[11px] text-slate-500 dark:text-darkMuted">Bank transfer, card, and 3x Koko installments</p>
               </div>
             </div>
           </div>
@@ -871,17 +871,17 @@ export default function Wishlist() {
 
       {/* QUICK VIEW MODAL */}
       {quickViewProduct && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white dark:bg-darkCard rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-darkBorder relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setQuickViewProduct(null)}
-              className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+              className="absolute top-5 right-5 p-2 rounded-full text-slate-400 dark:text-darkMuted hover:text-slate-700 dark:hover:text-darkText hover:bg-slate-100 dark:hover:bg-darkNav transition-all"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              <div className="bg-slate-100 rounded-2xl aspect-square overflow-hidden">
+              <div className="bg-slate-100 dark:bg-darkNav rounded-2xl aspect-square overflow-hidden">
                 <img
                   src={quickViewProduct.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
                   alt={quickViewProduct.name}
@@ -894,26 +894,26 @@ export default function Wishlist() {
                   <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
                     {quickViewProduct.category} • {quickViewProduct.brand}
                   </span>
-                  <h3 className="text-xl font-black text-slate-900 mt-1">
+                  <h3 className="text-xl font-black text-slate-900 dark:text-darkText mt-1">
                     {quickViewProduct.name}
                   </h3>
                 </div>
 
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-slate-900">
+                  <span className="text-2xl font-black text-slate-900 dark:text-darkText">
                     Rs. {quickViewProduct.price?.toLocaleString()}
                   </span>
                   {quickViewProduct.originalPrice && (
-                    <span className="text-sm text-slate-400 line-through">
+                    <span className="text-sm text-slate-400 dark:text-darkMuted line-through">
                       Rs. {quickViewProduct.originalPrice?.toLocaleString()}
                     </span>
                   )}
                 </div>
 
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 space-y-1">
-                  <p><b>Availability:</b> {quickViewProduct.stock > 0 ? 'In Stock (Fast Dispatch)' : 'Out of Stock'}</p>
-                  <p><b>Warranty:</b> 1 Year Official Brand Warranty</p>
-                  <p><b>Delivery:</b> 1 - 3 business days island-wide</p>
+                <div className="p-3 bg-slate-50 dark:bg-darkNav rounded-xl border border-slate-100 dark:border-darkBorder text-xs text-slate-600 dark:text-darkMuted space-y-1">
+                  <p><b className="text-slate-900 dark:text-darkText">Availability:</b> {quickViewProduct.stock > 0 ? 'In Stock (Fast Dispatch)' : 'Out of Stock'}</p>
+                  <p><b className="text-slate-900 dark:text-darkText">Warranty:</b> 1 Year Official Brand Warranty</p>
+                  <p><b className="text-slate-900 dark:text-darkText">Delivery:</b> 1 - 3 business days island-wide</p>
                 </div>
 
                 <div className="flex flex-col gap-2 pt-2">
@@ -946,32 +946,32 @@ export default function Wishlist() {
 
       {/* SHARE WISHLIST MODAL */}
       {isShareModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white dark:bg-darkCard rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-darkBorder relative">
             <button
               onClick={() => setIsShareModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+              className="absolute top-5 right-5 p-2 rounded-full text-slate-400 dark:text-darkMuted hover:text-slate-700 dark:hover:text-darkText hover:bg-slate-100 dark:hover:bg-darkNav transition-all"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="text-center mb-6">
-              <div className="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-14 h-14 bg-red-50 dark:bg-red-950/40 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <Share2 className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-black text-slate-900">Share Your Wishlist</h3>
-              <p className="text-xs text-slate-500 mt-1">
+              <h3 className="text-xl font-black text-slate-900 dark:text-darkText">Share Your Wishlist</h3>
+              <p className="text-xs text-slate-500 dark:text-darkMuted mt-1">
                 Share your saved gadgets with friends or save the link for later.
               </p>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-2 p-2 bg-slate-100 rounded-2xl border border-slate-200/80">
+              <div className="flex items-center gap-2 p-2 bg-slate-100 dark:bg-darkNav rounded-2xl border border-slate-200/80 dark:border-darkBorder">
                 <input
                   type="text"
                   readOnly
                   value={window.location.href}
-                  className="bg-transparent text-xs text-slate-700 px-2 flex-1 outline-none font-mono"
+                  className="bg-transparent text-xs text-slate-700 dark:text-darkText px-2 flex-1 outline-none font-mono"
                 />
                 <button
                   onClick={handleCopyShareLink}
@@ -982,9 +982,9 @@ export default function Wishlist() {
                 </button>
               </div>
 
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-600">
-                <p className="font-bold text-slate-800 mb-1">Items in this list ({wishlist.length}):</p>
-                <ul className="list-disc list-inside space-y-0.5 text-[11px] text-slate-500 max-h-32 overflow-y-auto">
+              <div className="p-4 bg-slate-50 dark:bg-darkNav rounded-2xl border border-slate-100 dark:border-darkBorder text-xs text-slate-600 dark:text-darkMuted">
+                <p className="font-bold text-slate-800 dark:text-darkText mb-1">Items in this list ({wishlist.length}):</p>
+                <ul className="list-disc list-inside space-y-0.5 text-[11px] text-slate-500 dark:text-darkMuted max-h-32 overflow-y-auto">
                   {wishlist.map((item) => (
                     <li key={item.id} className="truncate">
                       {item.name} — Rs. {item.price?.toLocaleString()}
@@ -1008,14 +1008,14 @@ export default function Wishlist() {
 
       {/* CLEAR ALL CONFIRMATION MODAL */}
       {isClearModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100 relative">
-            <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white dark:bg-darkCard rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100 dark:border-darkBorder relative">
+            <div className="w-14 h-14 bg-red-50 dark:bg-red-950/40 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Trash2 className="w-7 h-7" />
             </div>
 
-            <h3 className="text-xl font-black text-slate-900 mb-2">Clear Wishlist?</h3>
-            <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+            <h3 className="text-xl font-black text-slate-900 dark:text-darkText mb-2">Clear Wishlist?</h3>
+            <p className="text-xs text-slate-500 dark:text-darkMuted mb-6 leading-relaxed">
               Are you sure you want to remove all {wishlist.length} item{wishlist.length !== 1 ? 's' : ''} from your wishlist? This action cannot be undone.
             </p>
 
