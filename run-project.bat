@@ -5,7 +5,9 @@ set "JAVA_HOME=C:\Program Files\Java\jdk-21.0.10"
 set "ROOT=%~dp0"
 set "BACKEND_DIR=%ROOT%backend"
 set "FRONTEND_DIR=%ROOT%frontend"
+set "ADMIN_DIR=%ROOT%admin_frontend"
 set "FRONTEND_PORT=5173"
+set "ADMIN_PORT=5174"
 
 if exist "%ROOT%.env" (
   for /f "usebackq eol=# tokens=1,* delims==" %%A in ("%ROOT%.env") do (
@@ -22,7 +24,7 @@ call :check_tools
 if errorlevel 1 exit /b 1
 
 if not exist "%FRONTEND_DIR%\node_modules" (
-  echo Installing frontend dependencies...
+  echo Installing customer frontend dependencies...
   pushd "%FRONTEND_DIR%" || exit /b 1
   call npm install
   if errorlevel 1 (
@@ -32,18 +34,44 @@ if not exist "%FRONTEND_DIR%\node_modules" (
   popd
 )
 
-echo Starting NVSHOP backend on http://localhost:%SERVER_PORT%
-start "NVSHOP Backend" cmd /k "cd /d ""%BACKEND_DIR%"" && gradlew.bat bootRun"
+if exist "%ADMIN_DIR%" if not exist "%ADMIN_DIR%\node_modules" (
+  echo Installing admin frontend dependencies...
+  pushd "%ADMIN_DIR%" || exit /b 1
+  call npm install
+  if errorlevel 1 (
+    popd
+    exit /b 1
+  )
+  popd
+)
 
-echo Starting NVSHOP frontend on http://localhost:%FRONTEND_PORT%
-start "NVSHOP Frontend" cmd /k "cd /d ""%FRONTEND_DIR%"" && npm run dev -- --host 127.0.0.1 --port %FRONTEND_PORT%"
+if exist "C:\Program Files\Cloudflare\Cloudflare WARP\warp-cli.exe" (
+  echo Ensuring Cloudflare WARP secure tunnel is active...
+  "C:\Program Files\Cloudflare\Cloudflare WARP\warp-cli.exe" connect >nul 2>nul
+)
+
+echo Starting NVSHOP backend on http://127.0.0.1:%SERVER_PORT% (Supabase PostgreSQL)...
+start "NVSHOP Backend" cmd /k "cd /d ""%BACKEND_DIR%"" && set ""JAVA_HOME=%JAVA_HOME%"" && set ""JAVA_OPTS=-Djava.net.preferIPv4Stack=true"" && gradlew.bat bootRun"
+
+echo Starting NVSHOP customer store on http://127.0.0.1:%FRONTEND_PORT%...
+start "NVSHOP Customer Store" cmd /k "cd /d ""%FRONTEND_DIR%"" && npm run dev -- --host 127.0.0.1 --port %FRONTEND_PORT%"
+
+if exist "%ADMIN_DIR%" (
+  echo Starting NVSHOP admin portal on http://127.0.0.1:%ADMIN_PORT%...
+  start "NVSHOP Admin Portal" cmd /k "cd /d ""%ADMIN_DIR%"" && npm run dev -- --host 127.0.0.1 --port %ADMIN_PORT%"
+)
 
 echo.
-echo Project is starting in two terminal windows.
-echo Backend:  http://localhost:%SERVER_PORT%
-echo Frontend: http://localhost:%FRONTEND_PORT%
+echo ========================================================
+echo NVSHOP System Started Successfully!
+echo ========================================================
+echo Backend:        http://127.0.0.1:%SERVER_PORT%
+echo Database:       Supabase Cloud PostgreSQL (sechgzxyxslvcmcrpaxk)
+echo Customer Store: http://127.0.0.1:%FRONTEND_PORT%
+echo Admin Portal:   http://127.0.0.1:%ADMIN_PORT%
+echo Admin Login:    superadmin@example.com / admin123
+echo ========================================================
 echo.
-echo Make sure MySQL is running and the gpsd_project database is available.
 exit /b 0
 
 :check_only

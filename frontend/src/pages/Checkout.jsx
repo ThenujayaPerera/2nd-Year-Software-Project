@@ -20,10 +20,10 @@ export default function Checkout() {
     lastName: user?.name?.split(' ')[1] || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    address: user?.address || '',
-    city: 'Ambalangoda',
-    postalCode: '80300',
-    deliveryInstructions: '',
+    address: [user?.address, user?.addressLine2].filter(Boolean).join(', '),
+    city: [user?.city, user?.district, user?.province].filter(Boolean).join(', '),
+    postalCode: user?.postalCode || '',
+    deliveryInstructions: user?.deliveryInstructions || '',
   });
 
   const [paymentData, setPaymentData] = useState({
@@ -37,8 +37,10 @@ export default function Checkout() {
   });
 
   const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const tax = Math.round(subtotal * 0.05);
-  const shipping = cart.length > 0 && subtotal < 10000 ? 350 : 0;
+  const isAllFreeDelivery = cart.length > 0 && cart.every(item => item.isFreeDelivery || Number(item.deliveryFee) === 0);
+  const maxItemDeliveryFee = cart.length > 0 ? Math.max(0, ...cart.map(item => item.isFreeDelivery ? 0 : (item.deliveryFee != null ? Number(item.deliveryFee) : 350))) : 0;
+  const shipping = isAllFreeDelivery ? 0 : maxItemDeliveryFee;
+  const tax = Math.round(cart.reduce((sum, item) => sum + (item.price * item.quantity * ((item.vatRate || 0) / 100)), 0));
   const total = subtotal + tax + shipping;
 
   if (!isAuthenticated) {
@@ -117,11 +119,12 @@ export default function Checkout() {
         price: item.price,
         quantity: item.quantity,
         subtotal: item.price * item.quantity,
+        warrantyPeriod: item.warranty || item.warrantyPeriod || '',
       })),
     };
 
     try {
-      const res = await fetch('http://localhost:8080/api/orders', {
+      const res = await fetch('http://127.0.0.1:8080/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload),
@@ -205,17 +208,17 @@ export default function Checkout() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-6 sm:py-12 px-3 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <Link to="/cart" className="inline-flex items-center gap-2 text-slate-600 hover:text-primary mb-8 font-semibold text-sm">
+          <Link to="/cart" className="inline-flex items-center gap-2 text-slate-600 hover:text-primary mb-5 sm:mb-8 font-semibold text-xs sm:text-sm">
             <ArrowLeft className="w-4 h-4" /> Back to Cart
           </Link>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Main Form */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-5 sm:space-y-6">
               {/* Step indicator */}
-              <div className="flex gap-4 mb-6">
+              <div className="flex gap-2 sm:gap-4 mb-4 sm:mb-6">
                 {[1, 2, 3].map((s) => (
                   <div
                     key={s}
@@ -228,98 +231,101 @@ export default function Checkout() {
 
               {/* Step 1: Shipping */}
               {step === 1 && (
-                <div className="bg-white rounded-3xl shadow-sm p-8 border border-slate-100">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600">
+                <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm p-4 sm:p-8 border border-slate-100">
+                  <div className="flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6">
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-blue-50 text-blue-600">
                       <Truck className="w-5 h-5" />
                     </div>
-                    <h2 className="text-2xl font-black text-slate-900">Delivery Address</h2>
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-black text-slate-900">Delivery Address</h2>
+                      <p className="text-xs text-slate-500">Enter where you want your tech delivered</p>
+                    </div>
                   </div>
                   
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3.5 sm:space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">First Name</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">First Name</label>
                         <input
                           type="text"
                           name="firstName"
                           value={shippingData.firstName}
                           onChange={handleShippingChange}
                           placeholder="First Name"
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
+                          className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Last Name</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Last Name</label>
                         <input
                           type="text"
                           name="lastName"
                           value={shippingData.lastName}
                           onChange={handleShippingChange}
                           placeholder="Last Name"
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
+                          className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
                         />
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Email Address</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Email Address</label>
                         <input
                           type="email"
                           name="email"
                           value={shippingData.email}
                           onChange={handleShippingChange}
                           placeholder="Email Address"
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
+                          className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Phone Number</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Phone Number</label>
                         <input
                           type="tel"
                           name="phone"
                           value={shippingData.phone}
                           onChange={handleShippingChange}
                           placeholder="+94 76 989 0079"
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
+                          className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Street Address</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Street Address</label>
                       <textarea
                         name="address"
                         value={shippingData.address}
                         onChange={handleShippingChange}
                         placeholder="House / Building No, Street Address"
                         rows="2"
-                        className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm resize-none"
+                        className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm resize-none"
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">City / Town</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">City / Town</label>
                         <input
                           type="text"
                           name="city"
                           value={shippingData.city}
                           onChange={handleShippingChange}
                           placeholder="Ambalangoda / Colombo"
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
+                          className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Postal Code</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Postal Code</label>
                         <input
                           type="text"
                           name="postalCode"
                           value={shippingData.postalCode}
                           onChange={handleShippingChange}
                           placeholder="80300"
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
+                          className="w-full px-3.5 sm:px-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 text-sm"
                         />
                       </div>
                     </div>
@@ -327,7 +333,7 @@ export default function Checkout() {
                     <button
                       onClick={() => setStep(2)}
                       disabled={!shippingData.address || !shippingData.phone}
-                      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3.5 rounded-xl transition-all mt-4"
+                      className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all mt-4 text-sm sm:text-base shadow-sm"
                     >
                       Proceed to Payment Method
                     </button>
@@ -337,18 +343,18 @@ export default function Checkout() {
 
               {/* Step 2: Payment */}
               {step === 2 && (
-                <div className="bg-white rounded-3xl shadow-sm p-8 border border-slate-100">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600">
+                <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm p-4 sm:p-8 border border-slate-100">
+                  <div className="flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6">
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-blue-50 text-blue-600">
                       <Lock className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-slate-900">Payment Gateway</h2>
-                      <p className="text-xs text-slate-500">256-Bit SSL Encrypted & PCI-DSS Compliant (FR3.1)</p>
+                      <h2 className="text-xl sm:text-2xl font-black text-slate-900">Payment Gateway</h2>
+                      <p className="text-xs text-slate-500">256-Bit SSL Encrypted & PCI-DSS Compliant</p>
                     </div>
                   </div>
 
-                  <div className="grid sm:grid-cols-3 gap-3 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-5 sm:mb-6">
                     {/* PayHere Gateway */}
                     <button
                       type="button"
@@ -468,21 +474,21 @@ export default function Checkout() {
                     </div>
                   )}
 
-                  <div className="flex gap-3">
+                  <div className="flex flex-col-reverse sm:flex-row gap-3">
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="px-6 py-3.5 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-all text-sm"
+                      className="px-6 py-3 sm:py-3.5 border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-all text-sm text-center"
                     >
-                      Back
+                      Back to Address
                     </button>
                     <button
                       type="button"
                       onClick={handlePlaceOrder}
                       disabled={isProcessing}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3.5 rounded-xl transition-all text-sm shadow-md shadow-blue-500/20"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3.5 rounded-xl transition-all text-sm shadow-md shadow-blue-500/20 text-center"
                     >
-                      {isProcessing ? 'Processing Secure Payment...' : `Authorize & Pay LKR ${total.toLocaleString()}`}
+                      {isProcessing ? 'Processing Payment...' : `Authorize & Pay LKR ${total.toLocaleString()}`}
                     </button>
                   </div>
                 </div>
@@ -491,8 +497,8 @@ export default function Checkout() {
 
             {/* Order Summary Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-3xl shadow-sm p-6 border border-slate-100 sticky top-28 space-y-6">
-                <h3 className="text-lg font-black text-slate-900 pb-4 border-b border-slate-100">Order Summary ({cart.length})</h3>
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm p-4 sm:p-6 border border-slate-100 lg:sticky lg:top-28 space-y-5 sm:space-y-6">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 pb-3 sm:pb-4 border-b border-slate-100">Order Summary ({cart.length})</h3>
 
                 <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
                   {cart.map((item) => (
@@ -513,12 +519,16 @@ export default function Checkout() {
                     <span className="font-bold text-slate-900">LKR {subtotal.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-slate-500">
-                    <span>VAT & Taxes (5%)</span>
-                    <span className="font-bold text-slate-900">LKR {tax.toLocaleString()}</span>
+                    <span>Value Added Tax (VAT)</span>
+                    <span className="font-bold text-indigo-900">
+                      {tax > 0 ? `LKR ${tax.toLocaleString()}` : <span className="text-emerald-600 font-bold">LKR 0 (0%)</span>}
+                    </span>
                   </div>
                   <div className="flex justify-between text-slate-500">
-                    <span>Shipping</span>
-                    <span className="font-bold text-slate-900">{shipping === 0 ? 'FREE' : `LKR ${shipping}`}</span>
+                    <span>Islandwide Delivery</span>
+                    <span className="font-bold text-slate-900">
+                      {shipping === 0 ? <span className="text-emerald-600 font-black">FREE</span> : `LKR ${shipping.toLocaleString()}`}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-100">
                     <span>Total Amount</span>

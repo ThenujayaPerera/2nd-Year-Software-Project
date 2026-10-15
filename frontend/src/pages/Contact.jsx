@@ -1,6 +1,25 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle, MessageCircle, Smartphone } from 'lucide-react';
 import Layout from '../components/Layout';
+import { Link } from 'react-router-dom';
+
+const showroomPhotos = [
+  {
+    image: '/store/nvshop-store.jpg',
+    title: 'NVSHOP.LK Reception',
+    description: 'Visit us for genuine tech and in-store support.',
+  },
+  {
+    image: '/store/nvshop-vr-demo.webp',
+    title: 'Interactive Demo Zone',
+    description: 'Explore products and experience the latest tech.',
+  },
+  {
+    image: '/store/nvshop-store-overview.jpg',
+    title: 'Inside the Showroom',
+    description: 'Browse our Ambalangoda store in person.',
+  },
+];
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -111,23 +130,23 @@ export default function Contact() {
 
   return (
     <Layout>
-      <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen py-12 px-4 relative">
+      <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen py-6 sm:py-12 px-3 sm:px-6 relative">
         <div className="max-w-7xl mx-auto">
           {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+          <div className="text-center mb-8 sm:mb-16">
+            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 mb-2 sm:mb-4">
               Get in Touch
             </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-xl text-slate-600 max-w-2xl mx-auto px-2">
               Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-16">
             {/* Contact Form - 2 columns */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-100">
-                <h2 className="text-2xl font-black text-slate-900 mb-6">Send us a Message</h2>
+              <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm sm:shadow-lg p-4 sm:p-8 border border-slate-100">
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-4 sm:mb-6">Send us a Message</h2>
 
                 {submitted && (
                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3 animate-in fade-in">
@@ -139,18 +158,18 @@ export default function Contact() {
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
                   {/* Name & Email Row */}
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
+                      <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Name</label>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="John Doe"
-                        className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
+                        className={`w-full px-3.5 sm:px-4 py-2.5 rounded-xl border text-sm transition-all focus:outline-none ${
                           errors.name
                             ? 'border-red-300 bg-red-50 focus:border-red-500'
                             : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
@@ -160,14 +179,14 @@ export default function Contact() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                      <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Email</label>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="john@example.com"
-                        className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
+                        className={`w-full px-3.5 sm:px-4 py-2.5 rounded-xl border text-sm transition-all focus:outline-none ${
                           errors.email
                             ? 'border-red-300 bg-red-50 focus:border-red-500'
                             : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
@@ -178,16 +197,16 @@ export default function Contact() {
                   </div>
 
                   {/* Phone & Subject Row */}
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
+                      <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Phone</label>
                       <input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+94 71 234 5678"
-                        className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
+                        placeholder="+94 76 989 0079"
+                        className={`w-full px-3.5 sm:px-4 py-2.5 rounded-xl border text-sm transition-all focus:outline-none ${
                           errors.phone
                             ? 'border-red-300 bg-red-50 focus:border-red-500'
                             : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
@@ -197,14 +216,14 @@ export default function Contact() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-2">Subject</label>
+                      <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Subject</label>
                       <input
                         type="text"
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        placeholder="How can we help?"
-                        className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none ${
+                        placeholder="Warranty / Order Inquiry"
+                        className={`w-full px-3.5 sm:px-4 py-2.5 rounded-xl border text-sm transition-all focus:outline-none ${
                           errors.subject
                             ? 'border-red-300 bg-red-50 focus:border-red-500'
                             : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
@@ -216,14 +235,14 @@ export default function Contact() {
 
                   {/* Message */}
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Message</label>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Message</label>
                     <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Tell us more about your inquiry..."
-                      rows="6"
-                      className={`w-full px-4 py-2.5 rounded-lg border-2 transition-all focus:outline-none resize-none ${
+                      rows="4"
+                      className={`w-full px-3.5 sm:px-4 py-2.5 rounded-xl border text-sm transition-all focus:outline-none resize-none ${
                         errors.message
                           ? 'border-red-300 bg-red-50 focus:border-red-500'
                           : 'border-slate-200 bg-slate-50 focus:border-primary focus:bg-white'
@@ -235,16 +254,16 @@ export default function Contact() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-primary to-primary/80 hover:to-primary text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all duration-300 shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 text-sm sm:text-base"
                   >
-                    <Send className="w-5 h-5" />
+                    <Send className="w-4 h-4" />
                     Send Message
                   </button>
                 </form>
               </div>
 
               {/* Contact Methods */}
-              <div className="grid md:grid-cols-2 gap-4 mt-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8">
                 {contactMethods.map((method, idx) => {
                   const Icon = method.icon;
                   const CardContent = (
@@ -279,23 +298,58 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Support Bot - 1 column */}
+            {/* Showroom Image Panel - 1 column */}
             <div className="lg:col-span-1">
-              <div 
-                onClick={() => window.dispatchEvent(new CustomEvent('open-support-bot'))}
-                className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100 h-full cursor-pointer hover:border-primary/30 transition-all group"
-              >
-                <h3 className="text-lg font-black text-slate-900 mb-4">Need Quick Help?</h3>
-                <p className="text-sm text-slate-600 mb-6">
-                  Our AI-powered support bot is available 24/7 to answer your questions instantly.
-                </p>
-                <div className="flex items-center justify-center p-8 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl group-hover:bg-primary/15 transition-all">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🤖</div>
-                    <p className="text-sm font-bold text-primary">Click to Open AI Live Chat 💬</p>
-                  </div>
+              <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-lg">
+                <div className="p-5 pb-4">
+                  <p className="mb-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary">Visit us in person</p>
+                  <h3 className="text-xl font-black text-slate-900">Step inside our showroom</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                    Explore the NVSHOP.LK store and experience our products in Ambalangoda.
+                  </p>
                 </div>
-              </div>
+
+                <Link
+                  to="/#showroom"
+                  className="group relative mx-5 block aspect-[4/3] overflow-hidden rounded-xl bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  aria-label="Explore the NVSHOP.LK showroom gallery"
+                >
+                  <img
+                    src={showroomPhotos[0].image}
+                    alt={showroomPhotos[0].title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                    <h4 className="font-bold">{showroomPhotos[0].title}</h4>
+                    <p className="mt-1 text-xs text-white/80">{showroomPhotos[0].description}</p>
+                  </div>
+                </Link>
+
+                <div className="grid grid-cols-2 gap-3 p-5">
+                  {showroomPhotos.slice(1).map((photo) => (
+                    <Link
+                      key={photo.title}
+                      to="/#showroom"
+                      className="group min-w-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                    >
+                      <div className="aspect-[4/3] overflow-hidden bg-slate-100">
+                        <img
+                          src={photo.image}
+                          alt={photo.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="p-3">
+                        <h4 className="truncate text-xs font-bold text-slate-900">{photo.title}</h4>
+                        <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-slate-500">{photo.description}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
             </div>
           </div>
 
@@ -319,27 +373,30 @@ export default function Contact() {
           </div>
 
           {/* CTA Section */}
-          <div className="mt-16 bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 md:p-12 border border-primary/20 text-center">
-            <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4">
+          <div className="mt-8 sm:mt-16 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-sky-600 via-blue-700 to-fuchsia-600 p-6 sm:p-12 text-center text-white shadow-xl">
+            <h3 className="mb-2 text-xl font-black sm:mb-3 sm:text-3xl">
               Still have questions?
             </h3>
-            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-              Our expert support team is available 24/7. Don't hesitate to reach out—we're always happy to help!
+            <p className="mx-auto mb-5 max-w-md text-xs text-blue-100 sm:mb-8 sm:text-sm">
+              Our support team is ready to help with your questions, product advice, and orders.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button 
+            <div className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
+              <button
+                type="button"
                 onClick={() => window.dispatchEvent(new CustomEvent('open-support-bot'))}
-                className="bg-gradient-to-r from-primary to-primary/80 hover:to-primary text-white font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-xs font-bold text-blue-700 transition-colors duration-200 hover:bg-blue-100 hover:text-indigo-800 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-base"
               >
-                💬 Start Live AI Chat
+                <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                Quick Help Chat
               </button>
-              <a 
-                href="https://wa.me/94769890079?text=Hello%20NVSHOP.LK%20Support" 
-                target="_blank" 
+              <a
+                href="https://wa.me/94769890079?text=Hello%20NVSHOP.LK%20Support"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-blue-700/60 px-6 py-3 text-xs font-bold text-white transition-colors duration-200 hover:border-white/40 hover:bg-indigo-800 hover:text-white sm:rounded-2xl sm:px-8 sm:py-4 sm:text-base"
               >
-                📱 WhatsApp Live Agent
+                <Smartphone className="h-4 w-4 text-emerald-300 sm:h-5 sm:w-5" aria-hidden="true" />
+                WhatsApp Live Agent
               </a>
             </div>
           </div>

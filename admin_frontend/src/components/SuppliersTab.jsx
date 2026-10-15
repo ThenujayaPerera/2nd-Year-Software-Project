@@ -25,7 +25,7 @@ export default function SuppliersTab() {
   const fetchSuppliers = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8080/api/suppliers');
+      const res = await fetch('http://127.0.0.1:8080/api/suppliers');
       if (res.ok) {
         const data = await res.json();
         setSuppliers(data);
@@ -68,8 +68,8 @@ export default function SuppliersTab() {
     
     const method = editingSupplier ? 'PUT' : 'POST';
     const url = editingSupplier 
-      ? `http://localhost:8080/api/suppliers/${editingSupplier.id}` 
-      : 'http://localhost:8080/api/suppliers';
+      ? `http://127.0.0.1:8080/api/suppliers/${editingSupplier.id}` 
+      : 'http://127.0.0.1:8080/api/suppliers';
 
     try {
       const res = await fetch(url, {
@@ -93,7 +93,7 @@ export default function SuppliersTab() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to completely remove this supplier from the system?")) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/suppliers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`http://127.0.0.1:8080/api/suppliers/${id}`, { method: 'DELETE' });
       if (res.ok) {
         fetchSuppliers();
       }
@@ -111,7 +111,7 @@ export default function SuppliersTab() {
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs flex items-center gap-2 shadow-md shadow-blue-500/20 transition-all active:scale-95"
+          className="hidden md:flex px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs items-center gap-2 shadow-md shadow-blue-500/20 transition-all active:scale-95"
         >
           <Plus className="w-4 h-4" /> Add New Supplier
         </button>
@@ -147,7 +147,7 @@ export default function SuppliersTab() {
                     <p className="text-[11px] font-semibold text-slate-500">{s.name} (Rep)</p>
                   </div>
                 </div>
-                <div className="flex gap-1">
+                <div className="hidden md:flex gap-1">
                   <button onClick={() => handleOpenModal(s)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
                   <button onClick={() => handleDelete(s.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>

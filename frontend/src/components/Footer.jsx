@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Smartphone, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { Smartphone, Mail, Phone, MapPin, ArrowRight, ChevronDown } from 'lucide-react';
 
 const socialLinks = [
   {
@@ -35,24 +36,31 @@ const socialLinks = [
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [openSection, setOpenSection] = useState(null);
+
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
 
   return (
     <footer className="bg-slate-950 text-slate-200 border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+        
+        {/* DESKTOP & TABLET: 4-Column Grid */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12 sm:mb-16">
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link to="/" className="flex items-center gap-3">
               <img 
                 src="/logo.png" 
                 alt="NVSHOP.LK" 
-                className="h-10 w-auto object-contain bg-white/90 p-1.5 rounded-lg" 
+                className="h-10 w-auto object-contain" 
               />
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed">
               Elevating your mobile experience with curated, high-performance accessories designed to protect and power your devices.
             </p>
-            <div className="flex gap-3 mt-2">
+            <div className="flex gap-2.5 mt-1">
               {socialLinks.map((social, idx) => (
                 <a key={idx} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="p-2.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850 hover:border-slate-700 transition-all">
                   {social.svg}
@@ -63,7 +71,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Explore</h4>
+            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-5">Explore</h4>
             <ul className="space-y-3">
               {[
                 { name: 'Products', path: '/products' },
@@ -83,7 +91,7 @@ export default function Footer() {
 
           {/* Support */}
           <div>
-            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Support</h4>
+            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-5">Support</h4>
             <ul className="space-y-3">
               {[
                 { name: 'Shipping Info', path: '/shipping-info' },
@@ -103,14 +111,14 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-6">Get in Touch</h4>
-            <ul className="space-y-4">
+            <h4 className="text-sm font-bold tracking-wider uppercase text-white mb-5">Get in Touch</h4>
+            <ul className="space-y-3.5">
               <li>
                 <a
                   href="mailto:nvshopamba@gmail.com"
                   className="flex items-center gap-3 text-sm text-slate-400 hover:text-white group transition-colors"
                 >
-                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary group-hover:border-primary/40 group-hover:bg-primary/10 transition-all">
+                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-blue-500 group-hover:border-blue-500/40 group-hover:bg-blue-500/10 transition-all">
                     <Mail className="w-4 h-4" />
                   </div>
                   <span className="group-hover:underline">nvshopamba@gmail.com</span>
@@ -122,7 +130,7 @@ export default function Footer() {
                   href="tel:+94769890079"
                   className="flex items-center gap-3 text-sm text-slate-400 hover:text-white group transition-colors"
                 >
-                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary group-hover:border-primary/40 group-hover:bg-primary/10 transition-all">
+                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-emerald-500 group-hover:border-emerald-500/40 group-hover:bg-emerald-500/10 transition-all">
                     <Phone className="w-4 h-4" />
                   </div>
                   <span className="group-hover:underline">+94 76 989 0079</span>
@@ -136,11 +144,11 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-sm text-slate-400 hover:text-white group transition-colors"
                 >
-                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-primary mt-0.5 group-hover:border-primary/40 group-hover:bg-primary/10 transition-all">
+                  <div className="p-2 bg-slate-900 border border-slate-800 rounded-lg text-purple-500 mt-0.5 group-hover:border-purple-500/40 group-hover:bg-purple-500/10 transition-all">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <span className="group-hover:underline leading-relaxed">
-                    185/1/2B New Road, Ambalangoda, Sri Lanka
+                    185/1/2B New Road, Ambalangoda
                   </span>
                 </a>
               </li>
@@ -148,16 +156,98 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-900 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
-          <p className="text-xs text-slate-500 font-medium">
-            © {currentYear} NV-SHOP. All rights reserved. Sri Lanka's Premium Mobile Accessories Hub.
+        {/* MOBILE COMPACT VIEW (< 640px) */}
+        <div className="sm:hidden space-y-4 mb-6">
+          {/* Brand & Socials Compact */}
+          <div className="flex items-center justify-between pb-3 border-b border-slate-900">
+            <Link to="/" className="inline-block">
+              <img 
+                src="/logo.png" 
+                alt="NVSHOP.LK" 
+                className="h-8 w-auto object-contain" 
+              />
+            </Link>
+            <div className="flex gap-2">
+              {socialLinks.map((social, idx) => (
+                <a key={idx} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="p-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-all">
+                  {social.svg}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Contact Bar */}
+          <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
+            <a href="tel:+94769890079" className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 flex items-center gap-2 font-medium">
+              <Phone className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span className="truncate">+94 76 989 0079</span>
+            </a>
+            <a href="mailto:nvshopamba@gmail.com" className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 flex items-center gap-2 font-medium">
+              <Mail className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              <span className="truncate">Email Us</span>
+            </a>
+          </div>
+
+          {/* Collapsible Accordions for Links */}
+          <div className="divide-y divide-slate-900 border-t border-b border-slate-900">
+            {/* Explore Accordion */}
+            <div>
+              <button 
+                onClick={() => toggleSection('explore')}
+                className="w-full py-3 flex items-center justify-between text-xs font-bold text-slate-300"
+              >
+                <span>EXPLORE</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openSection === 'explore' ? 'rotate-180 text-blue-400' : 'text-slate-500'}`} />
+              </button>
+              {openSection === 'explore' && (
+                <div className="grid grid-cols-2 gap-2.5 pb-3 text-xs text-slate-400 animate-in fade-in">
+                  <Link to="/products" className="hover:text-white py-1">Products</Link>
+                  <Link to="/about" className="hover:text-white py-1">About Us</Link>
+                  <Link to="/contact" className="hover:text-white py-1">Contact</Link>
+                  <Link to="/faq" className="hover:text-white py-1">FAQ</Link>
+                </div>
+              )}
+            </div>
+
+            {/* Support Accordion */}
+            <div>
+              <button 
+                onClick={() => toggleSection('support')}
+                className="w-full py-3 flex items-center justify-between text-xs font-bold text-slate-300"
+              >
+                <span>SUPPORT & POLICIES</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openSection === 'support' ? 'rotate-180 text-blue-400' : 'text-slate-500'}`} />
+              </button>
+              {openSection === 'support' && (
+                <div className="grid grid-cols-2 gap-2.5 pb-3 text-xs text-slate-400 animate-in fade-in">
+                  <Link to="/shipping-info" className="hover:text-white py-1">Shipping Info</Link>
+                  <Link to="/returns" className="hover:text-white py-1">Returns</Link>
+                  <Link to="/privacy-policy" className="hover:text-white py-1">Privacy Policy</Link>
+                  <Link to="/terms-conditions" className="hover:text-white py-1">Terms</Link>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Showroom Location Summary */}
+          <p className="text-[11px] text-slate-500 flex items-center gap-1.5 pt-1">
+            <MapPin className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+            <span>Showroom: 185/1/2B New Road, Ambalangoda (10AM–8PM)</span>
           </p>
-          <p className="text-xs text-slate-500 font-medium">
-            Designed with excellence.
+        </div>
+
+        {/* Bottom Copyright */}
+        <div className="border-t border-slate-900 pt-5 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
+          <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+            © {currentYear} NV-SHOP.LK. All rights reserved. Sri Lanka.
+          </p>
+          <p className="text-[10px] sm:text-xs text-slate-600">
+            Authentic Tech Accessories Hub
           </p>
         </div>
       </div>
     </footer>
   );
 }
+
 

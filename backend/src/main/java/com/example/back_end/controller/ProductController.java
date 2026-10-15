@@ -108,10 +108,23 @@ public class ProductController {
      * POST /api/products/ai-compare
      */
     @PostMapping("/ai-compare")
-    public ResponseEntity<java.util.Map<String, Object>> compareProductsWithAi(@RequestBody java.util.Map<String, Long> payload) {
-        Long id1 = payload.get("productId1");
-        Long id2 = payload.get("productId2");
-        log.info("Generating AI comparison for product ID: {} vs ID: {}", id1, id2);
-        return ResponseEntity.ok(productService.compareProductsWithAi(id1, id2));
+    public ResponseEntity<java.util.Map<String, Object>> compareProductsWithAi(@RequestBody java.util.Map<String, Object> payload) {
+        java.util.List<Long> ids = new java.util.ArrayList<>();
+        if (payload != null) {
+            if (payload.get("productIds") instanceof java.util.List) {
+                java.util.List<?> list = (java.util.List<?>) payload.get("productIds");
+                for (Object o : list) {
+                    if (o instanceof Number) {
+                        ids.add(((Number) o).longValue());
+                    }
+                }
+            } else {
+                if (payload.get("productId1") instanceof Number) ids.add(((Number) payload.get("productId1")).longValue());
+                if (payload.get("productId2") instanceof Number) ids.add(((Number) payload.get("productId2")).longValue());
+                if (payload.get("productId3") instanceof Number) ids.add(((Number) payload.get("productId3")).longValue());
+            }
+        }
+        log.info("Generating AI comparison for {} product(s): {}", ids.size(), ids);
+        return ResponseEntity.ok(productService.compareProductsWithAi(ids));
     }
 }

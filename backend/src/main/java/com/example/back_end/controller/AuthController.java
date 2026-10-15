@@ -127,6 +127,49 @@ public class AuthController {
     }
 
     /**
+     * Request 6-digit OTP for Forgot Password
+     * POST /api/auth/forgot-password/request-otp
+     */
+    @PostMapping("/forgot-password/request-otp")
+    public ResponseEntity<?> requestForgotPasswordOtp(@Valid @RequestBody com.example.back_end.dto.ForgotPasswordRequestDTO request) {
+        log.info("Forgot password OTP request for email: {}", request.getEmail());
+        if (!userService.existsByEmail(request.getEmail())) {
+            log.warn("Forgot password requested for non-existent email: {}", request.getEmail());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "message", "No registered account was found with this email address."
+            ));
+        }
+
+        String otp = otpService.generateOtp(request.getEmail());
+
+        try {
+            mailService.sendForgotPasswordOtpEmail(request.getEmail(), otp);
+        } catch (Exception e) {
+            log.warn("Failed to deliver reset OTP email: {}", e.getMessage());
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "email", request.getEmail(),
+                "message", "A 6-digit verification PIN has been sent to your email address."
+        ));
+    }
+
+    /**
+     * Reset Password via 6-digit PIN and immediately authenticate
+     * POST /api/auth/forgot-password/reset
+     */
+    @PostMapping("/forgot-password/reset")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody com.example.back_end.dto.ForgotPasswordResetDTO request) {
+        log.info("Forgot password reset attempt for email: {}", request.getEmail());
+        try {
+            AuthResponseDTO authResponse = userService.resetPasswordWithOtp(request);
+            return ResponseEntity.ok(authResponse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
      * Logout user
      * POST /api/auth/logout
      */

@@ -1,6 +1,57 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, X, Minimize2, Maximize2, MessageCircle, Sparkles, ExternalLink, Bot, User, ArrowRight, ShieldCheck, MapPin, Phone, Clock, Watch, Battery, Zap, Headphones, Truck, Shield, PhoneCall } from 'lucide-react';
+import { aiAPI } from '../services/api';
+
+function FormattedMessageText({ text, isUser }) {
+  if (isUser) {
+    return <p className="whitespace-pre-wrap">{text}</p>;
+  }
+
+  const lines = (text || '').split('\n');
+  return (
+    <div className="space-y-1.5 leading-relaxed text-slate-800">
+      {lines.map((line, lIdx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={lIdx} className="h-1" />;
+        }
+
+        const isBullet = trimmed.startsWith('* ') || trimmed.startsWith('- ') || trimmed.startsWith('• ');
+        const rawContent = isBullet ? trimmed.replace(/^[\*\-•]\s*/, '') : line;
+
+        // Parse bold segments (**bold**)
+        const parts = rawContent.split(/(\*\*[^*]+\*\*)/g);
+        const rendered = parts.map((part, pIdx) => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            const boldText = part.slice(2, -2);
+            return (
+              <strong key={pIdx} className="font-semibold text-slate-950">
+                {boldText}
+              </strong>
+            );
+          }
+          return part;
+        });
+
+        if (isBullet) {
+          return (
+            <div key={lIdx} className="flex items-start gap-2 pl-1 my-0.5">
+              <span className="text-blue-500 font-bold shrink-0 mt-0.5">•</span>
+              <div className="flex-1">{rendered}</div>
+            </div>
+          );
+        }
+
+        return (
+          <p key={lIdx} className="my-0.5">
+            {rendered}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function SupportBot({ isProducts = false }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,8 +63,8 @@ export default function SupportBot({ isProducts = false }) {
       id: 1,
       type: 'bot',
       text: isProducts 
-        ? "👋 Ayubowan & Welcome to NVSHOP.LK! I am your AI Tech Assistant. Looking for genuine Smart Watches, GaN Fast Chargers, Power Banks, Soundcore Earbuds, or Apple accessories? Ask me anything!" 
-        : "👋 Ayubowan & Welcome to NVSHOP.LK! I'm your dedicated 24/7 AI Assistant. How can I assist you with products, island-wide delivery, warranty, or store information today?",
+        ? "Hello! Welcome to NVSHOP.LK. I am your Customer Care Specialist at NV Support. Looking for genuine Smart Watches, GaN Fast Chargers, Power Banks, Soundcore Earbuds, official warranty details, or island-wide delivery? I am right here to assist you!" 
+        : "Hello and welcome to NVSHOP.LK. I am your Customer Care Specialist at NV Support. How can I help you today with our genuine tech accessories, real-time prices, island-wide delivery, or official warranties?",
       timestamp: new Date(),
       suggestions: [],
     }
@@ -44,7 +95,7 @@ export default function SupportBot({ isProducts = false }) {
     // 1. SMART WATCHES
     smartwatch: {
       keywords: ['watch', 'smart watch', 'smartwatch', 'watches', 'black shark', 'green lion watch', 'haylou', 'wiwu', 'amoled', 'calling watch', 'fitness watch', 'clock'],
-      response: "⌚ Here are our top genuine Smart Watches with crystal-clear AMOLED displays, Bluetooth calling, and full company warranty:",
+      response: "Here are our top genuine Smart Watches with crystal-clear AMOLED displays, Bluetooth calling, and full company warranty:",
       suggestions: [
         { name: 'Green Lion Gravix Smart Watch', price: 'Rs. 14,500', warranty: '6 Months', brand: 'Green Lion', link: '/products?q=smart%20watches' },
         { name: 'Black Shark S3 Smart Watch', price: 'Rs. 16,900', warranty: '6 Months', brand: 'Black Shark', link: '/products?q=black%20shark' },
@@ -56,7 +107,7 @@ export default function SupportBot({ isProducts = false }) {
     // 2. POWER BANKS
     powerbank: {
       keywords: ['powerbank', 'power bank', 'power banks', 'battery', 'portable charger', 'mah', 'ugreen powerbank', 'anker power bank', '300w', '165w', '20000mah', '48000mah'],
-      response: "🔋 We have high-capacity fast charging Power Banks with digital displays & laptop power delivery:",
+      response: "We have high-capacity fast charging Power Banks with digital displays and laptop power delivery:",
       suggestions: [
         { name: 'UGREEN 300W 48000mAh Smart Power Bank', price: 'Rs. 58,000', warranty: '1 Year', brand: 'UGREEN', link: '/products?q=power%20banks' },
         { name: 'Anker 737 Power Bank (140W 24K)', price: 'Rs. 39,500', warranty: '18 Months', brand: 'Anker', link: '/products?q=power%20banks' },
@@ -68,7 +119,7 @@ export default function SupportBot({ isProducts = false }) {
     // 3. CHARGERS & ADAPTERS
     charger: {
       keywords: ['charger', 'chargers', 'adapter', 'wall charger', 'gan', 'ganprime', 'nexode', '100w', '65w', '20w', 'fast charger', 'fast charging', 'type c charger', 'apple charger'],
-      response: "⚡ Explore our high-speed GaN (Gallium Nitride) multi-port fast chargers for laptops, iPhones & Android devices:",
+      response: "Explore our high-speed GaN (Gallium Nitride) multi-port fast chargers for laptops, iPhones, and Android devices:",
       suggestions: [
         { name: 'UGREEN Nexode 100W 4-Port GaN Charger', price: 'Rs. 16,500', warranty: '1 Year', brand: 'UGREEN', link: '/products?q=chargers' },
         { name: 'Anker 735 GaNPrime 65W Charger', price: 'Rs. 15,500', warranty: '18 Months', brand: 'Anker', link: '/products?q=chargers' },
@@ -80,7 +131,7 @@ export default function SupportBot({ isProducts = false }) {
     // 4. CABLES
     cable: {
       keywords: ['cable', 'cables', 'type-c cable', 'usbc cable', 'lightning cable', 'fast charging cable', 'braided cable', '100w cable', '140w cable'],
-      response: "🔌 Genuine reinforced ultra-durable fast charging cables tested for 20,000+ bends:",
+      response: "Genuine reinforced ultra-durable fast charging cables tested for 20,000+ bends:",
       suggestions: [
         { name: 'UGREEN 100W 5A USB-C Cable (2M)', price: 'Rs. 3,200', warranty: '1 Year', brand: 'UGREEN', link: '/products?q=chargers' },
         { name: 'Anker 543 USB-C Bio-Based 140W (1.8M)', price: 'Rs. 4,500', warranty: '18 Months', brand: 'Anker', link: '/products?q=chargers' }
@@ -90,7 +141,7 @@ export default function SupportBot({ isProducts = false }) {
     // 5. EARPHONES, HEADSETS & AUDIO
     earphones: {
       keywords: ['earphone', 'earphones', 'earbuds', 'headphone', 'headphones', 'headset', 'soundcore', 'liberty 4', 'space q45', 'anc', 'wireless earbuds', 'bluetooth earphone', 'airpods', 'audio', 'ear pod'],
-      response: "🎧 Experience studio-grade Hi-Res audio and active noise cancellation (ANC):",
+      response: "Experience studio-grade Hi-Res audio and active noise cancellation (ANC):",
       suggestions: [
         { name: 'Anker Soundcore Liberty 4 NC Earbuds', price: 'Rs. 28,500', warranty: '18 Months', brand: 'Soundcore', link: '/products?q=earphones' },
         { name: 'Anker Soundcore Space Q45 Over-Ear Headphones', price: 'Rs. 38,500', warranty: '18 Months', brand: 'Soundcore', link: '/products?q=earphones' },
@@ -102,7 +153,7 @@ export default function SupportBot({ isProducts = false }) {
     // 6. SPEAKERS
     speakers: {
       keywords: ['speaker', 'speakers', 'jbl', 'bluetooth speaker', 'flip 6', 'charge 5', 'boombox', 'motion boom', 'sound bar', 'soundbox'],
-      response: "🔊 Powerful portable wireless Bluetooth speakers with waterproof durability & heavy bass:",
+      response: "Powerful portable wireless Bluetooth speakers with waterproof durability and heavy bass:",
       suggestions: [
         { name: 'JBL Flip 6 Waterproof Bluetooth Speaker', price: 'Rs. 36,500', warranty: '1 Year', brand: 'JBL', link: '/products?q=speakers' },
         { name: 'JBL Charge 5 Wi-Fi & Bluetooth Speaker', price: 'Rs. 52,000', warranty: '1 Year', brand: 'JBL', link: '/products?q=speakers' },
@@ -113,7 +164,7 @@ export default function SupportBot({ isProducts = false }) {
     // 7. APPLE & IPHONE
     apple: {
       keywords: ['iphone', 'apple', '17 pro max', '16 pro max', '15 pro', 'apple care', 'iphone price', 'apple sri lanka'],
-      response: "🍎 100% Genuine Apple devices and authentic accessories with international & local Apple Care warranty:",
+      response: "100% Genuine Apple devices and authentic accessories with international and local Apple Care warranty:",
       suggestions: [
         { name: 'Apple iPhone 17 Pro Max 256GB (X/A)', price: 'Rs. 445,000', warranty: '1 Year Apple Care', brand: 'Apple', link: '/products?q=apple' },
         { name: 'Apple Original 20W USB-C Adapter', price: 'Rs. 6,500', warranty: '1 Year', brand: 'Apple', link: '/products?q=apple' }
@@ -123,7 +174,7 @@ export default function SupportBot({ isProducts = false }) {
     // 8. CASES & SCREEN PROTECTORS
     cases: {
       keywords: ['case', 'cases', 'back cover', 'phone cover', 'screen protector', 'tempered glass', 'guard', 'spigen', 'ez fit', 'hybrid case'],
-      response: "🛡️ Military-grade protection for your smartphone:",
+      response: "Military-grade protection for your smartphone:",
       suggestions: [
         { name: 'Spigen Ultra Hybrid iPhone Case', price: 'Rs. 6,800', warranty: '12 Months', brand: 'Spigen', link: '/products?q=cases' },
         { name: 'Spigen EZ Fit Tempered Glass (2-Pack)', price: 'Rs. 4,500', warranty: '12 Months', brand: 'Spigen', link: '/products?q=screen%20protectors' }
@@ -133,7 +184,7 @@ export default function SupportBot({ isProducts = false }) {
     // 9. MOUSE, KEYBOARDS & ACCESSORIES
     mouse_keyboard: {
       keywords: ['mouse', 'keyboard', 'logitech', 'mx master', 'stand', 'phone stand', 'desk holder', 'sd card', 'sandisk', 'memory card', 'pendrive'],
-      response: "💻 High-performance workspace gear & ultra-fast storage devices:",
+      response: "High-performance workspace gear and ultra-fast storage devices:",
       suggestions: [
         { name: 'Logitech MX Master 3S Wireless Mouse', price: 'Rs. 34,500', warranty: '2 Years', brand: 'Logitech', link: '/products?q=mouse' },
         { name: 'SanDisk Extreme Pro 128GB MicroSDXC 200MB/s', price: 'Rs. 7,800', warranty: 'Lifetime', brand: 'SanDisk', link: '/products?q=pendrives' },
@@ -144,61 +195,61 @@ export default function SupportBot({ isProducts = false }) {
     // 10. DELIVERY & SHIPPING
     delivery: {
       keywords: ['delivery', 'shipping', 'courier', 'islandwide', 'how long', 'dawas keeyak', 'deliver', 'charge', 'post', 'domex', 'pronto', 'free delivery', 'ship'],
-      response: "🚚 **Island-wide Fast Delivery in Sri Lanka:**\n\n• **Delivery Time:** 1 to 3 business days to your doorstep.\n• **Same-Day / Next-Day:** Available for Southern & Western provinces.\n• **Tracking:** Real-time live order tracking via your NVSHOP account.\n• **Delivery Partners:** Prompt Xpress, Domex & trusted courier networks.\n• **Cash on Delivery (COD):** Available island-wide! 📦"
+      response: "**Island-wide Fast Delivery in Sri Lanka:**\n\n• **Delivery Time:** 1 to 3 business days to your doorstep.\n• **Same-Day / Next-Day:** Available for Southern & Western provinces.\n• **Tracking:** Real-time live order tracking via your NVSHOP account.\n• **Delivery Partners:** Prompt Xpress, Domex, and trusted courier networks.\n• **Cash on Delivery (COD):** Available island-wide!"
     },
 
     // 11. PAYMENT METHODS & KOKO INSTALLMENTS
     payment: {
       keywords: ['payment', 'pay', 'cod', 'cash on delivery', 'installment', 'koko', 'card', 'visa', 'mastercard', 'bank transfer', 'geveem', 'gewanna'],
-      response: "💳 **Flexible & 100% Secure Payment Options:**\n\n1. **Cash on Delivery (COD):** Pay cash when your parcel arrives at your doorstep.\n2. **Credit / Debit Cards:** Visa, MasterCard, UnionPay (3D Secure 256-bit SSL encrypted).\n3. **Koko 3-Month Installments:** Split your payment into 3 easy interest-free installments.\n4. **Direct Bank Transfer:** Instant receipt verification."
+      response: "**Flexible and Secure Payment Options:**\n\n1. **Cash on Delivery (COD):** Pay cash when your parcel arrives at your doorstep.\n2. **Credit / Debit Cards:** Visa, MasterCard, UnionPay (3D Secure 256-bit SSL encrypted).\n3. **Koko 3-Month Installments:** Split your payment into 3 easy interest-free installments.\n4. **Direct Bank Transfer:** Instant receipt verification."
     },
 
     // 12. WARRANTY & RETURN POLICY
     warranty: {
       keywords: ['warranty', 'guarantee', 'guaranty', 'warranty claim', 'return', 'refund', 'replacement', 'warranty check', 'apple warranty', 'company warranty'],
-      response: "🛡️ **NVSHOP.LK Official Warranty & Guarantee:**\n\n• **100% Genuine:** Every item is brand new, sealed, and authentic.\n• **Warranty Period:** 6 Months to 2 Years official manufacturer/company warranty depending on the product.\n• **7-Day Replacement:** If there is any manufacturer defect, get an instant replacement.\n• **Warranty Claim:** Visit our Ambalangoda showroom or send via courier with your invoice."
+      response: "**NVSHOP.LK Official Warranty & Guarantee:**\n\n• **100% Genuine:** Every item is brand new, sealed, and authentic.\n• **Warranty Period:** 6 Months to 2 Years official manufacturer/company warranty depending on the product.\n• **7-Day Replacement:** If there is any manufacturer defect, get an instant replacement.\n• **Warranty Claim:** Visit our Ambalangoda showroom or send via courier with your invoice."
     },
 
     // 13. STORE LOCATION & SHOWROOM ADDRESS
     location: {
       keywords: ['location', 'address', 'shop', 'showroom', 'store', 'where', 'place', 'koheda', 'ambalangoda', 'branch', 'map', 'directions'],
-      response: "📍 **NVSHOP.LK Official Showroom:**\n\n🏠 **Address:** 185/1/2B New Road, Ambalangoda 80300, Sri Lanka\n🚗 **Landmark:** Located on New Road with convenient customer parking.\n🗺️ **Google Maps:** Search 'NVSHOP Ambalangoda' on Google Maps for direct turn-by-turn navigation!"
+      response: "**NVSHOP.LK Official Showroom:**\n\n• **Address:** 185/1/2B New Road, Ambalangoda 80300, Sri Lanka\n• **Landmark:** Located on New Road with convenient customer parking.\n• **Google Maps:** Search 'NVSHOP Ambalangoda' on Google Maps for direct turn-by-turn navigation!"
     },
 
     // 14. CONTACT & HOTLINES
     contact: {
       keywords: ['contact', 'phone', 'telephone', 'hotline', 'mobile', 'call', 'whatsapp', 'email', 'number', 'kata karanna', 'katha karanna'],
-      response: "📞 **Contact NVSHOP Customer Care:**\n\n• 📱 **Hotline 1:** +94 76 989 0079\n• 📱 **Hotline 2:** +94 77 747 0186\n• 💬 **WhatsApp:** +94 76 989 0079\n• 📧 **Email:** nvshopamba@gmail.com\n\nOur team is available 7 days a week to help you!"
+      response: "**Contact NVSHOP Customer Care:**\n\n• **Hotline 1:** +94 76 989 0079\n• **Hotline 2:** +94 77 747 0186\n• **WhatsApp:** +94 76 989 0079\n• **Email:** nvshopamba@gmail.com\n\nOur team is available 7 days a week to help you!"
     },
 
     // 15. OPERATING HOURS
     hours: {
       keywords: ['hours', 'time', 'opening hours', 'open', 'closed', 'velewa', 'aralada', 'keeyatada'],
-      response: "⏰ **Showroom & Hotline Operating Hours:**\n\n• **Monday – Sunday:** 10:00 AM – 8:00 PM\n• **Open 7 Days a Week** (Including weekends & most public holidays).\n• **Online Web Store (nvshop.lk):** Open 24/7 for instant online orders!"
+      response: "**Showroom & Hotline Operating Hours:**\n\n• **Monday – Sunday:** 10:00 AM – 8:00 PM\n• **Open 7 Days a Week** (Including weekends and public holidays).\n• **Online Web Store (nvshop.lk):** Open 24/7 for instant online orders!"
     },
 
     // 16. ORDER TRACKING & ACCOUNT
     order_tracking: {
       keywords: ['order', 'track', 'tracking', 'order status', 'my order', 'order history', 'receipt', 'invoice', 'mage order'],
-      response: "📦 **Order Tracking & Management:**\n\nYou can track your live order progression (Confirmed ➔ Packed ➔ In Transit ➔ Delivered) and download electronic invoices directly from your **[Profile ➔ Order History](/profile)** page!"
+      response: "**Order Tracking & Management:**\n\nYou can track your live order progression (Confirmed to Packed to In Transit to Delivered) and download electronic invoices directly from your **[Profile - Order History](/profile)** page!"
     },
 
     // 17. DISCOUNTS & SPECIAL OFFERS
     offers: {
       keywords: ['offer', 'offers', 'discount', 'discounts', 'deal', 'deals', 'sale', 'promo', 'coupon', 'aduma', 'labama', 'vasi'],
-      response: "🔥 **Current Exclusive Offers & Deals at NVSHOP.LK:**\n\n• Up to **25% OFF** on selected Fast Chargers and Power Banks!\n• Special combo discounts on iPhone Protection Packs (Case + EZ Fit Tempered Glass).\n• Member rewards on all orders when logged in!\n\nVisit our **[Home Page](/)** or **[Products](/products)** page to see all active discounts!"
+      response: "**Current Exclusive Offers & Deals at NVSHOP.LK:**\n\n• Up to **25% OFF** on selected Fast Chargers and Power Banks!\n• Special combo discounts on iPhone Protection Packs (Case + EZ Fit Tempered Glass).\n• Member rewards on all orders when logged in!\n\nVisit our **[Home Page](/)** or **[Products](/products)** page to see all active discounts!"
     },
 
     // 18. GREETINGS & INTRO
     greeting: {
       keywords: ['hi', 'hello', 'hey', 'good morning', 'good evening', 'ayubowan', 'kohomada', 'sup', 'vanakkam', 'halo', 'help'],
-      response: "👋 Ayubowan! Welcome to NVSHOP.LK — Sri Lanka's trusted tech accessories store.\n\nI can help you with:\n• ⌚ Smart Watches & Wearables\n• 🔋 High-Capacity Power Banks\n• ⚡ GaN Multi-Port Fast Chargers & Cables\n• 🎧 Soundcore Earbuds & Audio\n• 🚚 Delivery, Warranty & Showroom info\n\nWhat are you looking for today? 😊"
+      response: "Hello! Welcome to NVSHOP.LK — Sri Lanka's trusted tech accessories store.\n\nI can help you with:\n• Smart Watches & Wearables\n• High-Capacity Power Banks\n• GaN Multi-Port Fast Chargers & Cables\n• Soundcore Earbuds & Audio\n• Delivery, Warranty, and Showroom details\n\nWhat can I help you find today?"
     },
 
     // 19. APPRECIATION / THANKS
     thanks: {
       keywords: ['thank you', 'thanks', 'thx', 'sthuthi', 'bohoma sthuthi', 'great', 'awesome', 'good', 'super', 'bye', 'goodbye'],
-      response: "You're most welcome! 😊 If you need anything else, feel free to ask anytime. Have a wonderful tech shopping experience at NVSHOP.LK! 💙"
+      response: "You are most welcome! If you need anything else, feel free to ask anytime. Have a wonderful tech shopping experience at NVSHOP.LK!"
     }
   };
 
@@ -249,10 +300,34 @@ export default function SupportBot({ isProducts = false }) {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate natural AI thinking delay
+    // Call live RAG backend (Groq + Gemini Embeddings + Supabase Vector DB)
+    try {
+      const match = findBestResponse(query);
+      const suggestions = match?.suggestions || [];
+
+      const res = await aiAPI.ask(query);
+      const answer = res.data?.answer;
+
+      if (answer) {
+        const botMessage = {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: answer,
+          suggestions: suggestions,
+          model: res.data?.llmModel,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, botMessage]);
+        setIsTyping(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("Backend AI query failed, falling back to local knowledge base:", err);
+    }
+
+    // Fallback if backend is offline or loading
     setTimeout(() => {
       const match = findBestResponse(query);
-
       let botResponseText = '';
       let suggestions = [];
 
@@ -260,7 +335,7 @@ export default function SupportBot({ isProducts = false }) {
         botResponseText = match.response;
         suggestions = match.suggestions || [];
       } else {
-        botResponseText = "I'd love to help you with that! 😊 You can ask me about:\n\n• ⌚ **Smart Watches** (Green Lion, Black Shark, Haylou)\n• 🔋 **Power Banks** (UGREEN, Anker 140W/300W)\n• ⚡ **GaN Fast Chargers & Cables** (100W, 65W, 20W)\n• 🎧 **Soundcore Earbuds & Audio** (Liberty 4 NC, Space Q45)\n• 🚚 **Islandwide Delivery & COD**\n• 📍 **Ambalangoda Showroom Location**\n• 🛡️ **Warranty & Guarantee**\n\nOr contact our hotline directly at **+94 76 989 0079**! 📞";
+        botResponseText = "I would be glad to help you with that. You can ask me about:\n\n• **Smart Watches** (Green Lion, Black Shark, Haylou)\n• **Power Banks** (UGREEN, Anker 140W/300W)\n• **GaN Fast Chargers & Cables** (100W, 65W, 20W)\n• **Soundcore Earbuds & Audio** (Liberty 4 NC, Space Q45)\n• **Island-wide Delivery & COD**\n• **Ambalangoda Showroom Location**\n• **Warranty & Guarantee Policies**\n\nOr contact our customer support team directly at **+94 77 123 4567**.";
       }
 
       const botMessage = {
@@ -273,7 +348,7 @@ export default function SupportBot({ isProducts = false }) {
 
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-    }, 600);
+    }, 400);
   };
 
   const handleQuickChipClick = (chipText) => {
@@ -306,14 +381,14 @@ export default function SupportBot({ isProducts = false }) {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center z-50 group border-2 border-white/20"
+          className="fixed bottom-4 right-3.5 sm:bottom-6 sm:right-6 w-13 h-13 sm:w-16 sm:h-16 p-3 sm:p-0 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center z-50 group border-2 border-white/20"
           aria-label="Open Support Assistant"
         >
           <div className="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-25 group-hover:opacity-0" />
-          <MessageCircle className="w-7 h-7 relative z-10 transition-transform group-hover:rotate-12" />
-          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+          <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7 relative z-10 transition-transform group-hover:rotate-12" />
+          <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-4 sm:w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white" />
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 bg-emerald-500 border-2 border-white" />
           </span>
         </button>
       )}
@@ -321,8 +396,8 @@ export default function SupportBot({ isProducts = false }) {
       {/* Modern Chatbot Window */}
       {isOpen && (
         <div 
-          className={`fixed bottom-6 right-4 sm:right-6 w-[calc(100vw-2rem)] sm:w-[410px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden border border-slate-200/80 transition-all duration-300 ${
-            isMinimized ? 'h-16' : 'h-[580px] max-h-[85vh]'
+          className={`fixed bottom-3 right-3 sm:bottom-6 sm:right-6 w-[calc(100vw-1.5rem)] sm:w-[410px] bg-white rounded-3xl shadow-2xl z-50 flex flex-col overflow-hidden border border-slate-200/80 transition-all duration-300 ${
+            isMinimized ? 'h-16' : 'h-[520px] sm:h-[580px] max-h-[85vh]'
           }`}
         >
           {/* Header */}
@@ -333,10 +408,10 @@ export default function SupportBot({ isProducts = false }) {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-sm sm:text-base leading-tight">NVSHOP AI Assistant</h3>
+                  <h3 className="font-bold text-sm sm:text-base leading-tight">NV Support Care</h3>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
-                <p className="text-[11px] text-blue-100 font-medium">Authentic Tech Accessories • 24/7 Live</p>
+                <p className="text-[11px] text-blue-100 font-medium">Customer Care Specialist • 24/7 Live</p>
               </div>
             </div>
             
@@ -396,7 +471,7 @@ export default function SupportBot({ isProducts = false }) {
                           : 'bg-white text-slate-900 rounded-tl-none border border-slate-200/80 shadow-xs'
                       }`}
                     >
-                      <p className="whitespace-pre-wrap">{msg.text}</p>
+                      <FormattedMessageText text={msg.text} isUser={msg.type === 'user'} />
 
                       {/* Interactive Product Suggestion Cards */}
                       {msg.suggestions && msg.suggestions.length > 0 && (

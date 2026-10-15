@@ -1,7 +1,7 @@
 import { useFilterStore } from '../store';
-import { SlidersHorizontal, Layers, DollarSign, Award, CheckSquare, Square, Star } from 'lucide-react';
+import { SlidersHorizontal, Layers, DollarSign, Award, CheckSquare, Square, Star, X } from 'lucide-react';
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const {
     filters,
     setCategory,
@@ -38,18 +38,29 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 h-fit sticky top-28">
-      <div className="flex justify-between items-center pb-6 border-b border-slate-100 mb-6">
+    <aside className="bg-white rounded-3xl shadow-sm border border-slate-100 p-5 sm:p-6 h-fit lg:sticky lg:top-28">
+      <div className="flex justify-between items-center pb-4 sm:pb-6 border-b border-slate-100 mb-6">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-5 h-5 text-slate-800" />
-          <h3 className="text-md font-bold text-slate-900">Filters</h3>
+          <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-slate-800" />
+          <h3 className="text-sm sm:text-base font-bold text-slate-900">Filters</h3>
         </div>
-        <button
-          onClick={resetFilters}
-          className="text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full"
-        >
-          Reset All
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={resetFilters}
+            className="text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full"
+          >
+            Reset All
+          </button>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="lg:hidden p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+              aria-label="Close Filters"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Categories */}

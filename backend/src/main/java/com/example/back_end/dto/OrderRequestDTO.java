@@ -32,6 +32,7 @@ public class OrderRequestDTO {
         private Long productId;
         private String productName;
         private String productImage;
+        private String warrantyPeriod;
         private Double price;
         private Integer quantity;
         private Double subtotal;

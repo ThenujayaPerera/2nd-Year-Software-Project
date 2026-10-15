@@ -37,5 +37,14 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
+# Environment Variables & Secrets
+.env
+.env.*
+*.env
+backend/.env
+frontend/.env
+admin_frontend/.env
+
 # Generated/local resources
 Resources & Details/
+

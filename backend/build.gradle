@@ -30,6 +30,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // Database
+    runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'com.h2database:h2'
     
@@ -56,4 +57,12 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('bootJar') {
+    archiveFileName = 'app.jar'
 }

@@ -20,6 +20,8 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
+    @lombok.ToString.Exclude
+    @lombok.EqualsAndHashCode.Exclude
     private Order order;
 
     @Column(name = "product_id", nullable = false)
@@ -30,6 +32,9 @@ public class OrderItem {
 
     @Column(name = "product_image")
     private String productImage;
+
+    @Column(name = "warranty_period")
+    private String warrantyPeriod;
 
     private Double price;
     private Integer quantity;

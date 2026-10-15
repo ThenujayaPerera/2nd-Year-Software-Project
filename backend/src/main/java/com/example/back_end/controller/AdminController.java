@@ -43,7 +43,14 @@ public class AdminController {
     @PutMapping("/orders/{id}/status")
     public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
         String status = body.get("status");
-        return ResponseEntity.ok(orderService.updateOrderStatus(id, status));
+        String notes = body.get("notes");
+        String updatedBy = body.get("updatedBy");
+        return ResponseEntity.ok(orderService.updateOrderStatus(id, status, notes, updatedBy));
+    }
+
+    @GetMapping("/orders/{id}/history")
+    public ResponseEntity<List<com.example.back_end.entity.OrderStatusHistory>> getOrderHistory(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.getOrderHistory(id));
     }
 
     // --- Users Table Management ---
@@ -103,17 +110,13 @@ public class AdminController {
     @GetMapping("/reports/sales")
     public ResponseEntity<Map<String, Object>> getSalesReports() {
         List<Order> orders = orderRepository.findAllByOrderByCreatedAtDesc();
-        List<Product> products = productRepository.findAll();
+        long totalProducts = productRepository.count();
+        List<Product> lowStockProducts = productRepository.findByStockLessThanEqual(5);
 
         double totalRevenue = orders.stream()
                 .filter(o -> "SUCCESS".equalsIgnoreCase(o.getPaymentStatus()) || "DELIVERED".equalsIgnoreCase(o.getStatus()))
                 .mapToDouble(o -> o.getTotalAmount() != null ? o.getTotalAmount() : 0.0)
                 .sum();
-
-        // FR2.6: Low stock alert threshold (stock <= 5)
-        List<Product> lowStockProducts = products.stream()
-                .filter(p -> p.getStock() != null && p.getStock() <= 5)
-                .collect(Collectors.toList());
 
         long totalOrders = orders.size();
         long pendingOrders = orders.stream().filter(o -> "PENDING".equalsIgnoreCase(o.getStatus()) || "PROCESSING".equalsIgnoreCase(o.getStatus())).count();
@@ -124,7 +127,7 @@ public class AdminController {
         report.put("totalOrders", totalOrders);
         report.put("pendingOrders", pendingOrders);
         report.put("completedOrders", completedOrders);
-        report.put("totalProducts", products.size());
+        report.put("totalProducts", totalProducts);
         report.put("lowStockCount", lowStockProducts.size());
         report.put("lowStockProducts", lowStockProducts);
 

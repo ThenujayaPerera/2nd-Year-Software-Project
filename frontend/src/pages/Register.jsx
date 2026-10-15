@@ -4,6 +4,7 @@ import {
   Mail, Lock, User, Phone, MapPin, Eye, EyeOff, Check, ArrowRight, 
   ShieldCheck, RefreshCw, Smartphone, Bell, MessageSquare, ExternalLink, Inbox
 } from 'lucide-react';
+import Layout from '../components/Layout';
 import { useAuthStore } from '../store';
 import { authAPI } from '../services/api';
 
@@ -18,7 +19,12 @@ export default function Register() {
     lastName: '',
     email: '',
     phone: '',
-    address: 'Ambalangoda',
+    address: '',
+    addressLine2: '',
+    city: '',
+    district: '',
+    province: '',
+    postalCode: '',
     password: '',
     confirmPassword: '',
     agreeTerms: true,
@@ -85,6 +91,12 @@ export default function Register() {
         name: `${formData.firstName} ${formData.lastName}`.trim(),
         email: formData.email,
         phone: formData.phone,
+        address: formData.address,
+        addressLine2: formData.addressLine2,
+        city: formData.city,
+        district: formData.district,
+        province: formData.province,
+        postalCode: formData.postalCode,
         password: formData.password,
       });
 
@@ -152,7 +164,7 @@ export default function Register() {
     if (!canResend) return;
     setLoading(true);
     try {
-      await fetch('http://localhost:8080/api/auth/resend-otp', {
+      await fetch('http://127.0.0.1:8080/api/auth/resend-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, phone: formData.phone }),
@@ -169,13 +181,14 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <div className="max-w-4xl w-full mx-auto">
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
-          <div className="grid md:grid-cols-2">
+    <Layout>
+      <div className="min-h-[calc(100vh-10rem)] bg-gradient-to-br from-slate-50 to-slate-100 py-6 sm:py-12 px-3 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="max-w-4xl w-full mx-auto">
+          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+            <div className="grid md:grid-cols-2">
             
             {/* Left Column: Brand Hero & Benefits */}
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-800 p-8 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+            <div className="hidden md:flex bg-gradient-to-br from-blue-600 to-indigo-800 p-8 sm:p-12 text-white flex-col justify-between relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent)]" />
               
               <div className="relative z-10">
@@ -214,20 +227,20 @@ export default function Register() {
             </div>
 
             {/* Right Column: Dynamic Form (Registration ➔ 6-Digit Email & SMS OTP Stage) */}
-            <div className="p-8 sm:p-12 flex flex-col justify-center">
+            <div className="p-5 sm:p-8 md:p-12 flex flex-col justify-center">
               
               {/* STAGE 2: 6-DIGIT EMAIL & SMS OTP VERIFICATION SCREEN */}
               {otpSent ? (
-                <div className="space-y-6 animate-in fade-in zoom-in-95">
+                <div className="space-y-5 sm:space-y-6 animate-in fade-in zoom-in-95">
                   
                   {/* Email & SMS Dispatch Banner */}
-                  <div className="p-4 bg-blue-50/70 border border-blue-200/80 rounded-2xl space-y-2.5">
+                  <div className="p-3.5 sm:p-4 bg-blue-50/70 border border-blue-200/80 rounded-2xl space-y-2">
                     <div className="flex items-center gap-2 text-xs font-bold text-blue-900">
                       <Mail className="w-4 h-4 text-blue-600 shrink-0" />
                       <span>Verification Code Sent via Email & SMS</span>
                     </div>
                     
-                    <div className="text-[11px] text-slate-600 space-y-1 pl-6">
+                    <div className="text-[11px] text-slate-600 space-y-0.5 pl-6">
                       <p>📧 Email: <strong className="text-slate-900 font-mono">{formData.email}</strong></p>
                       {formData.phone && (
                         <p>📱 Mobile: <strong className="text-slate-900 font-mono">+94 {formData.phone}</strong></p>
@@ -245,9 +258,9 @@ export default function Register() {
                   </div>
 
                   <div className="text-center">
-                    <h3 className="text-2xl font-black text-slate-900">Enter Verification Code</h3>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900">Enter Verification Code</h3>
                     <p className="text-xs text-slate-500 mt-1">
-                      Enter the 6-digit code received on your Email or Phone SMS
+                      Enter the 6-digit code received on your Email or SMS
                     </p>
                   </div>
 
@@ -257,9 +270,9 @@ export default function Register() {
                     </div>
                   )}
 
-                  <form onSubmit={handleVerifyOtp} className="space-y-6">
+                  <form onSubmit={handleVerifyOtp} className="space-y-5 sm:space-y-6">
                     {/* 6 Individual Digit Boxes */}
-                    <div className="flex justify-center gap-2 sm:gap-2.5">
+                    <div className="flex justify-center gap-1.5 sm:gap-2.5">
                       {otpDigits.map((digit, index) => (
                         <input
                           key={index}
@@ -269,7 +282,7 @@ export default function Register() {
                           value={digit}
                           onChange={(e) => handleOtpDigitChange(index, e.target.value)}
                           onKeyDown={(e) => handleKeyDown(index, e)}
-                          className="w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-black rounded-xl border-2 border-slate-200 focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-500/10 bg-slate-50 text-slate-900 transition-all font-mono"
+                          className="w-9 h-11 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-black rounded-xl border-2 border-slate-200 focus:border-blue-600 focus:outline-none focus:ring-2 sm:focus:ring-4 focus:ring-blue-500/10 bg-slate-50 text-slate-900 transition-all font-mono"
                         />
                       ))}
                     </div>
@@ -385,6 +398,69 @@ export default function Register() {
                     {errors.phone && <p className="text-[10px] text-red-600 mt-0.5">{errors.phone}</p>}
                   </div>
 
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1">Street Address</label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder="House / street / village"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">City / Town</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        placeholder="Ambalangoda"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">Postal Code</label>
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={formData.postalCode}
+                        onChange={handleChange}
+                        placeholder="80300"
+                        maxLength={10}
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">District</label>
+                      <input
+                        type="text"
+                        name="district"
+                        value={formData.district}
+                        onChange={handleChange}
+                        placeholder="Galle"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">Province</label>
+                      <input
+                        type="text"
+                        name="province"
+                        value={formData.province}
+                        onChange={handleChange}
+                        placeholder="Southern"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50"
+                      />
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-bold text-slate-600 mb-1">Password</label>
@@ -456,5 +532,6 @@ export default function Register() {
         </div>
       </div>
     </div>
+  </Layout>
   );
 }

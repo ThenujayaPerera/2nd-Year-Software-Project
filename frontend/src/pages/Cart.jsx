@@ -24,9 +24,12 @@ export default function Cart() {
   const [discountApplied, setDiscountApplied] = useState(0);
 
   const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const isAllFreeDelivery = cart.length > 0 && cart.every(item => item.isFreeDelivery || Number(item.deliveryFee) === 0);
+  const maxItemDeliveryFee = cart.length > 0 ? Math.max(0, ...cart.map(item => item.isFreeDelivery ? 0 : (item.deliveryFee != null ? Number(item.deliveryFee) : 350))) : 0;
+  const shipping = isAllFreeDelivery ? 0 : maxItemDeliveryFee;
+  const totalVat = Math.round(cart.reduce((sum, item) => sum + (item.price * item.quantity * ((item.vatRate || 0) / 100)), 0));
+  const total = Math.max(0, subtotal - discountApplied + totalVat + shipping);
   const freeShippingThreshold = 10000;
-  const shipping = cart.length > 0 && subtotal >= freeShippingThreshold ? 0 : (cart.length > 0 ? 450 : 0);
-  const total = Math.max(0, subtotal - discountApplied + shipping);
   const freeShippingRemaining = Math.max(0, freeShippingThreshold - subtotal);
   const freeShippingProgress = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
 
@@ -73,8 +76,20 @@ export default function Cart() {
       return;
     }
     const itemsToCompare = cart.filter((item) => selectedItems.includes(item.id));
-    itemsToCompare.forEach((item) => addToComparison(item));
-    setAlert({ type: 'success', message: `Added ${itemsToCompare.length} item(s) to comparison` });
+    let addedCount = 0;
+    let hitLimit = false;
+
+    itemsToCompare.forEach((item) => {
+      const res = addToComparison(item);
+      if (res?.success) addedCount++;
+      if (res?.reason === 'MAX_REACHED') hitLimit = true;
+    });
+
+    if (hitLimit && addedCount === 0) {
+      setAlert({ type: 'warning', message: 'Comparison is available for a maximum of 3 items' });
+    } else if (addedCount > 0) {
+      setAlert({ type: 'success', message: `Added ${addedCount} item(s) to comparison` + (hitLimit ? ' (Maximum 3 items reached)' : '') });
+    }
   };
 
   const handleApplyCoupon = (e) => {
@@ -94,30 +109,30 @@ export default function Cart() {
 
   return (
     <Layout>
-      <div className="bg-slate-50/60 min-h-screen py-8 px-4 sm:px-6">
+      <div className="bg-slate-50/60 min-h-screen py-4 sm:py-8 px-3 sm:px-6">
         <div className="max-w-7xl mx-auto">
           
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-6 font-medium">
+          <div className="flex items-center gap-2 text-xs text-slate-500 mb-4 sm:mb-6 font-medium">
             <Link to="/" className="hover:text-blue-600">Home</Link>
             <span>/</span>
             <span className="text-slate-800 font-bold">Shopping Cart</span>
           </div>
 
           {/* Cart Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-black text-slate-900">
+              <h1 className="text-2xl sm:text-4xl font-black text-slate-900">
                 Your Shopping Cart
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1">
                 {cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart • Original NVSHOP.LK Accessories
               </p>
             </div>
 
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 px-4 py-2.5 rounded-xl transition-all self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 px-3.5 py-2 rounded-xl transition-all self-start sm:self-auto"
             >
               <ArrowLeft className="w-4 h-4" /> Continue Shopping
             </Link>
@@ -125,7 +140,7 @@ export default function Cart() {
 
           {/* Alert Toast */}
           {alert && (
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <Alert type={alert.type} message={alert.message} onClose={() => setAlert(null)} />
             </div>
           )}
@@ -149,25 +164,25 @@ export default function Cart() {
             </div>
           ) : (
             /* ACTIVE CART GRID (2 Columns) */
-            <div className="grid lg:grid-cols-12 gap-8 items-start">
+            <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               
               {/* Left 8 Cols: Items List & Free Shipping Banner */}
-              <div className="lg:col-span-8 space-y-4">
+              <div className="lg:col-span-8 space-y-3 sm:space-y-4">
                 
                 {/* Free Delivery Target Progress Banner */}
-                <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm space-y-3">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200/80 shadow-xs space-y-2.5 sm:space-y-3">
                   <div className="flex items-center justify-between text-xs sm:text-sm font-bold">
-                    <span className="flex items-center gap-2 text-slate-800">
-                      <Truck className="w-4 h-4 text-blue-600" />
+                    <span className="flex items-center gap-1.5 sm:gap-2 text-slate-800 text-[11px] sm:text-sm">
+                      <Truck className="w-4 h-4 text-blue-600 shrink-0" />
                       {freeShippingRemaining === 0 ? (
-                        <span className="text-emerald-600">🎉 Congratulations! You have unlocked Free Islandwide Delivery!</span>
+                        <span className="text-emerald-600">🎉 Congratulations! You unlocked Free Delivery!</span>
                       ) : (
-                        <span>Add <strong className="text-blue-600">Rs. {freeShippingRemaining.toLocaleString()}</strong> more to get Free Delivery!</span>
+                        <span>Add <strong className="text-blue-600">Rs. {freeShippingRemaining.toLocaleString()}</strong> for Free Delivery!</span>
                       )}
                     </span>
                     <span className="text-xs text-slate-400 font-semibold">{freeShippingProgress}%</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-slate-100 rounded-full h-2 sm:h-2.5 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         freeShippingRemaining === 0 ? 'bg-emerald-500' : 'bg-blue-600'
@@ -178,8 +193,8 @@ export default function Cart() {
                 </div>
 
                 {/* Cart Action Header (Select All & Bulk Compare) */}
-                <div className="bg-white rounded-2xl p-4 border border-slate-200/80 flex items-center justify-between text-xs">
-                  <label className="flex items-center gap-2.5 font-bold text-slate-700 cursor-pointer">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <label className="flex items-center gap-2 font-bold text-slate-700 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={selectedItems.length === cart.length && cart.length > 0}
@@ -189,11 +204,11 @@ export default function Cart() {
                     <span>Select All ({cart.length})</span>
                   </label>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
                     {selectedItems.length > 0 && (
                       <button
                         onClick={handleCompareSelected}
-                        className="font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5"
+                        className="font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
                       >
                         <Scale className="w-3.5 h-3.5" /> Compare ({selectedItems.length})
                       </button>
@@ -227,11 +242,11 @@ export default function Cart() {
               {/* Right 4 Cols: Order Summary, Coupon & Checkout Action */}
               <div className="lg:col-span-4 space-y-4 sticky top-24">
                 
-                <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-sm space-y-5">
-                  <h3 className="text-lg font-black text-slate-900">Order Summary</h3>
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-7 border border-slate-200/80 shadow-xs space-y-4 sm:space-y-5">
+                  <h3 className="text-base sm:text-lg font-black text-slate-900">Order Summary</h3>
 
                   {/* Pricing Breakdown */}
-                  <div className="space-y-3 text-sm text-slate-600 pb-4 border-b border-slate-100">
+                  <div className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-slate-600 pb-3 sm:pb-4 border-b border-slate-100">
                     <div className="flex justify-between">
                       <span>Items Subtotal</span>
                       <span className="font-bold text-slate-900 font-sans">Rs. {subtotal.toLocaleString()}</span>
@@ -243,6 +258,17 @@ export default function Cart() {
                         <span>-Rs. {discountApplied.toLocaleString()}</span>
                       </div>
                     )}
+
+                    <div className="flex justify-between">
+                      <span>Value Added Tax (VAT)</span>
+                      <span className="font-bold font-sans text-indigo-900">
+                        {totalVat > 0 ? (
+                          `Rs. ${totalVat.toLocaleString()}`
+                        ) : (
+                          <span className="text-emerald-600 font-bold text-xs">Rs. 0 (0%)</span>
+                        )}
+                      </span>
+                    </div>
 
                     <div className="flex justify-between">
                       <span>Islandwide Delivery</span>
@@ -259,39 +285,39 @@ export default function Cart() {
                   {/* Total Due */}
                   <div className="flex justify-between items-baseline pt-1">
                     <div>
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Amount</p>
-                      <p className="text-2xl sm:text-3xl font-black text-slate-900 font-sans">
+                      <p className="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Total Amount</p>
+                      <p className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 font-sans">
                         Rs. {total.toLocaleString()}
                       </p>
                     </div>
-                    <span className="text-[11px] font-bold text-slate-400">LKR (All taxes incl.)</span>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-400">LKR (Taxes incl.)</span>
                   </div>
 
                   {/* Promo Code Form */}
-                  <form onSubmit={handleApplyCoupon} className="flex gap-2 pt-2">
+                  <form onSubmit={handleApplyCoupon} className="flex gap-2 pt-1">
                     <div className="relative flex-1">
-                      <Tag className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Tag className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
                         placeholder="Coupon (e.g. NV10)"
-                        className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50 uppercase font-mono"
+                        className="w-full pl-8 sm:pl-9 pr-3 py-2 sm:py-2.5 text-xs rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none bg-slate-50 uppercase font-mono"
                       />
                     </div>
                     <button
                       type="submit"
-                      className="px-4 py-2.5 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-all"
+                      className="px-3.5 sm:px-4 py-2 sm:py-2.5 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-all active:scale-95"
                     >
                       Apply
                     </button>
                   </form>
 
-                  {/* Checkout Button (NVSHOP Style) */}
-                  <div className="space-y-2.5 pt-2">
+                  {/* Checkout Button */}
+                  <div className="space-y-2 pt-1">
                     <Link
                       to="/checkout"
-                      className="w-full py-4 bg-[#111827] hover:bg-black text-white font-bold text-sm rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 group"
+                      className="w-full py-3.5 sm:py-4 bg-[#111827] hover:bg-black text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl transition-all shadow-md flex items-center justify-center gap-2 group active:scale-95"
                     >
                       <span>Proceed to Checkout</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -299,7 +325,7 @@ export default function Cart() {
 
                     <Link
                       to="/products"
-                      className="w-full py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl text-center block transition-all"
+                      className="w-full py-2.5 sm:py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl text-center block transition-all"
                     >
                       Add More Products
                     </Link>
@@ -307,21 +333,21 @@ export default function Cart() {
 
                 </div>
 
-                {/* Trust & Guarantee Box (Exact NVSHOP Details) */}
-                <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3 text-xs text-slate-600">
-                  <div className="flex items-center gap-2.5 font-bold text-slate-800">
+                {/* Trust & Guarantee Box */}
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-2xs space-y-2.5 sm:space-y-3 text-[11px] sm:text-xs text-slate-600">
+                  <div className="flex items-center gap-2 sm:gap-2.5 font-bold text-slate-800">
                     <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
                     <span>100% Genuine Branded Warranty</span>
                   </div>
-                  <div className="flex items-center gap-2.5 font-bold text-slate-800">
+                  <div className="flex items-center gap-2 sm:gap-2.5 font-bold text-slate-800">
                     <Truck className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>Cash on Delivery (Islandwide 1-3 Days)</span>
                   </div>
-                  <div className="flex items-center gap-2.5 font-bold text-slate-800">
+                  <div className="flex items-center gap-2 sm:gap-2.5 font-bold text-slate-800">
                     <Store className="w-4 h-4 text-purple-600 shrink-0" />
                     <span>Showroom: 185/1/2B New Road, Ambalangoda</span>
                   </div>
-                  <div className="flex items-center gap-2.5 font-bold text-slate-800">
+                  <div className="flex items-center gap-2 sm:gap-2.5 font-bold text-slate-800">
                     <Phone className="w-4 h-4 text-amber-600 shrink-0" />
                     <span>Hotline: +94 76 989 0079 (Open 7 Days)</span>
                   </div>

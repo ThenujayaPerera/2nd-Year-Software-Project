@@ -67,33 +67,33 @@ export default function Faq() {
 
   return (
     <Layout>
-      <div className="bg-slate-50 min-h-screen py-16 px-6">
+      <div className="bg-slate-50 min-h-screen py-8 sm:py-16 px-3 sm:px-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-14">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600/10 text-blue-600 mb-6">
-              <HelpCircle className="w-8 h-8" />
+          <div className="text-center mb-8 sm:mb-14">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-blue-600/10 text-blue-600 mb-3 sm:mb-6">
+              <HelpCircle className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 mb-2 sm:mb-4">
               Frequently Asked Questions
             </h1>
-            <p className="text-slate-600 text-lg max-w-xl mx-auto">
+            <p className="text-slate-600 text-xs sm:text-lg max-w-xl mx-auto px-2">
               Everything you need to know about shopping, shipping, original warranties, and payments at NVSHOP.LK.
             </p>
           </div>
 
           {/* FAQ Categories & Questions */}
-          <div className="space-y-10">
+          <div className="space-y-6 sm:space-y-10">
             {FAQS.map((cat, catIdx) => (
-              <div key={catIdx} className="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 shadow-sm">
-                <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
-                  <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600">
-                    <cat.icon className="w-6 h-6" />
+              <div key={catIdx} className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-slate-100 shadow-sm">
+                <div className="flex items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6 border-b border-slate-100 pb-3 sm:pb-4">
+                  <div className="p-2 sm:p-2.5 rounded-xl bg-blue-50 text-blue-600">
+                    <cat.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900">{cat.category}</h2>
+                  <h2 className="text-base sm:text-xl font-bold text-slate-900">{cat.category}</h2>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {cat.questions.map((faq, qIdx) => {
                     const uniqueId = `${catIdx}-${qIdx}`;
                     const isOpen = openIdx === uniqueId;
@@ -101,22 +101,22 @@ export default function Faq() {
                     return (
                       <div 
                         key={qIdx}
-                        className="border border-slate-100 rounded-2xl overflow-hidden transition-all duration-300"
+                        className="border border-slate-100 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300"
                       >
                         <button
                           onClick={() => toggleAccordion(uniqueId)}
-                          className="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                          className="w-full p-3.5 sm:p-5 text-left font-bold text-slate-800 flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 transition-colors"
                         >
-                          <span className="text-base md:text-lg pr-4">{faq.q}</span>
+                          <span className="text-xs sm:text-base md:text-lg pr-3">{faq.q}</span>
                           <ChevronDown 
-                            className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-300 ${
+                            className={`w-4 h-4 sm:w-5 sm:h-5 text-slate-400 shrink-0 transition-transform duration-300 ${
                               isOpen ? 'rotate-180 text-blue-600' : ''
                             }`} 
                           />
                         </button>
 
                         {isOpen && (
-                          <div className="p-5 pt-2 text-slate-600 text-sm md:text-base leading-relaxed bg-white border-t border-slate-100">
+                          <div className="p-3.5 sm:p-5 pt-2 text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed bg-white border-t border-slate-100">
                             {faq.a}
                           </div>
                         )}
@@ -129,23 +129,23 @@ export default function Faq() {
           </div>
 
           {/* Need More Help Box */}
-          <div className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 md:p-12 text-white text-center shadow-xl">
-            <h3 className="text-2xl md:text-3xl font-black mb-3">Still have questions?</h3>
-            <p className="text-blue-100 mb-8 max-w-md mx-auto">
+          <div className="mt-8 sm:mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-white text-center shadow-xl">
+            <h3 className="text-xl sm:text-3xl font-black mb-2 sm:mb-3">Still have questions?</h3>
+            <p className="text-blue-100 text-xs sm:text-sm mb-5 sm:mb-8 max-w-md mx-auto">
               Our customer support team is available on WhatsApp to assist you with order inquiries and tech recommendations.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <a
                 href="https://wa.me/94769890079"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+                className="bg-white text-slate-900 px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 text-xs sm:text-base"
               >
-                <MessageSquare className="w-5 h-5 text-emerald-600" /> WhatsApp Support
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" /> WhatsApp Support
               </a>
               <Link
                 to="/contact"
-                className="bg-blue-700/60 hover:bg-blue-700 text-white border border-white/20 px-8 py-4 rounded-2xl font-bold transition-colors"
+                className="bg-blue-700/60 hover:bg-blue-700 text-white border border-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold transition-colors text-xs sm:text-base"
               >
                 Contact Us Page
               </Link>

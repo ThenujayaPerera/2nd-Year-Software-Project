@@ -102,7 +102,7 @@ export default function StockManagementTab({ products, onUpdateStock }) {
     
     setIsUpdating(true);
     try {
-      const res = await fetch(`http://localhost:8080/api/products/${stockModalProduct.id}`, {
+      const res = await fetch(`http://127.0.0.1:8080/api/products/${stockModalProduct.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...stockModalProduct, stock: newStock })
@@ -196,7 +196,7 @@ export default function StockManagementTab({ products, onUpdateStock }) {
               <th className="px-4 py-3 font-bold uppercase tracking-wider">Runout Projection</th>
               <th className="px-4 py-3 font-bold uppercase tracking-wider">Reorder Status</th>
               <th className="px-4 py-3 font-bold uppercase tracking-wider">Inventory Value</th>
-              <th className="px-4 py-3 font-bold uppercase tracking-wider text-right">Actions</th>
+              <th className="px-4 py-3 font-bold uppercase tracking-wider text-right hidden md:table-cell">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 bg-white">
@@ -254,7 +254,7 @@ export default function StockManagementTab({ products, onUpdateStock }) {
                     Margin: {p.metrics.margin}%
                   </div>
                 </td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-right hidden md:table-cell">
                   <button 
                     onClick={() => handleManualRestock(p)}
                     className="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 rounded-lg text-[11px] font-bold hover:bg-slate-50 transition-colors shadow-sm"

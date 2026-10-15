@@ -39,10 +39,24 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @org.springframework.beans.factory.annotation.Value("${cors.allowed-origins:*}")
+    private String corsAllowedOrigins;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        java.util.List<String> origins = java.util.Arrays.stream(corsAllowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
+        if (origins.contains("*")) {
+            configuration.setAllowedOriginPatterns(List.of("*"));
+        } else {
+            configuration.setAllowedOrigins(origins);
+            configuration.setAllowedOriginPatterns(origins);
+        }
+
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

@@ -125,21 +125,23 @@ export const useFilterStore = create((set) => ({
 }));
 
 // Comparison Store
-export const useComparisonStore = create((set) => ({
-  comparison: JSON.parse(localStorage.getItem('comparison')) || [],
+export const useComparisonStore = create((set, get) => ({
+  comparison: (JSON.parse(localStorage.getItem('comparison')) || []).slice(0, 3),
 
-  addToComparison: (product) => set((state) => {
+  addToComparison: (product) => {
+    const state = get();
     const alreadyAdded = state.comparison.find(item => item.id === product.id);
     if (alreadyAdded) {
-      return { comparison: state.comparison };
+      return { success: false, reason: 'ALREADY_EXISTS' };
     }
-    if (state.comparison.length >= 4) {
-      return { comparison: state.comparison };
+    if (state.comparison.length >= 3) {
+      return { success: false, reason: 'MAX_REACHED' };
     }
     const updatedComparison = [...state.comparison, product];
     localStorage.setItem('comparison', JSON.stringify(updatedComparison));
-    return { comparison: updatedComparison };
-  }),
+    set({ comparison: updatedComparison });
+    return { success: true };
+  },
 
   removeFromComparison: (productId) => set((state) => {
     const updatedComparison = state.comparison.filter(item => item.id !== productId);

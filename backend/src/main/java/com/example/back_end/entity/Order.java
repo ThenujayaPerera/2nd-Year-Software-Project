@@ -9,10 +9,16 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", indexes = {
+    @Index(name = "idx_orders_user_email", columnList = "user_email"),
+    @Index(name = "idx_orders_created_at", columnList = "created_at"),
+    @Index(name = "idx_orders_status", columnList = "status")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,7 +52,7 @@ public class Order {
     private Double totalAmount;
 
     @Column(name = "status", nullable = false)
-    private String status; // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+    private String status; // PENDING, PLACED, PROCESSING, SHIPPED, DELIVERED, CANCELLED
 
     @Column(name = "payment_method")
     private String paymentMethod; // CARD, PAYHERE, STRIPE, BANK, KOKO, COD
@@ -55,7 +61,17 @@ public class Order {
     private String paymentStatus; // SUCCESS, PENDING, FAILED
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @org.hibernate.annotations.BatchSize(size = 50)
+    @lombok.ToString.Exclude
+    @lombok.EqualsAndHashCode.Exclude
     private List<OrderItem> items = new ArrayList<>();
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @org.hibernate.annotations.BatchSize(size = 50)
+    @OrderBy("createdAt ASC")
+    @lombok.ToString.Exclude
+    @lombok.EqualsAndHashCode.Exclude
+    private Set<OrderStatusHistory> statusHistory = new LinkedHashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

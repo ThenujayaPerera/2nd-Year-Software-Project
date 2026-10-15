@@ -76,9 +76,26 @@ export default function AdminProductPreview({ product, label }) {
           {product.name || 'Product Name'}
         </h3>
 
-        <p className="text-xs text-slate-400 mb-3 font-semibold italic">
+        <p className="text-xs text-slate-400 mb-2 font-semibold italic">
           by {product.brand || 'Premium Brand'}
         </p>
+
+        <div className="flex items-center gap-1.5 flex-wrap mb-2">
+          {product.isFreeDelivery || Number(product.deliveryFee) === 0 ? (
+            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+              Free Delivery
+            </span>
+          ) : (
+            <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+              Delivery: LKR {Number(product.deliveryFee || 0).toLocaleString()}
+            </span>
+          )}
+          {Number(product.vatRate) > 0 && (
+            <span className="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">
+              VAT: {product.vatRate}%
+            </span>
+          )}
+        </div>
 
         <div className="mt-auto flex flex-col gap-3">
           <div className="flex items-baseline justify-between">

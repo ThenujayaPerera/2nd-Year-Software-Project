@@ -11,7 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = {
+    @Index(name = "idx_products_category", columnList = "category"),
+    @Index(name = "idx_products_is_weekly_highlight", columnList = "is_weekly_highlight"),
+    @Index(name = "idx_products_brand", columnList = "brand")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -56,16 +60,27 @@ public class Product {
 
     private String returnPeriod = "30 Days";
 
+    @Column(name = "delivery_fee")
+    private Double deliveryFee = 0.0;
+
+    @Column(name = "is_free_delivery")
+    private Boolean isFreeDelivery = false;
+
+    @Column(name = "vat_rate")
+    private Double vatRate = 0.0;
+
     @Column(length = 5000)
     private String description;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "product_description_images", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "image_url", length = 1000)
+    @org.hibernate.annotations.BatchSize(size = 50)
     private List<String> descriptionImages = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "product_gallery_images", joinColumns = @JoinColumn(name = "product_id"))
     @Column(name = "gallery_image_url", length = 1000)
+    @org.hibernate.annotations.BatchSize(size = 50)
     private List<String> galleryImages = new ArrayList<>();
 }

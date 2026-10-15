@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -66,19 +67,32 @@ public class UserController {
     }
 
     /**
-     * Update user profile (Name, Phone, Address)
+     * Update user profile and delivery address
      * PUT /api/users/profile
      */
     @PutMapping("/profile")
     public ResponseEntity<UserDTO> updateProfile(@RequestBody UserDTO profileDTO) {
         log.info("PUT request to update user profile: {}", profileDTO.getEmail());
-        UserDTO updated = userService.updateUserProfile(
-                profileDTO.getEmail(),
-                profileDTO.getName(),
-                profileDTO.getPhone(),
-                profileDTO.getAddress()
-        );
+        UserDTO updated = userService.updateUserProfile(profileDTO.getEmail(), profileDTO);
         return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * Change user password from User Profile
+     * PUT /api/users/change-password
+     */
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody com.example.back_end.dto.ChangePasswordDTO dto) {
+        log.info("PUT request to change password for user: {}", dto.getEmail());
+        try {
+            UserDTO updated = userService.changePassword(dto);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Password updated successfully",
+                    "user", updated
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     /**

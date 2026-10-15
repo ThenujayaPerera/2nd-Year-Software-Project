@@ -30,10 +30,14 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
     e.stopPropagation();
     if (inComparison) {
       removeFromComparison(product.id);
-      if (toast) toast(`Removed from comparison`, { type: 'info' });
+      if (toast) toast(`${product.name} removed from comparison`, { type: 'info' });
     } else {
-      addToComparison(product);
-      if (toast) toast(`Added to comparison!`, { type: 'success' });
+      const result = addToComparison(product);
+      if (result?.reason === 'MAX_REACHED') {
+        if (toast) toast('Comparison is available for a maximum of 3 items.', { type: 'warning', title: 'Limit Reached' });
+      } else if (result?.success) {
+        if (toast) toast(`${product.name} added to comparison!`, { type: 'success' });
+      }
     }
   };
 
@@ -48,93 +52,114 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
   };
 
   return (
-    <div className="card-premium group relative flex flex-col h-full">
-      {/* Wishlist & Comparison Buttons */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
+    <div className="card-premium group relative flex flex-col h-full p-3 sm:p-5">
+      {/* Wishlist & Comparison Buttons - Visible on mobile, hover on desktop */}
+      <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-10 flex flex-col gap-1.5 sm:gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all">
         <button 
           onClick={handleToggleComparison}
-          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${
+          className={`p-1.5 sm:p-2 rounded-full backdrop-blur-md shadow-sm transition-all active:scale-90 ${
             inComparison
               ? 'bg-primary text-white'
-              : 'bg-white/80 hover:bg-primary/10 hover:text-primary'
+              : 'bg-white/90 hover:bg-primary/10 hover:text-primary text-slate-600'
           }`}
           title={inComparison ? 'Remove from comparison' : 'Add to comparison'}
         >
-          <CheckSquare2 className="w-5 h-5" />
+          <CheckSquare2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
         <button 
           onClick={handleToggleWishlist}
-          className={`p-2 rounded-full backdrop-blur-md shadow-sm transition-all ${
+          className={`p-1.5 sm:p-2 rounded-full backdrop-blur-md shadow-sm transition-all active:scale-90 ${
             inWishlist
-              ? 'bg-red-50 text-red-500 scale-110 shadow-md shadow-red-500/20'
-              : 'bg-white/80 hover:bg-red-50 hover:text-red-500'
+              ? 'bg-red-50 text-red-500 scale-105 shadow-md shadow-red-500/20'
+              : 'bg-white/90 hover:bg-red-50 hover:text-red-500 text-slate-600'
           }`}
           title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
         >
-          <Heart className={`w-5 h-5 transition-transform ${inWishlist ? 'fill-red-500 text-red-500' : ''}`} />
+          <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform ${inWishlist ? 'fill-red-500 text-red-500' : ''}`} />
         </button>
       </div>
 
       {/* Image Container */}
-      <div className="relative mb-6 bg-slate-100 rounded-xl overflow-hidden aspect-square cursor-pointer" onClick={handleViewDetails}>
+      <div className="relative mb-3 sm:mb-4 bg-slate-100 rounded-xl overflow-hidden aspect-square cursor-pointer" onClick={handleViewDetails}>
         <img
-          src={product.image || 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?q=80&w=600&auto=format&fit=crop'}
+          src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
         />
         
-        {product.discount && (
-          <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-            -{product.discount}% OFF
+        {(product.discount > 0 || product.isNew) && (
+          <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-[1] flex items-center gap-1 sm:gap-1.5">
+            {product.isNew && (
+              <span className="bg-primary text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-black shadow-md whitespace-nowrap">
+                NEW
+              </span>
+            )}
+            {product.discount > 0 && (
+              <span className="bg-red-600 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-xs font-black shadow-md whitespace-nowrap">
+                -{product.discount}%
+              </span>
+            )}
           </div>
         )}
 
-        {product.isNew && (
-          <div className="absolute top-4 left-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-            NEW ARRIVAL
-          </div>
-        )}
-
-        {/* Quick View Overlay */}
-        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+        {/* Quick View Overlay (Desktop only) */}
+        <div className="hidden sm:flex absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity items-center justify-center gap-3">
           <button
             onClick={handleViewDetails}
-            className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300"
+            className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-900 hover:bg-primary hover:text-white transition-all transform translate-y-3 group-hover:translate-y-0 duration-300 shadow-lg"
           >
-            <Eye className="w-5 h-5" />
+            <Eye className="w-4 h-4" />
           </button>
         </div>
       </div>
 
       {/* Content */}
       <div className="flex flex-col flex-1">
-        <div className="flex justify-between items-start mb-2">
-          <span className="text-[10px] font-bold tracking-widest text-primary uppercase">
+        <div className="flex justify-between items-start mb-1 sm:mb-1.5">
+          <span className="text-[9px] sm:text-[10px] font-bold tracking-wider text-primary uppercase truncate max-w-[65%]">
             {product.category || 'Accessories'}
           </span>
-          <div className="flex items-center gap-1">
-            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-            <span className="text-xs font-bold text-slate-700">{product.rating || '4.5'}</span>
+          <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
+            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+            <span className="text-[10px] sm:text-xs font-bold text-slate-700">{product.rating || '4.5'}</span>
           </div>
         </div>
 
-        <h3 onClick={handleViewDetails} className="font-bold text-slate-900 mb-1 line-clamp-1 group-hover:text-primary transition-colors cursor-pointer">
+        <h3 onClick={handleViewDetails} className="font-bold text-slate-900 text-xs sm:text-sm mb-1 line-clamp-2 group-hover:text-primary transition-colors cursor-pointer leading-tight sm:leading-snug">
           {product.name}
         </h3>
 
-        <p className="text-xs text-slate-550 mb-3 font-semibold italic text-slate-400">
+        <p className="text-[10px] sm:text-xs text-slate-400 mb-1.5 font-medium truncate">
           by {product.brand || 'Premium Brand'}
         </p>
 
-        <div className="mt-auto flex flex-col gap-3">
-          <div className="flex items-baseline justify-between">
-            <div className="flex flex-col">
+        <div className="flex items-center gap-1.5 flex-wrap mb-2">
+          {product.isFreeDelivery || product.deliveryFee === 0 ? (
+            <span className="text-[9px] sm:text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.5 rounded-md">
+              Free Delivery
+            </span>
+          ) : (
+            <span className="text-[9px] sm:text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-md">
+              Delivery LKR {(product.deliveryFee || 350).toLocaleString()}
+            </span>
+          )}
+          {(product.vatRate || 0) > 0 && (
+            <span className="text-[9px] sm:text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-1.5 py-0.5 rounded-md">
+              VAT {product.vatRate}%
+            </span>
+          )}
+        </div>
+
+        <div className="mt-auto flex flex-col gap-2 sm:gap-3">
+          <div className="flex items-baseline justify-between gap-1">
+            <div className="flex flex-col min-w-0">
               {product.originalPrice && (
-                <span className="text-xs text-slate-400 line-through">
+                <span className="text-[10px] sm:text-xs text-slate-400 line-through truncate">
                   LKR {product.originalPrice.toLocaleString()}
                 </span>
               )}
-              <span className="text-lg font-black text-slate-900">
+              <span className="text-xs sm:text-base font-black text-slate-900 truncate">
                 LKR {product.price.toLocaleString()}
               </span>
             </div>
@@ -142,20 +167,20 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }) {
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="p-3 rounded-xl bg-slate-900 text-white hover:bg-primary transition-all disabled:bg-slate-200 disabled:text-slate-400"
+              className="p-2 sm:p-2.5 rounded-xl bg-slate-900 text-white hover:bg-primary transition-all disabled:bg-slate-200 disabled:text-slate-400 active:scale-95 shrink-0"
+              title="Add to Cart"
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
 
           {/* Koko Installment Banner */}
-          <div className="border-t border-slate-100 pt-2 text-[10px] font-semibold text-slate-500 flex items-center justify-between">
-            <span>Or 3 installments of</span>
-            <span className="text-koko font-bold">LKR {Math.round(product.price / 3).toLocaleString()}</span>
+          <div className="border-t border-slate-100 pt-1.5 text-[9px] sm:text-[10px] font-semibold text-slate-500 flex items-center justify-between gap-1">
+            <span className="truncate">3x Koko</span>
+            <span className="text-koko font-bold shrink-0">LKR {Math.round(product.price / 3).toLocaleString()}</span>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

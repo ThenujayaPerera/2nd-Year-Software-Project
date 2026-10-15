@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 import java.util.List;
 
 @RestController
@@ -18,6 +21,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final com.example.back_end.service.OrderStreamService orderStreamService;
 
     @PostMapping
     public ResponseEntity<Order> placeOrder(@RequestBody OrderRequestDTO request) {
@@ -29,5 +33,11 @@ public class OrderController {
     @GetMapping("/my-orders")
     public ResponseEntity<List<Order>> getMyOrders(@RequestParam String email) {
         return ResponseEntity.ok(orderService.getUserOrders(email));
+    }
+
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamOrders(@RequestParam(required = false) String email) {
+        log.info("SSE real-time stream subscription for email: {}", email);
+        return orderStreamService.subscribe(email);
     }
 }

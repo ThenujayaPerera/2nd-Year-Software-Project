@@ -118,6 +118,8 @@ logging.level.com.example.back_end=DEBUG
 - `ddl-auto=validate`: Only validates schema (production)
 - `ddl-auto=none`: No automatic schema handling
 
+The customer profile now stores address line 2, city, district, province, postal code, and delivery instructions. Order items also retain the warranty period captured at checkout. With `ddl-auto=update`, Hibernate adds these nullable columns to existing databases without deleting existing profile or order data.
+
 ## Running the Application
 
 ### Using Gradle (Recommended)

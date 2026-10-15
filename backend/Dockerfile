@@ -12,7 +12,7 @@ RUN ./gradlew build -x test
 # Runtime stage
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=builder /build/build/libs/Back_End-*.jar app.jar
+COPY --from=builder /build/build/libs/app.jar app.jar
 
 EXPOSE 8080
 

@@ -208,7 +208,7 @@ export default function CategoryShowcaseExperience({ initialCategory = 'Apple iP
 
   useEffect(() => {
     // Fetch live products from backend to show matching real inventory
-    fetch('http://localhost:8080/api/products')
+    fetch('http://127.0.0.1:8080/api/products')
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setAllProducts(data);

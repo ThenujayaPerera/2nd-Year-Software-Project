@@ -55,6 +55,25 @@ public class MailService {
         }
     }
 
+    public void sendForgotPasswordOtpEmail(String toEmail, String otp) {
+        log.info("Preparing Password Reset OTP email for: {}. CODE: {}", toEmail, otp);
+        String html = buildForgotPasswordHtmlBody(otp);
+        String subject = "NVSHOP.LK - Password Reset Code: " + otp;
+
+        try {
+            if (StringUtils.hasText(resendApiKey)) {
+                if (sendWithResend(toEmail, subject, html)) {
+                    return;
+                }
+            }
+
+            sendWithSmtp(toEmail, subject, html, buildForgotPasswordTextBody(otp));
+        } catch (Exception ex) {
+            log.warn("Failed to send Password Reset OTP to {}: {}. Logged OTP for dev.", toEmail, ex.getMessage());
+            log.info("DEV PASSWORD RESET OTP FOR {}: {}", toEmail, otp);
+        }
+    }
+
     public void sendOrderConfirmationEmail(Order order) {
         try {
             String subject = "Order Confirmed #" + order.getOrderNumber() + " - NVSHOP.LK";
@@ -249,6 +268,45 @@ public class MailService {
                 "</div>" +
                 "<p style='color: #94a3b8; font-size: 12px; margin-top: 24px;'>" +
                 "This code is valid for 10 minutes. Please do not share this code with anyone." +
+                "</p>" +
+                "</div>" +
+                "<div style='background: #f8fafc; padding: 16px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;'>" +
+                "Showroom: 185/1/2B New Road, Ambalangoda • Hotline: +94 76 989 0079<br>© NVSHOP.LK All rights reserved." +
+                "</div>" +
+                "</div>",
+                otp
+        );
+    }
+
+    private String buildForgotPasswordTextBody(String otp) {
+        return String.format(
+                "NVSHOP.LK Password Reset Request\n\n" +
+                "Your 6-digit Password Reset Code is: %s\n\n" +
+                "Enter this code on the password reset screen to set a new password and access your account.\n" +
+                "This code is valid for 10 minutes.\n\n" +
+                "If you did not request a password reset, please contact our support team immediately.\n\n" +
+                "Showroom: 185/1/2B New Road, Ambalangoda • Hotline: +94 76 989 0079",
+                otp
+        );
+    }
+
+    private String buildForgotPasswordHtmlBody(String otp) {
+        return String.format(
+                "<div style='font-family: Arial, sans-serif; max-width: 540px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);'>" +
+                "<div style='background: #0f172a; color: white; padding: 28px 24px; text-align: center;'>" +
+                "<h1 style='margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 1px;'>NVSHOP.LK</h1>" +
+                "<p style='margin: 6px 0 0 0; font-size: 13px; color: #94a3b8;'>Security & Account Access</p>" +
+                "</div>" +
+                "<div style='padding: 32px 24px; text-align: center;'>" +
+                "<h2 style='color: #0f172a; margin-top: 0; font-size: 20px; font-weight: 800;'>Reset Your Password</h2>" +
+                "<p style='color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 24px;'>" +
+                "We received a request to reset your NVSHOP.LK account password. Enter the 6-digit verification code below to set your new password:" +
+                "</p>" +
+                "<div style='display: inline-block; padding: 16px 36px; background: #f1f5f9; border: 2px dashed #0284c7; border-radius: 12px; font-size: 32px; font-weight: 900; letter-spacing: 8px; color: #0f172a; font-family: monospace;'>" +
+                "%s" +
+                "</div>" +
+                "<p style='color: #94a3b8; font-size: 12px; margin-top: 24px;'>" +
+                "This code is valid for 10 minutes. If you did not request this, please ignore this email or contact support." +
                 "</p>" +
                 "</div>" +
                 "<div style='background: #f8fafc; padding: 16px 24px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;'>" +

@@ -14,8 +14,8 @@ export default function CustomizeHomeTab() {
     setLoading(true);
     try {
       const [slidesRes, photosRes] = await Promise.all([
-        fetch('http://localhost:8080/api/home/slides'),
-        fetch('http://localhost:8080/api/home/showroom')
+        fetch('http://127.0.0.1:8080/api/home/slides'),
+        fetch('http://127.0.0.1:8080/api/home/showroom')
       ]);
       if (slidesRes.ok) setHeroSlides(await slidesRes.json());
       if (photosRes.ok) setShowroomPhotos(await photosRes.json());
@@ -34,8 +34,8 @@ export default function CustomizeHomeTab() {
   const handleSaveSlide = async (e) => {
     e.preventDefault();
     const url = editingSlide.id 
-      ? `http://localhost:8080/api/home/slides/${editingSlide.id}`
-      : 'http://localhost:8080/api/home/slides';
+      ? `http://127.0.0.1:8080/api/home/slides/${editingSlide.id}`
+      : 'http://127.0.0.1:8080/api/home/slides';
     const method = editingSlide.id ? 'PUT' : 'POST';
 
     try {
@@ -56,7 +56,7 @@ export default function CustomizeHomeTab() {
   const handleDeleteSlide = async (id) => {
     if (!window.confirm("Are you sure you want to delete this slide?")) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/home/slides/${id}`, { method: 'DELETE' });
+      const res = await fetch(`http://127.0.0.1:8080/api/home/slides/${id}`, { method: 'DELETE' });
       if (res.ok) fetchData();
     } catch (err) {
       console.error(err);
@@ -67,8 +67,8 @@ export default function CustomizeHomeTab() {
   const handleSavePhoto = async (e) => {
     e.preventDefault();
     const url = editingPhoto.id 
-      ? `http://localhost:8080/api/home/showroom/${editingPhoto.id}`
-      : 'http://localhost:8080/api/home/showroom';
+      ? `http://127.0.0.1:8080/api/home/showroom/${editingPhoto.id}`
+      : 'http://127.0.0.1:8080/api/home/showroom';
     const method = editingPhoto.id ? 'PUT' : 'POST';
 
     try {
@@ -89,7 +89,7 @@ export default function CustomizeHomeTab() {
   const handleDeletePhoto = async (id) => {
     if (!window.confirm("Are you sure you want to delete this photo?")) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/home/showroom/${id}`, { method: 'DELETE' });
+      const res = await fetch(`http://127.0.0.1:8080/api/home/showroom/${id}`, { method: 'DELETE' });
       if (res.ok) fetchData();
     } catch (err) {
       console.error(err);
@@ -106,7 +106,7 @@ export default function CustomizeHomeTab() {
           <h3 className="font-black text-xl text-slate-900">Hero Slideshow Configuration</h3>
           <button 
             onClick={() => setEditingSlide({ title: '', subtitle: '', image: '', cta: '', link: '', color: 'from-slate-950/85 via-slate-900/40 to-transparent' })}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold"
+            className="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold"
           >
             <Plus className="w-4 h-4" /> Add Slide
           </button>
@@ -158,7 +158,7 @@ export default function CustomizeHomeTab() {
                   <h5 className="font-bold text-sm text-slate-900 line-clamp-1">{slide.title}</h5>
                   <p className="text-xs text-slate-500 line-clamp-1">{slide.subtitle}</p>
                 </div>
-                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="hidden md:flex absolute top-2 right-2 gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => setEditingSlide(slide)} className="p-2 bg-white text-blue-600 rounded-lg shadow"><Pencil className="w-4 h-4" /></button>
                   <button onClick={() => handleDeleteSlide(slide.id)} className="p-2 bg-white text-red-600 rounded-lg shadow"><Trash2 className="w-4 h-4" /></button>
                 </div>
@@ -175,7 +175,7 @@ export default function CustomizeHomeTab() {
           <h3 className="font-black text-xl text-slate-900">Step Inside NVSHOP.LK (Showroom Photos)</h3>
           <button 
             onClick={() => setEditingPhoto({ tag: '', tagColor: 'text-blue-400', title: '', subtitle: '', fullDesc: '', image: '', gridClass: 'col-span-1 aspect-[4/3]' })}
-            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold"
+            className="hidden md:flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm font-bold"
           >
             <Plus className="w-4 h-4" /> Add Photo
           </button>
@@ -232,7 +232,7 @@ export default function CustomizeHomeTab() {
                   <h5 className="font-bold text-sm text-slate-900 line-clamp-1">{photo.title}</h5>
                   <p className="text-[11px] text-slate-500 line-clamp-2">{photo.fullDesc}</p>
                 </div>
-                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="hidden md:flex absolute top-2 right-2 gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => setEditingPhoto(photo)} className="p-2 bg-white text-emerald-600 rounded-lg shadow"><Pencil className="w-4 h-4" /></button>
                   <button onClick={() => handleDeletePhoto(photo.id)} className="p-2 bg-white text-red-600 rounded-lg shadow"><Trash2 className="w-4 h-4" /></button>
                 </div>

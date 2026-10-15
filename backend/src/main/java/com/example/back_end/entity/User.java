@@ -34,6 +34,24 @@ public class User {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "address_line_2")
+    private String addressLine2;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "district")
+    private String district;
+
+    @Column(name = "province")
+    private String province;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "delivery_instructions")
+    private String deliveryInstructions;
+
     @Column(name = "is_email_verified")
     private Boolean isEmailVerified = false;
 

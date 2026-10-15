@@ -23,6 +23,18 @@ public class UserCreateDTO {
 
     private String address;
 
+    private String addressLine2;
+
+    private String city;
+
+    private String district;
+
+    private String province;
+
+    private String postalCode;
+
+    private String deliveryInstructions;
+
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;

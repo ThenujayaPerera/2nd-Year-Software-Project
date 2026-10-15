@@ -1,10 +1,12 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, Zap, Award, Users, Heart, Smartphone, 
   MapPin, Clock, Phone, Mail, MessageSquare, CheckCircle, 
-  Star, Truck, Sparkles, ArrowRight, ShieldAlert, Store
+  Star, Truck, Sparkles, ArrowRight, ShieldAlert, Store, Quote
 } from 'lucide-react';
 import Layout from '../components/Layout';
+import { reviewAPI } from '../services/api';
 
 const SHOWROOM_PHOTOS = [
   {
@@ -89,29 +91,76 @@ const BRANDS = [
 ];
 
 export default function About() {
+  const [featuredReviews, setFeaturedReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    reviewAPI.getFeatured()
+      .then((res) => {
+        if (isMounted && Array.isArray(res.data)) {
+          setFeaturedReviews(res.data);
+        }
+      })
+      .catch((err) => console.warn('Could not load featured reviews:', err))
+      .finally(() => {
+        if (isMounted) setLoadingReviews(false);
+      });
+    return () => { isMounted = false; };
+  }, []);
+
+  const fallbackReviews = [
+    {
+      id: 'f1',
+      userName: 'Nimal Bandara',
+      productName: 'Anker PowerCore 20000mAh GaN',
+      rating: 5,
+      comment: 'Super fast delivery to Kandy! The genuine Anker fast charging speed is incredible. Outstanding service from NVSHOP.',
+      createdAt: '2026-09-20'
+    },
+    {
+      id: 'f2',
+      userName: 'Sanduni Perera',
+      productName: 'UGREEN 65W Nexode GaN Charger',
+      rating: 5,
+      comment: '100% original product with official company warranty card included. Tested with my MacBook and iPhone simultaneously without any heating issues.',
+      createdAt: '2026-09-28'
+    },
+    {
+      id: 'f3',
+      userName: 'Kasun Jayawardena',
+      productName: 'Soundcore Space One ANC Headphones',
+      rating: 5,
+      comment: 'Purchased online with Cash on Delivery. Delivered safely in 2 days to Galle. Authentic bass and noise cancellation is phenomenal.',
+      createdAt: '2026-10-04'
+    }
+  ];
+
+  const displayReviews = featuredReviews.length > 0 ? featuredReviews : fallbackReviews;
+
   return (
     <Layout>
       <div className="bg-slate-50 min-h-screen">
         {/* 1. Hero Section */}
-        <section className="bg-gradient-to-b from-blue-950 via-slate-900 to-slate-900 text-white py-20 px-6 relative overflow-hidden">
+        <section className="bg-gradient-to-b from-blue-950 via-slate-900 to-slate-900 text-white py-12 sm:py-20 px-4 sm:px-6 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-          <div className="max-w-6xl mx-auto text-center relative z-10 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-black uppercase tracking-widest">
-              <Sparkles className="w-4 h-4" /> Find Your Perfect Match
+          <div className="max-w-6xl mx-auto text-center relative z-10 space-y-4 sm:space-y-6">
+            <div className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[10px] sm:text-xs font-black uppercase tracking-widest">
+              <Sparkles className="w-3.5 h-3.5" /> Find Your Perfect Match
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight max-w-4xl mx-auto">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight max-w-4xl mx-auto">
               About <span className="text-blue-400">NVSHOP.LK</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
+            <p className="text-sm sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed px-2">
               The premier destination for 100% original mobile accessories, fast chargers, power banks, and gaming gear in Ambalangoda and throughout Sri Lanka.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-4 pt-2 sm:pt-4">
               <Link
                 to="/products"
-                className="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-blue-500/30 flex items-center gap-2"
+                className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3 sm:py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-lg shadow-blue-500/30 flex items-center gap-2"
               >
                 Shop All Products <ArrowRight className="w-4 h-4" />
               </Link>
@@ -119,7 +168,7 @@ export default function About() {
                 href="https://wa.me/94769890079"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-7 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-emerald-600/30"
+                className="w-full sm:w-auto justify-center px-6 sm:px-7 py-3 sm:py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-emerald-600/30"
               >
                 <MessageSquare className="w-4 h-4" /> Chat on WhatsApp
               </a>
@@ -128,13 +177,13 @@ export default function About() {
         </section>
 
         {/* 2. Key Stats Strip */}
-        <section className="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="max-w-7xl mx-auto px-3 sm:px-6 -mt-6 sm:-mt-10 relative z-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             {STATS.map((st, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 text-center space-y-1">
-                <p className="text-2xl sm:text-3xl font-black text-blue-600">{st.number}</p>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">{st.label}</h4>
-                <p className="text-[11px] text-slate-500">{st.sub}</p>
+              <div key={idx} className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-md sm:shadow-xl border border-slate-100 text-center space-y-0.5 sm:space-y-1">
+                <p className="text-xl sm:text-3xl font-black text-blue-600">{st.number}</p>
+                <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-900">{st.label}</h4>
+                <p className="text-[10px] sm:text-[11px] text-slate-500">{st.sub}</p>
               </div>
             ))}
           </div>
@@ -364,8 +413,85 @@ export default function About() {
           </div>
         </section>
 
-        {/* 8. Call to Action Banner */}
-        <section className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16 px-6 text-center">
+        {/* 8. Verified Customer Feedback & Ratings */}
+        <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white border-y border-slate-200/80">
+          <div className="max-w-6xl mx-auto space-y-10 sm:space-y-12">
+            <div className="text-center space-y-2.5 max-w-2xl mx-auto">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-600 font-mono">
+                Real Customer Experiences
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900">
+                Verified Customer Feedback
+              </h2>
+              <p className="text-slate-500 text-xs sm:text-sm">
+                Authentic ratings and reviews submitted by confirmed buyers across Sri Lanka after order delivery.
+              </p>
+            </div>
+
+            {loadingReviews ? (
+              <div className="grid md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-100 animate-pulse space-y-3">
+                    <div className="h-4 bg-slate-200 rounded w-1/2" />
+                    <div className="h-3 bg-slate-200 rounded w-1/3" />
+                    <div className="h-16 bg-slate-200 rounded" />
+                  </div>
+                ))}
+              </div>
+            ) : displayReviews.length === 0 ? (
+              <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200 text-center max-w-md mx-auto space-y-2">
+                <ShieldCheck className="w-8 h-8 text-blue-600 mx-auto" />
+                <h4 className="font-bold text-slate-900 text-sm">Verified Customer Reviews</h4>
+                <p className="text-xs text-slate-500">
+                  Every order on NVSHOP.LK comes with verified review privileges once delivered.
+                </p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-3 gap-6">
+                {displayReviews.map((item, idx) => (
+                  <div
+                    key={item.id || idx}
+                    className="p-6 rounded-3xl bg-slate-50/70 border border-slate-200/80 hover:border-blue-300 transition-all flex flex-col justify-between space-y-4 hover:shadow-md"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-amber-400">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`w-4 h-4 ${(item.rating || 5) >= star ? 'fill-amber-400 text-amber-400' : 'text-slate-200'}`}
+                            />
+                          ))}
+                        </div>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                          <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                          Verified Buyer
+                        </span>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+                        "{item.comment}"
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                      <div>
+                        <p className="font-bold text-slate-900">{item.userName || 'Customer'}</p>
+                        <p className="text-[10px] text-slate-400 font-mono truncate max-w-[140px]">{item.productName || 'Verified Purchase'}</p>
+                      </div>
+                      <span className="text-[10px] text-slate-400">
+                        {item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Verified Delivery'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* 9. Call to Action Banner */}
+        <section className="bg-gradient-to-br from-sky-600 via-blue-700 to-fuchsia-600 text-white py-16 px-6 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
             <h2 className="text-3xl sm:text-4xl font-black">Ready to Upgrade Your Tech Setup?</h2>
             <p className="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto">

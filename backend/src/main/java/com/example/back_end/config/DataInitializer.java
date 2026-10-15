@@ -100,11 +100,9 @@ public class DataInitializer implements CommandLineRunner {
             showroomPhotoRepository.saveAll(photos);
         }
 
-        // Clean & Sync exact live products and photo assets from official nvshop.lk
-        log.info("Syncing exact NVSHOP.LK catalog, official product images, and details...");
-        productRepository.deleteAll();
-
-        List<Product> products = new ArrayList<>();
+        if (productRepository.count() == 0) {
+            log.info("Supabase products table is empty. Seeding initial NVSHOP.LK catalog...");
+            List<Product> products = new ArrayList<>();
 
         // --- 1. Apple iPhone ---
         products.add(createProduct(
@@ -512,8 +510,11 @@ public class DataInitializer implements CommandLineRunner {
                 "Adjustable multi-angle aluminum desktop stand for smartphones and tablets."
         ));
 
-        productRepository.saveAll(products);
-        log.info("Successfully synced {} official NVSHOP.LK products across all 11 categories!", products.size());
+            productRepository.saveAll(products);
+            log.info("Successfully seeded {} official NVSHOP.LK products across all 11 categories into Supabase!", products.size());
+        } else {
+            log.info("Supabase database already contains {} products. Preserving live Supabase database records and admin configurations without overwrite.", productRepository.count());
+        }
 
         // Seed realistic sample orders for customers
         seedUserOrders("khimasha16@gmail.com", "Kulashi Himasha", "+94 76 227 7566", "185/1/2B New Road, Ambalangoda, Sri Lanka");
@@ -614,12 +615,7 @@ public class DataInitializer implements CommandLineRunner {
         p.setImage(image);
         p.setDiscount(discount);
         p.setIsNew(isNew);
-        // Automatically make it a weekly highlight if discount is 15% or more, or if it's the iPhone
-        if ((discount != null && discount >= 15) || name.contains("iPhone 17")) {
-            p.setIsWeeklyHighlight(true);
-        } else {
-            p.setIsWeeklyHighlight(false);
-        }
+        p.setIsWeeklyHighlight(false);
         p.setStock(stock);
         p.setWarranty(warranty);
         p.setReturnPeriod(returnPeriod);
