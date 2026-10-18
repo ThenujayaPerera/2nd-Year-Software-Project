@@ -5,6 +5,7 @@ import {
   Check, Star, Eye, ChevronRight, Play, Award, Flame, Heart
 } from 'lucide-react';
 import { useCartStore, useWishlistStore } from '../store';
+import { API_BASE_URL } from '../services/api';
 
 export const SHOWCASE_CATEGORIES = [
   {
@@ -208,7 +209,7 @@ export default function CategoryShowcaseExperience({ initialCategory = 'Apple iP
 
   useEffect(() => {
     // Fetch live products from backend to show matching real inventory
-    fetch('http://127.0.0.1:8080/api/products')
+    fetch(`${API_BASE_URL}/products`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setAllProducts(data);

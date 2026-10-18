@@ -3,8 +3,9 @@ import {
   Star, Search, RefreshCw, Check, X, Trash2, ShieldCheck, 
   AlertCircle, MessageSquare, Clock, Filter, ThumbsUp, ThumbsDown
 } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
-const API_BASE = 'http://127.0.0.1:8080/api/admin';
+const API_BASE = `${API_BASE_URL}/admin`;
 
 export default function ReviewsTab() {
   const [reviews, setReviews] = useState([]);

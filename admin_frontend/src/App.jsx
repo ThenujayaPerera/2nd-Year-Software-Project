@@ -68,14 +68,9 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-const getApiHost = () => {
-  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-    return window.location.hostname;
-  }
-  return '127.0.0.1';
-};
+import { API_BASE_URL } from './config/api';
 
-const AUTH_BASE = `http://${getApiHost()}:8080/api/admin-auth`;
+const AUTH_BASE = `${API_BASE_URL}/admin-auth`;
 
 function AdminLogin({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -104,7 +99,7 @@ function AdminLogin({ onLogin }) {
     } catch (err) {
       console.warn('Primary login attempt failed, trying fallback 127.0.0.1...', err);
       try {
-        const fallbackRes = await axios.post('http://127.0.0.1:8080/api/admin-auth/login', { 
+        const fallbackRes = await axios.post(`${AUTH_BASE}/login`, { 
           email: trimmedEmail, 
           password: trimmedPassword 
         });
@@ -118,7 +113,7 @@ function AdminLogin({ onLogin }) {
         if (serverMsg) {
           setError(serverMsg);
         } else if (fallbackErr.code === 'ERR_NETWORK' || err.code === 'ERR_NETWORK') {
-          setError('Cannot connect to backend server at http://127.0.0.1:8080. Please ensure the backend is running.');
+          setError(`Cannot connect to backend server at ${API_BASE_URL}. Please ensure the backend is running.`);
         } else {
           setError('Login failed. Please verify your credentials and try again.');
         }

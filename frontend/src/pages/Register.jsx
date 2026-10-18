@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import Layout from '../components/Layout';
 import { useAuthStore } from '../store';
-import { authAPI } from '../services/api';
+import { authAPI, API_BASE_URL } from '../services/api';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -164,7 +164,7 @@ export default function Register() {
     if (!canResend) return;
     setLoading(true);
     try {
-      await fetch('http://127.0.0.1:8080/api/auth/resend-otp', {
+      await fetch(`${API_BASE_URL}/auth/resend-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, phone: formData.phone }),

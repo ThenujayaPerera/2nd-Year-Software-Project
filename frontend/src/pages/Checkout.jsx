@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check, CreditCard, Banknote, Smartphone, AlertCircle, ShieldCheck, Truck, Lock } from 'lucide-react';
 import Layout from '../components/Layout';
 import { useCartStore, useAuthStore } from '../store';
+import { API_BASE_URL } from '../services/api';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ export default function Checkout() {
     };
 
     try {
-      const res = await fetch('http://127.0.0.1:8080/api/orders', {
+      const res = await fetch(`${API_BASE_URL}/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload),

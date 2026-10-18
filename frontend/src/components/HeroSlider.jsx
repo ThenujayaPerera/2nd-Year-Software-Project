@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../services/api';
 
 const DEFAULT_SLIDES = [
   {
@@ -42,7 +43,7 @@ export default function HeroSlider() {
   const [slides, setSlides] = useState(DEFAULT_SLIDES);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8080/api/home/slides')
+    fetch(`${API_BASE_URL}/home/slides`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {

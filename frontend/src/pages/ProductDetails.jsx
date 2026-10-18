@@ -2,7 +2,7 @@ import { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useCartStore, useWishlistStore } from '../store';
-import { productAPI, reviewAPI } from '../services/api';
+import { productAPI, reviewAPI, API_BASE_URL } from '../services/api';
 import { 
   Star, ShoppingCart, Zap, Heart, ArrowLeft, Truck, ShieldCheck, 
   RotateCcw, Check, Share2, Store, HelpCircle, Phone, MessageSquare,
@@ -42,7 +42,7 @@ export default function ProductDetails() {
       })
       .catch(() => {
         // Fetch from all products if by ID direct endpoint failed
-        fetch('http://127.0.0.1:8080/api/products')
+        fetch(`${API_BASE_URL}/products`)
           .then((r) => r.json())
           .then((all) => {
             if (isMounted && Array.isArray(all)) {

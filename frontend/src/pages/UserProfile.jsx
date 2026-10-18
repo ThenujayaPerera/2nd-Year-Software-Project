@@ -256,7 +256,7 @@ export default function UserProfile() {
     setSaveError('');
 
     try {
-      const res = await fetch('http://127.0.0.1:8080/api/users/profile', {
+      const res = await fetch(`${API_BASE_URL}/users/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

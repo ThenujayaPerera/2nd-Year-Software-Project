@@ -6,6 +6,7 @@ import HeroSlider from '../components/HeroSlider';
 import { useCartStore } from '../store';
 import { Smartphone, Zap, ShieldCheck, Truck, Headphones, ArrowRight, Star, X, ChevronLeft, ChevronRight, Maximize2, CheckCircle2, Mail, Sparkles } from 'lucide-react';
 import { useToast } from '../components/Toast';
+import { API_BASE_URL } from '../services/api';
 
 // Showroom photos are fetched dynamically
 
@@ -73,8 +74,8 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [highlightsRes, photosRes] = await Promise.all([
-          fetch('http://127.0.0.1:8080/api/products/highlights'),
-          fetch('http://127.0.0.1:8080/api/home/showroom')
+          fetch(`${API_BASE_URL}/products/highlights`),
+          fetch(`${API_BASE_URL}/home/showroom`)
         ]);
         if (highlightsRes.ok) {
           const data = await highlightsRes.json();

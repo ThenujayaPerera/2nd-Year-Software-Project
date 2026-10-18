@@ -12,6 +12,7 @@ import StockManagementTab from '../components/StockManagementTab';
 import SuppliersTab from '../components/SuppliersTab';
 import ShopSettingsTab from '../components/ShopSettingsTab';
 import ReviewsTab from '../components/ReviewsTab';
+import { API_BASE_URL } from '../config/api';
 
 export default function Admin({ admin, onLogout }) {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -84,12 +85,12 @@ export default function Admin({ admin, onLogout }) {
     setLoading(true);
     try {
       const [repRes, ordRes, prodRes, userRes, payRes, adminRes] = await Promise.all([
-        fetch('http://127.0.0.1:8080/api/admin/reports/sales'),
-        fetch('http://127.0.0.1:8080/api/admin/orders'),
-        fetch('http://127.0.0.1:8080/api/products'),
-        fetch('http://127.0.0.1:8080/api/admin/users'),
-        fetch('http://127.0.0.1:8080/api/admin/payments'),
-        fetch('http://127.0.0.1:8080/api/admin/admins'),
+        fetch(`${API_BASE_URL}/admin/reports/sales`),
+        fetch(`${API_BASE_URL}/admin/orders`),
+        fetch(`${API_BASE_URL}/products`),
+        fetch(`${API_BASE_URL}/admin/users`),
+        fetch(`${API_BASE_URL}/admin/payments`),
+        fetch(`${API_BASE_URL}/admin/admins`),
       ]);
 
       if (repRes.ok) {
@@ -116,7 +117,7 @@ export default function Admin({ admin, onLogout }) {
         setAdminsList(await adminRes.json());
       }
 
-      fetch('http://127.0.0.1:8080/api/admin/reviews')
+      fetch(`${API_BASE_URL}/admin/reviews`)
         .then((r) => (r.ok ? r.json() : []))
         .then((revs) => {
           if (Array.isArray(revs)) {
@@ -137,7 +138,7 @@ export default function Admin({ admin, onLogout }) {
 
   const handleUpdateOrderStatus = async (orderId, newStatus, notes = '') => {
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/orders/${orderId}/status`, {
+      const res = await fetch(`${API_BASE_URL}/admin/orders/${orderId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, notes, updatedBy: 'ADMIN' }),
@@ -152,7 +153,7 @@ export default function Admin({ admin, onLogout }) {
 
   const handleToggleUserStatus = async (userId) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/users/${userId}/toggle-status`, {
+      const res = await fetch(`${API_BASE_URL}/admin/users/${userId}/toggle-status`, {
         method: 'PUT',
       });
       if (res.ok) {
@@ -166,7 +167,7 @@ export default function Admin({ admin, onLogout }) {
   const handleDeleteUser = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/users/${userId}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE_URL}/admin/users/${userId}`, { method: 'DELETE' });
       if (res.ok) fetchAdminData();
     } catch (err) {
       console.error(err);
@@ -175,7 +176,7 @@ export default function Admin({ admin, onLogout }) {
 
   const handleToggleAdminRole = async (adminId) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/admins/${adminId}/toggle-role`, { method: 'PUT' });
+      const res = await fetch(`${API_BASE_URL}/admin/admins/${adminId}/toggle-role`, { method: 'PUT' });
       if (res.ok) fetchAdminData();
     } catch (err) {
       console.error(err);
@@ -185,7 +186,7 @@ export default function Admin({ admin, onLogout }) {
   const handleDeleteAdmin = async (adminId) => {
     if (!window.confirm("Are you sure you want to delete this admin?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/admin/admins/${adminId}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE_URL}/admin/admins/${adminId}`, { method: 'DELETE' });
       if (res.ok) fetchAdminData();
     } catch (err) {
       console.error(err);
@@ -198,7 +199,7 @@ export default function Admin({ admin, onLogout }) {
     setAdminSaving(true);
     setAdminAlert(null);
     try {
-      const res = await fetch('http://127.0.0.1:8080/api/admin/admins', {
+      const res = await fetch(`${API_BASE_URL}/admin/admins`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -231,7 +232,7 @@ export default function Admin({ admin, onLogout }) {
   const handleDeleteProduct = async (productId) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/products/${productId}`, {
+      const res = await fetch(`${API_BASE_URL}/products/${productId}`, {
         method: 'DELETE',
       });
       if (res.ok) {
@@ -244,7 +245,7 @@ export default function Admin({ admin, onLogout }) {
 
   const handleToggleHighlight = async (productId) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/products/${productId}/highlight`, {
+      const res = await fetch(`${API_BASE_URL}/products/${productId}/highlight`, {
         method: 'PUT',
       });
       if (res.ok) {
@@ -288,7 +289,7 @@ export default function Admin({ admin, onLogout }) {
     setEditSaving(true);
     setEditAlert(null);
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/products/${editingProduct.id}`, {
+      const res = await fetch(`${API_BASE_URL}/products/${editingProduct.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -327,7 +328,7 @@ export default function Admin({ admin, onLogout }) {
     e.preventDefault();
     if (!window.confirm('Are you sure you want to add this product to the catalog?')) return;
     try {
-      const res = await fetch('http://127.0.0.1:8080/api/products', {
+      const res = await fetch(`${API_BASE_URL}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

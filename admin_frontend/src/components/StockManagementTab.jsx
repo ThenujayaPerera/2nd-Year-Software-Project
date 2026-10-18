@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Filter, AlertTriangle, TrendingDown, TrendingUp, PackageOpen, Download, X } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 export default function StockManagementTab({ products, onUpdateStock }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -102,7 +103,7 @@ export default function StockManagementTab({ products, onUpdateStock }) {
     
     setIsUpdating(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/products/${stockModalProduct.id}`, {
+      const res = await fetch(`${API_BASE_URL}/products/${stockModalProduct.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...stockModalProduct, stock: newStock })

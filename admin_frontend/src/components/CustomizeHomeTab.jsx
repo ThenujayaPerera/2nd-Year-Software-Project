@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Pencil, Trash2, Plus, Save, X, Image as ImageIcon } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 export default function CustomizeHomeTab() {
   const [heroSlides, setHeroSlides] = useState([]);
@@ -14,8 +15,8 @@ export default function CustomizeHomeTab() {
     setLoading(true);
     try {
       const [slidesRes, photosRes] = await Promise.all([
-        fetch('http://127.0.0.1:8080/api/home/slides'),
-        fetch('http://127.0.0.1:8080/api/home/showroom')
+        fetch(`${API_BASE_URL}/home/slides`),
+        fetch(`${API_BASE_URL}/home/showroom`)
       ]);
       if (slidesRes.ok) setHeroSlides(await slidesRes.json());
       if (photosRes.ok) setShowroomPhotos(await photosRes.json());
@@ -34,8 +35,8 @@ export default function CustomizeHomeTab() {
   const handleSaveSlide = async (e) => {
     e.preventDefault();
     const url = editingSlide.id 
-      ? `http://127.0.0.1:8080/api/home/slides/${editingSlide.id}`
-      : 'http://127.0.0.1:8080/api/home/slides';
+      ? `${API_BASE_URL}/home/slides/${editingSlide.id}`
+      : `${API_BASE_URL}/home/slides`;
     const method = editingSlide.id ? 'PUT' : 'POST';
 
     try {
@@ -56,7 +57,7 @@ export default function CustomizeHomeTab() {
   const handleDeleteSlide = async (id) => {
     if (!window.confirm("Are you sure you want to delete this slide?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/home/slides/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE_URL}/home/slides/${id}`, { method: 'DELETE' });
       if (res.ok) fetchData();
     } catch (err) {
       console.error(err);
@@ -67,8 +68,8 @@ export default function CustomizeHomeTab() {
   const handleSavePhoto = async (e) => {
     e.preventDefault();
     const url = editingPhoto.id 
-      ? `http://127.0.0.1:8080/api/home/showroom/${editingPhoto.id}`
-      : 'http://127.0.0.1:8080/api/home/showroom';
+      ? `${API_BASE_URL}/home/showroom/${editingPhoto.id}`
+      : `${API_BASE_URL}/home/showroom`;
     const method = editingPhoto.id ? 'PUT' : 'POST';
 
     try {
@@ -89,7 +90,7 @@ export default function CustomizeHomeTab() {
   const handleDeletePhoto = async (id) => {
     if (!window.confirm("Are you sure you want to delete this photo?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/home/showroom/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE_URL}/home/showroom/${id}`, { method: 'DELETE' });
       if (res.ok) fetchData();
     } catch (err) {
       console.error(err);

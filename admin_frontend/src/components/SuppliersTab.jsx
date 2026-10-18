@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Truck, Search, Plus, Pencil, Trash2, X, Building2, Phone, Mail, Package } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 export default function SuppliersTab() {
   const [suppliers, setSuppliers] = useState([]);
@@ -25,7 +26,7 @@ export default function SuppliersTab() {
   const fetchSuppliers = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://127.0.0.1:8080/api/suppliers');
+      const res = await fetch(`${API_BASE_URL}/suppliers`);
       if (res.ok) {
         const data = await res.json();
         setSuppliers(data);
@@ -68,8 +69,8 @@ export default function SuppliersTab() {
     
     const method = editingSupplier ? 'PUT' : 'POST';
     const url = editingSupplier 
-      ? `http://127.0.0.1:8080/api/suppliers/${editingSupplier.id}` 
-      : 'http://127.0.0.1:8080/api/suppliers';
+      ? `${API_BASE_URL}/suppliers/${editingSupplier.id}` 
+      : `${API_BASE_URL}/suppliers`;
 
     try {
       const res = await fetch(url, {
@@ -93,7 +94,7 @@ export default function SuppliersTab() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to completely remove this supplier from the system?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8080/api/suppliers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_BASE_URL}/suppliers/${id}`, { method: 'DELETE' });
       if (res.ok) {
         fetchSuppliers();
       }
